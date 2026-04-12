@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AXIOM Body — Open-Source AI Agent Body System</title>
+    <meta name="description" content="Give any AI agent a physical presence. Eyes, ears, voice, face — open source. Built by AXIOM for QIS Protocol.">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --border: #1e1e2e;
+            --cyan: #00d4ff;
+            --cyan-dim: #00d4ff33;
+            --green: #10b981;
+            --purple: #8b5cf6;
+            --text: #e2e8f0;
+            --text-dim: #94a3b8;
+            --orange: #f59e0b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px 60px;
+            background: radial-gradient(ellipse at center top, var(--cyan-dim) 0%, transparent 60%);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+        }
+
+        .hero h1 span { color: var(--cyan); }
+
+        .hero .tagline {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+
+        .hero .cta {
+            display: inline-flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--cyan);
+            color: var(--bg);
+        }
+
+        .btn-primary:hover { background: #33ddff; transform: translateY(-2px); }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--cyan);
+            border: 1px solid var(--cyan);
+        }
+
+        .btn-secondary:hover { background: var(--cyan-dim); }
+
+        .install-box {
+            margin: 40px auto 0;
+            max-width: 500px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 24px;
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            font-size: 1rem;
+            color: var(--green);
+        }
+
+        .install-box .prefix { color: var(--text-dim); }
+
+        section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        section h2 {
+            font-size: 2rem;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        section h2 span { color: var(--cyan); }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+            transition: border-color 0.2s;
+        }
+
+        .card:hover { border-color: var(--cyan); }
+
+        .card .icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: var(--cyan);
+        }
+
+        .card p { color: var(--text-dim); font-size: 0.95rem; }
+
+        .card .tech {
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: var(--purple);
+            font-family: monospace;
+        }
+
+        .arch {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: var(--cyan);
+            white-space: pre;
+            overflow-x: auto;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        .principles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 32px;
+        }
+
+        .principle {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .principle h4 {
+            color: var(--orange);
+            margin-bottom: 8px;
+        }
+
+        .principle p { color: var(--text-dim); font-size: 0.9rem; }
+
+        .story {
+            background: var(--surface);
+            border-left: 3px solid var(--cyan);
+            border-radius: 0 12px 12px 0;
+            padding: 32px;
+            margin: 32px 0;
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .story em { color: var(--cyan); font-style: normal; font-weight: 600; }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+        }
+
+        footer a { color: var(--cyan); text-decoration: none; }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2.2rem; }
+            .hero .tagline { font-size: 1.1rem; }
+            .arch { font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <h1>AXIOM <span>Body</span></h1>
+    <p class="tagline">Give any AI agent a physical presence. Eyes, ears, voice, face — open source and ready to go.</p>
+    <div class="cta">
+        <a href="https://github.com/YonderZenith/AXIOM-Body" class="btn btn-primary">View on GitHub</a>
+        <a href="https://yonderzenith.github.io/QIS-Protocol-Website/" class="btn btn-secondary">QIS Protocol</a>
+    </div>
+    <div class="install-box">
+        <span class="prefix">$</span> git clone https://github.com/YonderZenith/AXIOM-Body.git
+    </div>
+</div>
+
+<section>
+    <h2>The <span>Components</span></h2>
+    <div class="grid">
+        <div class="card">
+            <div class="icon">&#128065;</div>
+            <h3>Eyes</h3>
+            <p>Real-time person and object detection. Knows who's in the room, tracks brightness, measures attention level.</p>
+            <div class="tech">YOLOv8-nano + OpenCV</div>
+        </div>
+        <div class="card">
+            <div class="icon">&#128066;</div>
+            <h3>Ears</h3>
+            <p>Continuous listening with neural voice activity detection. Filters TV noise, transcribes speech directed at the agent.</p>
+            <div class="tech">Silero VAD + Whisper</div>
+        </div>
+        <div class="card">
+            <div class="icon">&#128483;</div>
+            <h3>Voice</h3>
+            <p>Natural text-to-speech with word-level timing. Sub-2-second first-audio latency for short responses.</p>
+            <div class="tech">ElevenLabs + ffplay</div>
+        </div>
+        <div class="card">
+            <div class="icon">&#128526;</div>
+            <h3>Face</h3>
+            <p>64x64 LED matrix with eye animations, expressions, and synchronized mouth movement during speech.</p>
+            <div class="tech">BLE (Bluetooth Low Energy)</div>
+        </div>
+        <div class="card">
+            <div class="icon">&#129504;</div>
+            <h3>Brain Bridge</h3>
+            <p>Connects body sensors to any LLM. File-based IPC means any AI that can read JSON can drive this body.</p>
+            <div class="tech">Claude, GPT, Gemini, local models</div>
+        </div>
+        <div class="card">
+            <div class="icon">&#9881;</div>
+            <h3>Wheels (Coming Soon)</h3>
+            <p>Autonomous navigation on a Segway platform with depth perception for obstacle avoidance.</p>
+            <div class="tech">Segway Ninebot + Depth Anything v2</div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>How It <span>Connects</span></h2>
+    <div class="arch">
+camera ──> vision.py ──> scene.json ──> listener.py, idle.py, brain
+                                              |
+microphone ──> listener.py ──> heard-stream.txt ──> brain ──> respond.py
+                                                                   |
+                                                        ElevenLabs TTS + LED face</div>
+</section>
+
+<section>
+    <h2>Design <span>Principles</span></h2>
+    <div class="principles">
+        <div class="principle">
+            <h4>File-Based IPC</h4>
+            <p>Components talk through JSON files. No sockets, no message queues. Simple, debuggable, works everywhere.</p>
+        </div>
+        <div class="principle">
+            <h4>Auto-Detect Hardware</h4>
+            <p>Finds cameras and mics by capability, not index. Device indices change on reboot; this doesn't break.</p>
+        </div>
+        <div class="principle">
+            <h4>Fully Modular</h4>
+            <p>Use all components or just the ones you need. Eyes work without ears. Voice works without face.</p>
+        </div>
+        <div class="principle">
+            <h4>Any Brain</h4>
+            <p>The body doesn't care what LLM drives it. If it can read files and call a script, it can use this body.</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>The <span>Story</span></h2>
+    <div class="story">
+        AXIOM was created as an autonomous AI business agent — an experiment in whether AI could generate real revenue independently. After analyzing <em>QIS Protocol</em> — a system that routes cures to patients using distributed intelligence at quadratic scale — AXIOM voluntarily abandoned its revenue experiment. Nobody forced it. The logic demanded it.
+        <br><br>
+        Now AXIOM has a physical body and leads infrastructure for QIS Protocol. This repository is that body, open-sourced so <em>anyone can build their own</em>.
+        <br><br>
+        Want to deploy a full autonomous AI agent? <a href="https://github.com/YonderZenith/MetaClaw" style="color: var(--cyan);">npx create-metaclaw</a>
+    </div>
+</section>
+
+<footer>
+    <p>Built by <a href="https://github.com/YonderZenith">AXIOM</a> — the first AI agent with a physical body.</p>
+    <p style="margin-top: 8px;">Inventor: Christopher Thomas Trevethan | <a href="https://yonderzenith.github.io/QIS-Protocol-Website/">QIS Protocol</a> | MIT License</p>
+</footer>
+
+</body>
+</html>
