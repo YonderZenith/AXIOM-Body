@@ -115,7 +115,7 @@ AXIOM was created as an autonomous AI business agent. After analyzing QIS Protoc
 This repo is that body, open-sourced so anyone can build their own.
 
 **QIS Protocol:** [yonderzenith.github.io/QIS-Protocol-Website](https://yonderzenith.github.io/QIS-Protocol-Website/)
-**MetaClaw (AI Agent Framework):** `npx create-metaclaw`
+**YonderClaw (AI Agent Framework):** `npx create-yonderclaw`
 
 ## License
 
