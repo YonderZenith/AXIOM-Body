@@ -8,7 +8,7 @@ Uses a continuous InputStream (no open/close per chunk) so the mic light
 stays solid and no audio is dropped between reads.
 
 Usage:
-  python listener.py              # Auto-detect Brio 500 by name (survives reboots)
+  python listener.py              # Auto-detect microphone by name (survives reboots)
   python listener.py --device 1   # Override with specific index
 """
 import os
@@ -197,12 +197,12 @@ def check_people_present():
         return True  # On error, default to listening
 
 
-def find_brio_device():
-    """Find a working Brio mic device by actually testing each candidate."""
+def find_microphone():
+    """Find a working microphone device by actually testing each candidate."""
     devices = sd.query_devices()
     candidates = []
     for i, d in enumerate(devices):
-        if "brio" in d['name'].lower() and d['max_input_channels'] > 0:
+        if d['max_input_channels'] > 0:
             candidates.append(i)
     # Test each candidate — return the first that actually opens at 16kHz
     for i in candidates:
@@ -224,11 +224,11 @@ def main():
 
     device = args.device
     if device is None:
-        device = find_brio_device()
+        device = find_microphone()
         if device is None:
-            log("Brio 500 not found, using default")
+            log("No preferred mic found, using default")
         else:
-            log(f"Found Brio 500 at device {device}")
+            log(f"Found microphone at device {device}")
 
     device_info = sd.query_devices(device, 'input')
     log(f"Using: {device_info['name']}")

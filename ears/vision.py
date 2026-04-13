@@ -1,7 +1,7 @@
 """
 AXIOM Eyes — Ambient Vision Daemon
 ====================================
-Periodically captures frames from the Brio camera, runs YOLOv8-nano
+Periodically captures frames from a USB camera, runs YOLOv8-nano
 for person/object detection, and writes scene state to a JSON file.
 
 The brain (main AXIOM session) reads this file to adapt behavior:
@@ -70,11 +70,18 @@ def get_model():
     return _model
 
 
-def find_brio_camera():
-    """Find Brio 500 camera by testing each index for brightness (not black).
-    Device indices shift on reboot — name-based detection is stable."""
+def _cv_backend():
+    """Use DirectShow on Windows (avoids audio conflict), default elsewhere."""
+    import platform
+    return cv2.CAP_DSHOW if platform.system() == "Windows" else 0
+
+
+def find_camera():
+    """Find a working camera by testing indices 0-4 for a real image.
+    Device indices shift on reboot — this tests by brightness, not index."""
+    backend = _cv_backend()
     for i in range(5):
-        cap = cv2.VideoCapture(i, cv2.CAP_DSHOW)
+        cap = cv2.VideoCapture(i, backend)
         if cap.isOpened():
             ret, frame = cap.read()
             cap.release()
@@ -87,8 +94,8 @@ def find_brio_camera():
 
 
 def capture_frame(camera_idx=0):
-    """Capture a single frame from the camera (DirectShow to avoid audio conflict)"""
-    cap = cv2.VideoCapture(camera_idx, cv2.CAP_DSHOW)
+    """Capture a single frame from the camera."""
+    cap = cv2.VideoCapture(camera_idx, _cv_backend())
     if not cap.isOpened():
         log(f"Camera {camera_idx} not available")
         return None
@@ -192,14 +199,14 @@ def save_scene(scene):
 
 def main():
     parser = argparse.ArgumentParser(description="AXIOM Eyes — Ambient Vision")
-    parser.add_argument("--camera", type=int, default=None, help="Camera index (auto-detects Brio if omitted)")
+    parser.add_argument("--camera", type=int, default=None, help="Camera index (auto-detects camera if omitted)")
     parser.add_argument("--interval", type=int, default=30, help="Seconds between snapshots")
     parser.add_argument("--once", action="store_true", help="Capture once and exit")
     args = parser.parse_args()
 
     camera = args.camera
     if camera is None:
-        camera = find_brio_camera()
+        camera = find_camera()
         if camera is None:
             log("No working camera found, defaulting to 0")
             camera = 0
