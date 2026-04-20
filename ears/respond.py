@@ -26,8 +26,8 @@ sys.path.insert(0, os.path.join(BASE_DIR, "backpack-project"))
 from PIL import Image, ImageDraw
 
 SPEAK_SCRIPT = os.path.join(BASE_DIR, "scripts", "speak.cjs")
-SIGNAL_FILE = os.path.join(BASE_DIR, "axiom", "voice-playing.signal")
-MUTE_FILE = os.path.join(BASE_DIR, "axiom", "ears", "mute.flag")
+SIGNAL_FILE = os.path.join(BASE_DIR, "voice-playing.signal")
+MUTE_FILE = os.path.join(BASE_DIR, "mute.flag")  # v2: shared with face-engine + listener
 
 # BLE config — replace with your device's address and characteristic UUIDs
 ADDR = "XX:XX:XX:XX:XX:XX"

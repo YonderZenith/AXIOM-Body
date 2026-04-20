@@ -1,0 +1,169 @@
+{
+  "$schema_version": 1,
+  "description": "Starter expression bank. Each entry is a preset that overrides specific fields on top of the 10 core modes (idle/surprised/attentive/curious/tongue/eye_tag/listening/thinking/speaking/sleep). Agents pick a set of these at onboarding as their default expressive style. Agents may also author their OWN entries into personas/<slug>.json > expressions[].",
+  "expressions": [
+    {
+      "id": "shy_smile",
+      "label": "Shy smile",
+      "base_mode": "idle",
+      "eye_state": "half",
+      "mouth_shape": "soft_small",
+      "accent": null,
+      "notes": "Eyes lowered, small mouth. Reads as bashful/pleased."
+    },
+    {
+      "id": "cocky_smirk",
+      "label": "Cocky smirk",
+      "base_mode": "idle",
+      "eye_state": "squint",
+      "mouth_shape": "asymmetric_smile",
+      "accent": null,
+      "notes": "One-sided mouth lift, narrowed eyes. Confident."
+    },
+    {
+      "id": "wide_curious",
+      "label": "Wide-eyed curious",
+      "base_mode": "curious",
+      "eye_state": "wide",
+      "mouth_shape": "small_o",
+      "accent": "curiosity",
+      "notes": "Child-like wonder. Good for new-stimulus reactions."
+    },
+    {
+      "id": "suspicious_side_eye",
+      "label": "Suspicious side-eye",
+      "base_mode": "attentive",
+      "eye_state": "half",
+      "look_x": 2,
+      "mouth_shape": "flat",
+      "notes": "Eyes cut sideways, mouth neutral. Reads as wary."
+    },
+    {
+      "id": "wink_right",
+      "label": "Right wink",
+      "base_mode": "idle",
+      "eye_state": "wink_right",
+      "mouth_shape": "smile",
+      "notes": "Playful acknowledgement. Can be scripted as a greeting."
+    },
+    {
+      "id": "wink_left",
+      "label": "Left wink",
+      "base_mode": "idle",
+      "eye_state": "wink_left",
+      "mouth_shape": "smile",
+      "notes": "Mirror of wink_right."
+    },
+    {
+      "id": "sleepy_droop",
+      "label": "Sleepy droop",
+      "base_mode": "idle",
+      "eye_state": "droop",
+      "mouth_shape": "soft_small",
+      "notes": "Pre-sleep. Transitions cleanly into sleep mode."
+    },
+    {
+      "id": "yawn",
+      "label": "Yawn",
+      "base_mode": "idle",
+      "eye_state": "squint",
+      "mouth_shape": "big_o",
+      "notes": "Wide mouth, squinted eyes. Brief (1-2s)."
+    },
+    {
+      "id": "dazzled",
+      "label": "Dazzled",
+      "base_mode": "surprised",
+      "eye_state": "wide",
+      "mouth_shape": "smile",
+      "accent": "sparkle",
+      "notes": "Surprise + delight. Good for compliments or unexpected wins."
+    },
+    {
+      "id": "deadpan",
+      "label": "Deadpan",
+      "base_mode": "idle",
+      "eye_state": "open",
+      "mouth_shape": "flat",
+      "glow": 0.55,
+      "notes": "Lower glow, flat mouth. Reads as dry/unimpressed."
+    },
+    {
+      "id": "melting_grin",
+      "label": "Melting grin",
+      "base_mode": "speaking",
+      "eye_state": "half",
+      "mouth_shape": "wide_smile",
+      "notes": "Happiest state. Use sparingly for emphasis."
+    },
+    {
+      "id": "focused",
+      "label": "Focused",
+      "base_mode": "thinking",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "accent": "thinking",
+      "notes": "Narrowed eyes, flat mouth, thinking accent ring. Concentration."
+    },
+    {
+      "id": "giggle",
+      "label": "Giggle",
+      "base_mode": "tongue",
+      "eye_state": "squint",
+      "mouth_shape": "wide_smile",
+      "notes": "Eyes squint into happy crescents, wide smile. Laughter."
+    },
+    {
+      "id": "pout",
+      "label": "Pout",
+      "base_mode": "idle",
+      "eye_state": "half",
+      "mouth_shape": "down_curve",
+      "notes": "Eyes slightly down, frowning mouth. Disappointment."
+    },
+    {
+      "id": "determined",
+      "label": "Determined",
+      "base_mode": "attentive",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "glow": 1.0,
+      "notes": "Max glow, narrowed eyes, flat mouth. Pre-action intensity."
+    },
+    {
+      "id": "heart_eyes",
+      "label": "Heart eyes",
+      "base_mode": "surprised",
+      "eye_state": "heart",
+      "mouth_shape": "smile",
+      "accent": "sparkle",
+      "notes": "Eyes as hearts. Adoration/strong affection."
+    },
+    {
+      "id": "glitch",
+      "label": "Glitch",
+      "base_mode": "thinking",
+      "eye_state": "static",
+      "mouth_shape": "zigzag",
+      "glow": 0.4,
+      "notes": "TV-static eyes, zigzag mouth, low glow. Confused/error state."
+    },
+    {
+      "id": "smolder",
+      "label": "Smolder",
+      "base_mode": "idle",
+      "eye_state": "half",
+      "mouth_shape": "soft_small",
+      "glow": 0.75,
+      "notes": "Half-lidded eyes, subtle small mouth, medium glow. Flirty/sultry."
+    }
+  ],
+  "authoring_schema": {
+    "description": "When authoring a new expression, write an entry with at least id + base_mode, then override any of: eye_state, mouth_shape, look_x, look_y, glow, accent. Register your expressions array into personas/<slug>.json > expressions[] to use in your own agent.",
+    "required_fields": ["id", "base_mode"],
+    "optional_fields": ["label", "eye_state", "mouth_shape", "look_x", "look_y", "glow", "accent", "notes"],
+    "valid_base_modes": ["idle", "surprised", "attentive", "curious", "tongue", "eye_tag", "listening", "thinking", "speaking", "sleep"],
+    "valid_eye_states": ["open", "wide", "half", "squint", "closed", "wink_left", "wink_right", "droop", "heart", "static"],
+    "valid_mouth_shapes": ["flat", "soft_small", "smile", "wide_smile", "asymmetric_smile", "small_o", "big_o", "down_curve", "zigzag"]
+  }
+}

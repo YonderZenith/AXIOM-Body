@@ -2,6 +2,22 @@
 
 All notable changes to AXIOM-Body.
 
+## [1.2.1] — 2026-04-20
+
+### Added — Agent self-onboarding (no default face)
+- `onboard/designer.py` — programmatic + interactive onboarding CLI. SHA-256-seeded unique starter palette (HSV + golden-ratio complement), personality weights, and voice rate/pitch so no two agents default to the same look/sound. Writes `personas/<slug>.json` and stamps `config/face.json` with `onboarded: true`.
+- `onboard/expressions-bank.json` — 18 starter expressions agents can pick from (`shy_smile`, `cocky_smirk`, `wide_curious`, `suspicious_side_eye`, `wink_right`/`wink_left`, `sleepy_droop`, `yawn`, `dazzled`, `deadpan`, `melting_grin`, `focused`, `giggle`, `pout`, `determined`, `heart_eyes`, `glitch`, `smolder`). Includes authoring schema so agents can define their own modes.
+- `voice/speak.py` — graceful TTS ladder. Tries ElevenLabs `/with-timestamps` first if `ELEVENLABS_API_KEY` env or `config/elevenlabs_api_key.txt` is set AND persona `voice.elevenlabs_voice_id` is not a placeholder; falls back to Windows SAPI (free, offline). Publishes `voice-meta.json` + `mute.flag` on both paths for face-engine mouth sync.
+
+### Changed
+- `face/face-engine.py` — refuses to start if `config/face.json` is missing or `onboarded != true`. Directs the agent to `python onboard/designer.py`. Adds `--skip-onboard-check` for tests.
+- `face/web-face.html` — fetch path corrected to `../face-state.json` (state lives at repo root, not under `/face/`).
+- `face/face-engine.py` — `_read_scene` now accepts both list (`[x, y]`) and dict (`{x,y}`) `gaze_target` payloads.
+- `ears/vision.py`, `ears/listener.py`, `ears/respond.py` — all file-IPC paths rooted at repo root so face-engine sees `scene.json`, `listening.flag`, `mute.flag` regardless of where the script was started from.
+
+### Philosophy
+Every agent that boots AXIOM-Body now self-designs their face, voice, and expression palette. There is no default Axiom face — first run forces onboarding.
+
 ## [1.2.0-alpha.1] — 2026-04-20
 
 ### Added — Face v2 (state-driven architecture)

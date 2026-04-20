@@ -18,6 +18,11 @@ face-screenshots/
 status.json
 *-log.txt
 *-stdout.txt
+*.log
+scene.json.tmp
+face/server.log
+face/scene-driver.py
+config/elevenlabs_api_key.txt
 __pycache__/
 *.pyc
 node_modules/

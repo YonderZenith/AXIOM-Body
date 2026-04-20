@@ -232,8 +232,14 @@ class FaceEngine:
         scene = read_json(SCENE_FILE) or {}
         people = int(scene.get("people_count", 0) or 0)
         gaze = scene.get("gaze_target") or {}
-        gx = int(max(-3, min(3, gaze.get("x", 0) or 0)))
-        gy = int(max(-2, min(2, gaze.get("y", 0) or 0)))
+        if isinstance(gaze, (list, tuple)) and len(gaze) >= 2:
+            gx_raw, gy_raw = gaze[0], gaze[1]
+        elif isinstance(gaze, dict):
+            gx_raw, gy_raw = gaze.get("x", 0), gaze.get("y", 0)
+        else:
+            gx_raw, gy_raw = 0, 0
+        gx = int(max(-3, min(3, gx_raw or 0)))
+        gy = int(max(-2, min(2, gy_raw or 0)))
         novelty = bool(scene.get("novelty", False))
         return people, gx, gy, novelty
 
@@ -562,11 +568,37 @@ def _clear_all():
         _remove(p)
 
 
+def require_onboarded(config_path):
+    """Refuse to start if the agent hasn't self-designed their face via
+    onboard/designer.py. There is no default face — every agent chooses."""
+    if not os.path.exists(config_path):
+        print("[face-engine] config/face.json missing — no persona has been designed yet.", file=sys.stderr)
+        print("[face-engine] Run the onboarding designer first:", file=sys.stderr)
+        print("    python onboard/designer.py --name <Name> --slug <slug> --random", file=sys.stderr)
+        print("  or for full control:", file=sys.stderr)
+        print("    python onboard/designer.py --interactive", file=sys.stderr)
+        sys.exit(2)
+    try:
+        with open(config_path, "r", encoding="utf-8") as f:
+            cfg = json.load(f)
+    except Exception as e:
+        print(f"[face-engine] config/face.json is unreadable ({e}). Re-run onboard/designer.py.", file=sys.stderr)
+        sys.exit(2)
+    if not cfg.get("onboarded"):
+        print("[face-engine] config/face.json exists but onboarded != true.", file=sys.stderr)
+        print("[face-engine] Re-run onboarding: python onboard/designer.py --interactive", file=sys.stderr)
+        sys.exit(2)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="AXIOM Face Engine v2")
     parser.add_argument("--config", default=str(DEFAULT_CONFIG), help="Path to face config json")
     parser.add_argument("--mock", action="store_true", help="Run scripted mock sequence then exit")
+    parser.add_argument("--skip-onboard-check", action="store_true", help="Bypass the onboarding gate (tests only)")
     args = parser.parse_args()
+
+    if not args.mock and not args.skip_onboard_check:
+        require_onboarded(args.config)
 
     if args.mock:
         run_mock()

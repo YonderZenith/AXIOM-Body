@@ -28,7 +28,8 @@ import numpy as np
 _model = None
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SCENE_FILE = os.path.join(BASE_DIR, "scene.json")
+ROOT_DIR = os.path.dirname(BASE_DIR)  # v2: face-engine reads scene.json from repo root
+SCENE_FILE = os.path.join(ROOT_DIR, "scene.json")  # v2: shared with face-engine
 SNAP_FILE = os.path.join(BASE_DIR, "latest_snap.jpg")
 LOG_FILE = os.path.join(BASE_DIR, "vision-log.txt")
 

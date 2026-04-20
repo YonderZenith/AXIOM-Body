@@ -32,18 +32,19 @@ import whisper
 
 # --- Config ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(BASE_DIR)  # v2: face-engine reads signals from repo root
 HEARD_FILE = os.path.join(BASE_DIR, "heard.txt")
 FLAG_FILE = os.path.join(BASE_DIR, "new-speech.flag")
 LOG_FILE = os.path.join(BASE_DIR, "listener-log.txt")
 ALL_HEARD_FILE = os.path.join(BASE_DIR, "all-heard.txt")
 STREAM_FILE = os.path.join(BASE_DIR, "heard-stream.txt")  # Rolling transcript log for brain
 
-SCENE_FILE = os.path.join(BASE_DIR, "scene.json")
+SCENE_FILE = os.path.join(ROOT_DIR, "scene.json")  # v2: shared with face-engine
 
 SAMPLE_RATE = 16000
 FRAME_MS = 30
-MUTE_FILE = os.path.join(BASE_DIR, "mute.flag")  # Brain writes this while speaking
-LISTENING_FLAG = os.path.join(BASE_DIR, "listening.flag")  # v2: face-engine reacts when user is speaking
+MUTE_FILE = os.path.join(ROOT_DIR, "mute.flag")  # v2: shared with face-engine + respond.py
+LISTENING_FLAG = os.path.join(ROOT_DIR, "listening.flag")  # v2: face-engine reacts when user is speaking
 FRAME_SAMPLES = int(SAMPLE_RATE * FRAME_MS / 1000)  # 480
 CHANNELS = 1
 
