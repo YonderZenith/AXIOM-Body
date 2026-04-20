@@ -1,0 +1,36 @@
+{
+  "$schema_version": 1,
+  "_doc": "Tuning for the ambient vision sensor (ears/vision.py) and the on-demand eyes (eyes/look.py). Edit freely; face-engine and the eyes re-read this file on next invocation.",
+
+  "model": "yolov8n",
+  "_model_options": {
+    "yolov8n": "nano  — ~6 MB, ~6 ms CPU. Recommended for always-on / low-power. Default.",
+    "yolov8s": "small — ~22 MB, ~12 ms CPU. Better small-object recall. Still laptop-friendly.",
+    "yolov8m": "medium — ~52 MB, ~30 ms CPU. Noticeable jump in accuracy. Needs a real GPU or patience.",
+    "yolov8l": "large — ~87 MB. For desktops with a dedicated GPU.",
+    "yolov8x": "xlarge — ~136 MB. Max accuracy. GPU only, slow on CPU."
+  },
+
+  "interval_sec": 30,
+  "_interval_note": "How often ears/vision.py takes an ambient snap. 30s is a good always-on default. Drop to 5-10s if you want faster reactions; raise to 120s+ to save power. The sensor is multi-purpose (see purposes below), so it runs whenever the agent is awake.",
+
+  "confidence": {
+    "min": 0.35,
+    "person": 0.25
+  },
+
+  "camera_index": null,
+  "_camera_note": "Null = auto-detect (tests indices 0-4 by brightness). Set an integer to pin a specific camera if auto-detect picks the wrong one.",
+
+  "purposes": [
+    "ambient_scene_snapshot — writes scene.json every interval so face-engine, brain, and any other process can read who/what is in view.",
+    "sleep_detection — long stretches with no people detected feed the face into sleep/droop modes.",
+    "keep_face_alive — gaze target shifts to detected people; face stays responsive even when the agent session is mid-compaction or idle.",
+    "trigger_active_vision — when something interesting appears the agent can call eyes/look.py for a fresh photo/video + Claude Vision analysis."
+  ],
+
+  "off_switch": {
+    "flag_file": "config/eyes.off",
+    "env_var": "AXIOM_EYES_DISABLED"
+  }
+}

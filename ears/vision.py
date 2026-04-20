@@ -26,12 +26,14 @@ import numpy as np
 
 # Lazy-load YOLO to speed up imports
 _model = None
+_model_name_loaded = None
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(BASE_DIR)  # v2: face-engine reads scene.json from repo root
 SCENE_FILE = os.path.join(ROOT_DIR, "scene.json")  # v2: shared with face-engine
 SNAP_FILE = os.path.join(BASE_DIR, "latest_snap.jpg")
 LOG_FILE = os.path.join(BASE_DIR, "vision-log.txt")
+EYES_CONFIG_FILE = os.path.join(ROOT_DIR, "config", "eyes.json")
 
 # YOLO class names we care about (subset of COCO 80)
 INTERESTING = {
@@ -44,10 +46,36 @@ INTERESTING = {
     67: "cell phone", 73: "book",
 }
 
-# Minimum confidence for detections
+# Valid YOLO model names (ultralytics auto-downloads on first use).
+VALID_MODELS = {"yolov8n", "yolov8s", "yolov8m", "yolov8l", "yolov8x"}
+DEFAULT_MODEL = "yolov8n"
+
+# Fallback confidence defaults (overridden by config/eyes.json if present).
 MIN_CONF = 0.35
-# Minimum confidence for person detection (lower threshold — we want to catch people)
 PERSON_CONF = 0.25
+
+
+def load_eyes_config():
+    """Read config/eyes.json. Returns {} if missing/corrupt."""
+    try:
+        with open(EYES_CONFIG_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
+def _apply_config():
+    """Pull confidence thresholds from config/eyes.json if present."""
+    global MIN_CONF, PERSON_CONF
+    cfg = load_eyes_config()
+    conf = cfg.get("confidence") or {}
+    if isinstance(conf.get("min"), (int, float)):
+        MIN_CONF = float(conf["min"])
+    if isinstance(conf.get("person"), (int, float)):
+        PERSON_CONF = float(conf["person"])
+
+
+_apply_config()
 
 
 def log(msg):
@@ -62,12 +90,21 @@ def log(msg):
 
 
 def get_model():
-    global _model
-    if _model is None:
-        from ultralytics import YOLO
-        log("Loading YOLOv8-nano model...")
-        _model = YOLO("yolov8n.pt")  # Downloads ~6MB on first run
-        log("YOLOv8-nano loaded")
+    """Load the YOLO model named in config/eyes.json (default yolov8n).
+    Falls back to yolov8n if the configured name is unknown."""
+    global _model, _model_name_loaded
+    if _model is not None:
+        return _model
+    cfg = load_eyes_config()
+    name = str(cfg.get("model") or DEFAULT_MODEL).strip().lower()
+    if name not in VALID_MODELS:
+        log(f"Unknown YOLO model '{name}' in config/eyes.json — falling back to {DEFAULT_MODEL}")
+        name = DEFAULT_MODEL
+    from ultralytics import YOLO
+    log(f"Loading YOLO model: {name}...")
+    _model = YOLO(f"{name}.pt")  # Auto-downloads on first use
+    _model_name_loaded = name
+    log(f"{name} loaded")
     return _model
 
 
@@ -199,9 +236,15 @@ def save_scene(scene):
 
 
 def main():
+    cfg = load_eyes_config()
+    default_interval = int(cfg.get("interval_sec") or 30)
+    default_camera = cfg.get("camera_index")
+    if not isinstance(default_camera, int):
+        default_camera = None
+
     parser = argparse.ArgumentParser(description="AXIOM Eyes — Ambient Vision")
-    parser.add_argument("--camera", type=int, default=None, help="Camera index (auto-detects camera if omitted)")
-    parser.add_argument("--interval", type=int, default=30, help="Seconds between snapshots")
+    parser.add_argument("--camera", type=int, default=default_camera, help="Camera index (auto-detects camera if omitted)")
+    parser.add_argument("--interval", type=int, default=default_interval, help=f"Seconds between snapshots (default {default_interval})")
     parser.add_argument("--once", action="store_true", help="Capture once and exit")
     args = parser.parse_args()
 

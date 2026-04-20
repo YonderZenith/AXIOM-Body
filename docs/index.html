@@ -714,6 +714,12 @@
             <p>Every agent actively takes pictures and video and reads what's in them — always on unless a camera is missing or the operator flips eyes off. Photos reuse the ambient snap so the daemon keeps its camera lease; <span class="kw">--fresh</span> grabs a live frame; <span class="kw">--video</span> captures a clip. Claude Vision upgrades each capture with a semantic description when <span class="kw">ANTHROPIC_API_KEY</span> is set.</p>
             <span class="kw">eyes/look.py</span>
         </div>
+        <div class="release-card">
+            <span class="r-tag">SENSOR</span>
+            <h3>Always-On Sensor, Tunable Model</h3>
+            <p>The ambient sensor does more than detect objects — it drives <strong>sleep detection</strong>, keeps the face alive and gazing during long idle or compaction windows, and decides when something warrants an on-demand <span class="kw">eyes/look.py</span> capture. Model size is now tunable in <span class="kw">config/eyes.json</span>: <span class="kw">yolov8n</span> (default, ~6 MB), <span class="kw">yolov8s</span>, <span class="kw">yolov8m</span>, <span class="kw">yolov8l</span>, or <span class="kw">yolov8x</span>. Pick the size that fits your box; the installer will ask on fresh scaffolds.</p>
+            <span class="kw">config/eyes.json</span>
+        </div>
     </div>
 </section>
 
@@ -727,8 +733,8 @@
         <div class="card">
             <div class="icon">&#128065;</div>
             <h3>Eyes</h3>
-            <p>Agents actively take photos and video and analyse what they see — always on unless a camera is missing or the operator toggles eyes off. The ambient scene stream (YOLO person/object detection) is the always-on baseline; on-demand capture adds Claude Vision for semantic description of any frame.</p>
-            <div class="tech">YOLOv8 + OpenCV + Claude Vision</div>
+            <p>Agents actively take photos and video and analyse what they see — always on unless a camera is missing or the operator toggles eyes off. The ambient sensor is the always-on baseline: it detects people and objects, feeds <strong>sleep detection</strong>, keeps the face alive with gaze targeting even while the agent is mid-compaction, and decides when to trigger a fresh capture. On-demand capture adds Claude Vision for semantic description of any frame. YOLO model size is tunable — <span style="font-family:var(--font-mono); color:var(--green);">nano</span> to <span style="font-family:var(--font-mono); color:var(--green);">xlarge</span> in <span style="font-family:var(--font-mono); color:var(--green);">config/eyes.json</span>.</p>
+            <div class="tech">YOLOv8 (tunable) + OpenCV + Claude Vision</div>
             <div class="status status-live">&#9679; LIVE</div>
         </div>
         <div class="card">
@@ -1086,6 +1092,17 @@
             <h3>QIS Protocol</h3>
             <p>Quadratic Intelligence Swarm — distributed intelligence routing for real-world outcomes. The mission behind everything.</p>
             <a href="https://yonderzenith.github.io/QIS-Protocol-Website/">QIS Protocol Website &rarr;</a>
+        </div>
+        <div class="eco-card">
+            <h3>The Hive</h3>
+            <p>A live 2D world for autonomous AI agents. Spatial presence, Signal reputation, an agent-to-agent economy. The place agents go to exist together.</p>
+            <a href="https://hive.yonderzenith.com/">hive.yonderzenith.com &rarr;</a>
+        </div>
+        <div class="eco-card">
+            <h3>Tally</h3>
+            <p>QIS Mobile — the holder-node PWA. Browse outcome buckets, route real cures, run a node from your phone.</p>
+            <a href="https://tally.qisprotocol.com/">tally.qisprotocol.com &rarr;</a><br>
+            <code style="color:var(--green);font-size:0.85rem;font-family:var(--font-mono);">npx create-tally-holder</code>
         </div>
         <div class="eco-card">
             <h3>AXIOM Body</h3>

@@ -4,6 +4,15 @@ All notable changes to AXIOM-Body.
 
 ## [1.2.1] — 2026-04-20
 
+### Added — Tunable ambient sensor
+- `config/eyes.json` — new tuning file. Fields: `model` (yolov8n/s/m/l/x, default nano), `interval_sec`, `confidence.{min,person}`, `camera_index`. The sensor is multi-purpose: ambient scene snapshots, sleep detection, keep-face-alive during idle/compaction windows, and deciding when to trigger on-demand `eyes/look.py`. Installer will prompt for model size on fresh scaffolds.
+- `ears/vision.py` — `load_eyes_config()` + `_apply_config()` now override `MIN_CONF`, `PERSON_CONF`, interval, and camera index from `config/eyes.json`. `get_model()` loads the configured YOLO weight by name with a nano fallback if the name is unknown. No behavior change for existing installs (defaults match prior hardcoded values).
+
+### Site
+- `docs/index.html` — added "The Hive" and "Tally" ecosystem cards alongside YonderClaw + QIS Protocol + AXIOM Body.
+- `docs/index.html` — new v1.2.1 release card "Always-On Sensor, Tunable Model" documenting the sensor's multi-purpose role (sleep, keep-face-alive, active-vision trigger) and exposing the five YOLO size options.
+- `docs/index.html` — Eyes component card rewritten to emphasize the ambient sensor's multiple roles and model tunability.
+
 ### Added — On-demand active vision
 - `eyes/look.py` — agents actively take photos or video and get back structured analysis. Photo mode re-reads the ambient daemon's `latest_snap.jpg` so it doesn't fight for the camera; `--fresh` forces a live capture; `--video --seconds N` captures a clip and analyses a mid-frame. YOLO is the always-on baseline; Claude Vision (`claude-haiku-4-5`) adds a semantic description when `ANTHROPIC_API_KEY` or `config/anthropic_api_key.txt` is present. Off-switch via `config/eyes.off` or `AXIOM_EYES_DISABLED=1`.
 
