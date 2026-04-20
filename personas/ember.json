@@ -1,0 +1,47 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Ember",
+  "agent_slug": "ember",
+  "palette": {
+    "bg": [15, 8, 8],
+    "eye": [255, 140, 60],
+    "pupil": [255, 240, 200],
+    "mouth": [255, 90, 60],
+    "tongue": [200, 40, 60],
+    "listening_accent": [255, 190, 120],
+    "thinking_accent": [255, 100, 180],
+    "surprised_accent": [255, 255, 160]
+  },
+  "voice": {
+    "provider": "piper",
+    "piper_voice_id": "en_US-lessac-medium",
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1",
+    "rate": 0.95,
+    "pitch": 0.95
+  },
+  "personality": {
+    "blink_rate": 0.8,
+    "shyness": 0.15,
+    "playfulness": 0.75,
+    "attention_drift": 0.3,
+    "curiosity": 0.8,
+    "surprise_reactivity": 0.6,
+    "sleep_threshold_sec": 60.0
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "large",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 1.0
+  },
+  "behavior_weights": {
+    "eye_tag": 0.20,
+    "attentive": 0.30,
+    "tongue": 0.20,
+    "curious": 0.20,
+    "chill": 0.10
+  },
+  "notes": "Ember — warm, outgoing, curious. Amber/red palette. Free Piper voice by default. Less shy, more playful than Axiom."
+}

@@ -3,32 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AXIOM Face</title>
+<title>AXIOM Face v2</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0a0f; }
   canvas { display: block; image-rendering: pixelated; }
+  #label {
+    position: fixed; left: 12px; bottom: 10px;
+    font: 11px/1.2 "JetBrains Mono", monospace;
+    color: rgba(255,255,255,0.35);
+    pointer-events: none;
+    white-space: nowrap;
+  }
 </style>
 </head>
 <body>
 <canvas id="face"></canvas>
+<div id="label"></div>
 <script>
 (function() {
   "use strict";
 
-  // --- Constants ---
+  // ---------- Constants ----------
   const W = 64, H = 64;
-  const BG = [10, 10, 15];
-  const EYE_COLOR  = [0, 212, 255];   // cyan
-  const MOUTH_COLOR = [16, 185, 129]; // green-cyan
+  const SCHEMA_VERSION = 2;
 
-  // --- Canvas setup ---
+  // Default palette if state isn't embedding one
+  const DEFAULT_PALETTE = {
+    bg: [10, 10, 15],
+    eye: [0, 212, 255],
+    pupil: [200, 255, 255],
+    mouth: [16, 185, 129],
+    tongue: [220, 60, 90],
+    listening_accent: [120, 220, 255],
+    thinking_accent: [180, 140, 255],
+    surprised_accent: [255, 220, 100],
+  };
+
+  // ---------- Canvas ----------
   const canvas = document.getElementById("face");
   const ctx = canvas.getContext("2d");
+  const label = document.getElementById("label");
 
-  // Each "pixel" = pxSize screen pixels with a 1px gap
   let pxSize = 1, offsetX = 0, offsetY = 0;
-
   function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -41,29 +58,31 @@
   window.addEventListener("resize", resize);
   resize();
 
-  // --- Framebuffer: 64x64, each cell [r, g, b, glow(0-1)] ---
+  // ---------- Framebuffer ----------
+  // fb[i] = [r, g, b, glow]
   const fb = new Array(W * H);
   for (let i = 0; i < fb.length; i++) fb[i] = [0, 0, 0, 0];
 
   function clearFB() {
-    for (let i = 0; i < fb.length; i++) { fb[i][0]=0; fb[i][1]=0; fb[i][2]=0; fb[i][3]=0; }
+    for (let i = 0; i < fb.length; i++) {
+      fb[i][0]=0; fb[i][1]=0; fb[i][2]=0; fb[i][3]=0;
+    }
   }
 
   function setPixel(x, y, r, g, b, glow) {
     if (x < 0 || x >= W || y < 0 || y >= H) return;
     const i = y * W + x;
-    fb[i][0] = r; fb[i][1] = g; fb[i][2] = b; fb[i][3] = glow || 1;
+    const g0 = glow == null ? 1 : glow;
+    // Additive mix so overlapping glows brighten
+    if (g0 > fb[i][3]) {
+      fb[i][0] = r; fb[i][1] = g; fb[i][2] = b; fb[i][3] = g0;
+    }
   }
 
-  function fillRect(x0, y0, w, h, r, g, b, glow) {
-    for (let dy = 0; dy < h; dy++)
-      for (let dx = 0; dx < w; dx++)
-        setPixel(x0 + dx, y0 + dy, r, g, b, glow || 1);
-  }
-
-  // --- Render framebuffer to canvas ---
-  function render() {
-    ctx.fillStyle = "#0a0a0f";
+  // ---------- Render ----------
+  function render(palette) {
+    const bg = palette.bg;
+    ctx.fillStyle = `rgb(${bg[0]},${bg[1]},${bg[2]})`;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const gap = Math.max(1, Math.floor(pxSize * 0.12));
@@ -75,13 +94,12 @@
         const sx = offsetX + x * pxSize;
         const sy = offsetY + y * pxSize;
 
-        // Dark cell background (subtle grid)
+        // Dark cell tint behind everything
         ctx.fillStyle = "rgba(15,15,25,1)";
         ctx.fillRect(sx, sy, cell, cell);
 
         if (p[3] > 0) {
           const r = p[0], g = p[1], b = p[2], gl = p[3];
-          // Glow layer
           const glowR = Math.floor(pxSize * 0.5);
           if (glowR > 1) {
             const grad = ctx.createRadialGradient(
@@ -93,7 +111,6 @@
             ctx.fillStyle = grad;
             ctx.fillRect(sx - glowR, sy - glowR, cell + glowR*2, cell + glowR*2);
           }
-          // Pixel
           ctx.fillStyle = `rgba(${r},${g},${b},${gl})`;
           ctx.fillRect(sx, sy, cell, cell);
           // Bright center highlight
@@ -106,145 +123,178 @@
     }
   }
 
-  // --- Eye definitions ---
-  // Each eye is drawn relative to its center position
-  // Eye socket: 8 wide x 6 tall, pupil: 4x4 inside
+  // ---------- Eye & mouth shape builders ----------
   const EYE_LX = 20, EYE_RX = 44, EYE_Y = 22;
+  const MOUTH_CX = 32, MOUTH_CY = 48;
 
-  // Eye shapes — each is an array of [dx, dy] offsets from center
-  function makeEyeOpen() {
+  function eyeOpen() {
     const pts = [];
-    // Outer shape: rounded rectangle 8x6
-    for (let dy = -3; dy <= 2; dy++) {
+    for (let dy = -3; dy <= 2; dy++)
       for (let dx = -4; dx <= 3; dx++) {
-        // Skip corners for rounded look
-        if ((Math.abs(dx) >= 3) && (Math.abs(dy) >= 2)) continue;
+        if (Math.abs(dx) >= 3 && Math.abs(dy) >= 2) continue;
         pts.push([dx, dy]);
       }
-    }
     return pts;
   }
-
-  function makeEyeHalf() {
+  function eyeHalf() {
     const pts = [];
-    for (let dy = -1; dy <= 1; dy++) {
+    for (let dy = -1; dy <= 1; dy++)
       for (let dx = -4; dx <= 3; dx++) {
-        if ((Math.abs(dx) >= 3) && (Math.abs(dy) >= 1)) continue;
+        if (Math.abs(dx) >= 3 && Math.abs(dy) >= 1) continue;
         pts.push([dx, dy]);
       }
-    }
     return pts;
   }
-
-  function makeEyeClosed() {
+  function eyeClosed() {
     const pts = [];
-    for (let dx = -3; dx <= 2; dx++) {
-      pts.push([dx, 0]);
-    }
+    for (let dx = -3; dx <= 2; dx++) pts.push([dx, 0]);
     return pts;
   }
-
-  function makePupil(lookX, lookY) {
-    // 3x3 pupil, offset by look direction
+  function eyeWide() {
     const pts = [];
-    const ox = Math.round(lookX);
-    const oy = Math.round(lookY);
-    for (let dy = -1; dy <= 1; dy++) {
-      for (let dx = -1; dx <= 0; dx++) {
-        pts.push([dx + ox, dy + oy]);
+    for (let dy = -4; dy <= 3; dy++)
+      for (let dx = -5; dx <= 4; dx++) {
+        if (Math.abs(dx) >= 4 && Math.abs(dy) >= 3) continue;
+        pts.push([dx, dy]);
       }
+    return pts;
+  }
+  function eyeSquint() {
+    const pts = [];
+    for (let dy = 0; dy <= 1; dy++)
+      for (let dx = -4; dx <= 3; dx++) pts.push([dx, dy]);
+    return pts;
+  }
+  function pupil(lookX, lookY, big) {
+    const pts = [];
+    const ox = Math.round(lookX), oy = Math.round(lookY);
+    if (big) {
+      for (let dy = -1; dy <= 1; dy++)
+        for (let dx = -1; dx <= 1; dx++) pts.push([dx + ox, dy + oy]);
+    } else {
+      for (let dy = -1; dy <= 1; dy++)
+        for (let dx = -1; dx <= 0; dx++) pts.push([dx + ox, dy + oy]);
     }
     return pts;
   }
 
-  // Mouth shapes: centered at (32, 48), varying heights
-  // Mouths use outline style for closed/slight, filled for open/wide
-  function makeMouthClosed() {
-    // Simple horizontal line — resting face
+  // Mouth: pts are [dx, dy, alpha]. Mouth shapes 0..3 = closed/slight/open/wide.
+  function mouthClosed() {
     const pts = [];
-    for (let dx = -5; dx <= 4; dx++) {
-      pts.push([dx, 0, 1.0]);
-    }
+    for (let dx = -5; dx <= 4; dx++) pts.push([dx, 0, 1.0]);
     return pts;
   }
-
-  function makeMouthSlight() {
-    // Rounded opening, 2px tall
+  function mouthSlight() {
     const pts = [];
-    // Top edge
     for (let dx = -5; dx <= 4; dx++) pts.push([dx, -1, 1.0]);
-    // Sides
     pts.push([-5, 0, 0.7]); pts.push([4, 0, 0.7]);
-    // Bottom edge
     for (let dx = -5; dx <= 4; dx++) pts.push([dx, 1, 1.0]);
     return pts;
   }
-
-  function makeMouthOpen() {
-    // Oval opening, filled interior dimmer
+  function mouthOpen() {
     const pts = [];
-    // Top edge
     for (let dx = -5; dx <= 4; dx++) pts.push([dx, -2, 1.0]);
-    // Sides + dim interior
     for (let dy = -1; dy <= 1; dy++) {
-      pts.push([-6, dy, 0.8]);
-      pts.push([5, dy, 0.8]);
+      pts.push([-6, dy, 0.8]); pts.push([5, dy, 0.8]);
       for (let dx = -5; dx <= 4; dx++) pts.push([dx, dy, 0.3]);
     }
-    // Bottom edge
     for (let dx = -5; dx <= 4; dx++) pts.push([dx, 2, 1.0]);
     return pts;
   }
-
-  function makeMouthWide() {
-    // Large oval, filled interior dimmer
+  function mouthWide() {
     const pts = [];
-    // Top
     for (let dx = -6; dx <= 5; dx++) pts.push([dx, -3, 1.0]);
-    // Upper sides + interior
     for (let dy = -2; dy <= 2; dy++) {
-      pts.push([-7, dy, 0.8]);
-      pts.push([6, dy, 0.8]);
+      pts.push([-7, dy, 0.8]); pts.push([6, dy, 0.8]);
       for (let dx = -6; dx <= 5; dx++) pts.push([dx, dy, 0.25]);
     }
-    // Bottom
     for (let dx = -6; dx <= 5; dx++) pts.push([dx, 3, 1.0]);
     return pts;
   }
+  function mouthO(size) {
+    // Circular surprise mouth
+    const pts = [];
+    const r = size || 3;
+    for (let dy = -r; dy <= r; dy++) {
+      for (let dx = -r; dx <= r; dx++) {
+        const d = Math.sqrt(dx*dx + dy*dy);
+        if (d <= r && d >= r - 1) pts.push([dx, dy, 1.0]);
+        else if (d < r - 1) pts.push([dx, dy, 0.25]);
+      }
+    }
+    return pts;
+  }
+  function mouthSmile() {
+    // Slight upturned arc (2 rows)
+    const pts = [];
+    for (let dx = -5; dx <= 4; dx++) pts.push([dx, 0, 1.0]);
+    pts.push([-5, -1, 0.7]); pts.push([4, -1, 0.7]);
+    return pts;
+  }
+  function tongueShape() {
+    const pts = [];
+    for (let dy = 2; dy <= 4; dy++)
+      for (let dx = -2; dx <= 1; dx++) pts.push([dx, dy, 1.0]);
+    return pts;
+  }
 
-  const MOUTH_SHAPES = [makeMouthClosed(), makeMouthSlight(), makeMouthOpen(), makeMouthWide()];
-  const MOUTH_CX = 32, MOUTH_CY = 48;
+  const MOUTH_SHAPES = [mouthClosed(), mouthSlight(), mouthOpen(), mouthWide()];
 
-  // --- Animation state ---
+  // ---------- Zs for sleep ----------
+  function drawZs(time, eyeColor) {
+    // Three floating Zs, drifting up and right
+    const zs = [
+      {x: 48, y: 18, size: 6, phase: 0},
+      {x: 52, y: 10, size: 5, phase: 0.33},
+      {x: 55, y:  4, size: 4, phase: 0.66},
+    ];
+    zs.forEach(z => {
+      const p = ((time * 0.0003) + z.phase) % 1;
+      const dy = Math.floor(-p * 16);
+      const fade = 1 - p;
+      if (fade <= 0) return;
+      const y = z.y + dy;
+      if (y < -8 || y > 60) return;
+      const sz = z.size;
+      const [r, g, b] = eyeColor;
+      // Z = top line, diagonal, bottom line
+      for (let dx = 0; dx <= sz; dx++) setPixel(z.x + dx, y, r, g, b, fade * 0.8);
+      for (let i = 0; i <= sz; i++) setPixel(z.x + sz - i, y + i, r, g, b, fade * 0.8);
+      for (let dx = 0; dx <= sz; dx++) setPixel(z.x + dx, y + sz, r, g, b, fade * 0.8);
+    });
+  }
+
+  // ---------- Accent glow halo (outer ring) ----------
+  function drawRing(cx, cy, inner, outer, color, alpha) {
+    for (let dy = -outer; dy <= outer; dy++) {
+      for (let dx = -outer; dx <= outer; dx++) {
+        const d = Math.sqrt(dx*dx + dy*dy);
+        if (d >= inner && d <= outer) {
+          const fade = 1 - Math.min(1, (d - inner) / Math.max(1, (outer - inner)));
+          setPixel(cx + dx, cy + dy, color[0], color[1], color[2], alpha * fade);
+        }
+      }
+    }
+  }
+
+  // ---------- State ----------
   let state = {
-    mode: "idle",     // idle, speaking, sleep
-    mouth: 0,         // 0-3
-    look_x: 0,        // -3 to 3
-    look_y: 0         // -2 to 2
+    schema_version: SCHEMA_VERSION,
+    mode: "idle",
+    mouth: 0,
+    mouth_openness: 0,
+    look_x: 0,
+    look_y: 0,
+    eye_state: "open",
+    expression: "smile",
+    glow: 0.85,
+    blink_phase: 0,
+    listening_intensity: 0,
+    active_word_end_ms: null,
+    palette: DEFAULT_PALETTE,
+    tick_ms: 0,
   };
-
-  let standalone = true; // true = demo mode (no face-state.json)
-  let blinkPhase = 0;    // 0=open, 1=closing, 2=closed, 3=opening
-  let blinkTimer = 0;
-  let nextBlink = randomBetween(3000, 5000);
-  let saccadeX = 0, saccadeY = 0;
-  let saccadeTimer = 0;
-  let nextSaccade = randomBetween(500, 2000);
-  let gazeX = 0, gazeY = 0;
-  let gazeTimer = 0;
-  let nextGaze = randomBetween(4000, 8000);
-  let demoMouthTimer = 0;
-  let nextDemoMouth = randomBetween(6000, 12000);
-  let demoMouthPhase = 0;
-  let demoMouthCount = 0;
-
-  // Breathing / subtle life pulse
-  let breathPhase = 0;
-
-  function randomBetween(a, b) { return a + Math.random() * (b - a); }
-
-  // --- Polling face-state.json ---
-  let pollInterval = null;
+  let standalone = true;
   let fetchFails = 0;
 
   async function pollState() {
@@ -252,10 +302,8 @@
       const resp = await fetch("face-state.json?" + Date.now());
       if (!resp.ok) throw new Error(resp.status);
       const data = await resp.json();
-      state.mode = data.mode || "idle";
-      state.mouth = Math.max(0, Math.min(3, data.mouth || 0));
-      state.look_x = Math.max(-3, Math.min(3, data.look_x || 0));
-      state.look_y = Math.max(-2, Math.min(2, data.look_y || 0));
+      state = Object.assign(state, data);
+      if (!state.palette || !state.palette.bg) state.palette = DEFAULT_PALETTE;
       standalone = false;
       fetchFails = 0;
     } catch (e) {
@@ -263,143 +311,206 @@
       if (fetchFails > 5) {
         standalone = true;
         state.mode = "idle";
+        state.palette = DEFAULT_PALETTE;
       }
     }
   }
+  setInterval(pollState, 100);
+  pollState();
 
-  pollInterval = setInterval(pollState, 100);
-  pollState(); // initial attempt
+  // Standalone demo animation helpers (used only when no engine is writing state)
+  let demoBlinkPhase = 0, demoBlinkTimer = 0, nextBlink = 3500;
+  let demoSaccadeX = 0, demoSaccadeY = 0, demoSaccadeTimer = 0, nextSaccade = 1200;
+  let demoGazeX = 0, demoGazeY = 0, demoGazeTimer = 0, nextGaze = 5000;
+  let demoMouthTimer = 0, nextDemoMouth = 8000, demoMouthBurst = 0, demoMouthVal = 0;
+  let demoModeIndex = 0, demoModeTimer = 0;
+  const demoModes = ["idle", "attentive", "curious", "surprised", "listening", "thinking", "speaking", "tongue"];
 
-  // --- Main loop ---
+  function randBetween(a, b) { return a + Math.random() * (b - a); }
+
+  function tickStandalone(dt) {
+    // Cycle through modes every few seconds to showcase
+    demoModeTimer += dt;
+    if (demoModeTimer > 5500) {
+      demoModeTimer = 0;
+      demoModeIndex = (demoModeIndex + 1) % demoModes.length;
+      state.mode = demoModes[demoModeIndex];
+    }
+
+    // Blink
+    demoBlinkTimer += dt;
+    if (demoBlinkPhase === 0 && demoBlinkTimer >= nextBlink) { demoBlinkPhase = 1; demoBlinkTimer = 0; }
+    else if (demoBlinkPhase === 1 && demoBlinkTimer >= 50) { demoBlinkPhase = 2; demoBlinkTimer = 0; }
+    else if (demoBlinkPhase === 2 && demoBlinkTimer >= 80) { demoBlinkPhase = 3; demoBlinkTimer = 0; }
+    else if (demoBlinkPhase === 3 && demoBlinkTimer >= 50) {
+      demoBlinkPhase = 0; demoBlinkTimer = 0; nextBlink = randBetween(3000, 5000);
+    }
+    state.blink_phase = demoBlinkPhase;
+
+    // Saccade
+    demoSaccadeTimer += dt;
+    if (demoSaccadeTimer >= nextSaccade) {
+      demoSaccadeX = Math.round(randBetween(-1, 1));
+      demoSaccadeY = Math.round(randBetween(-1, 1));
+      setTimeout(() => { demoSaccadeX = 0; demoSaccadeY = 0; }, 150);
+      demoSaccadeTimer = 0; nextSaccade = randBetween(500, 2000);
+    }
+    // Gaze drift
+    demoGazeTimer += dt;
+    if (demoGazeTimer >= nextGaze) {
+      demoGazeX = Math.round(randBetween(-2, 2));
+      demoGazeY = Math.round(randBetween(-1, 1));
+      demoGazeTimer = 0; nextGaze = randBetween(4000, 8000);
+    }
+    state.look_x = demoGazeX + demoSaccadeX;
+    state.look_y = demoGazeY + demoSaccadeY;
+
+    // Demo mouth for speaking
+    if (state.mode === "speaking") {
+      demoMouthTimer += dt;
+      if (demoMouthTimer > 100) {
+        demoMouthVal = Math.floor(randBetween(0, 4));
+        demoMouthTimer = 0;
+      }
+      state.mouth = demoMouthVal;
+      state.mouth_openness = demoMouthVal / 3.0;
+    } else if (state.mode === "tongue") {
+      state.mouth = 3;
+      state.mouth_openness = 1.0;
+    } else {
+      state.mouth = 0;
+      state.mouth_openness = 0;
+    }
+
+    state.glow = 0.85;
+    if (state.mode === "listening") state.listening_intensity = 0.5 + 0.5 * Math.sin(performance.now() * 0.006);
+  }
+
+  // ---------- Main tick ----------
   let lastTime = performance.now();
 
   function tick(now) {
     const dt = now - lastTime;
     lastTime = now;
 
+    if (standalone) tickStandalone(dt);
+
+    const palette = state.palette || DEFAULT_PALETTE;
+    const mode = state.mode || "idle";
+
     clearFB();
 
-    const mode = standalone ? "idle" : state.mode;
-    const effectiveLookX = standalone ? gazeX + saccadeX : state.look_x + saccadeX;
-    const effectiveLookY = standalone ? gazeY + saccadeY : state.look_y + saccadeY;
-
-    // --- Update blink ---
-    blinkTimer += dt;
-    if (blinkPhase === 0 && blinkTimer >= nextBlink) {
-      blinkPhase = 1;
-      blinkTimer = 0;
-    } else if (blinkPhase === 1 && blinkTimer >= 50) {
-      blinkPhase = 2;
-      blinkTimer = 0;
-    } else if (blinkPhase === 2 && blinkTimer >= 80) {
-      blinkPhase = 3;
-      blinkTimer = 0;
-    } else if (blinkPhase === 3 && blinkTimer >= 50) {
-      blinkPhase = 0;
-      blinkTimer = 0;
-      nextBlink = randomBetween(3000, 5000);
+    // -------- Mode-specific accents --------
+    if (mode === "listening") {
+      const pulse = 0.3 + 0.5 * Math.max(0, state.listening_intensity || 0.5);
+      drawRing(EYE_LX, EYE_Y, 6, 9, palette.listening_accent || palette.eye, pulse * 0.6);
+      drawRing(EYE_RX, EYE_Y, 6, 9, palette.listening_accent || palette.eye, pulse * 0.6);
     }
-
-    // --- Update saccades ---
-    saccadeTimer += dt;
-    if (saccadeTimer >= nextSaccade) {
-      saccadeX = Math.round(randomBetween(-1, 1));
-      saccadeY = Math.round(randomBetween(-1, 1));
-      // Reset saccade after short hold
-      setTimeout(() => { saccadeX = 0; saccadeY = 0; }, 150);
-      saccadeTimer = 0;
-      nextSaccade = randomBetween(500, 2000);
-    }
-
-    // --- Update gaze (standalone only) ---
-    if (standalone) {
-      gazeTimer += dt;
-      if (gazeTimer >= nextGaze) {
-        gazeX = Math.round(randomBetween(-2, 2));
-        gazeY = Math.round(randomBetween(-1, 1));
-        gazeTimer = 0;
-        nextGaze = randomBetween(4000, 8000);
+    if (mode === "thinking") {
+      // Orbit dot above the head
+      const t = now * 0.003;
+      const cx = 32, cy = 10;
+      for (let i = 0; i < 3; i++) {
+        const a = t + i * (Math.PI * 2 / 3);
+        const dx = Math.round(Math.cos(a) * 4);
+        const dy = Math.round(Math.sin(a) * 2);
+        const col = palette.thinking_accent || palette.eye;
+        setPixel(cx + dx, cy + dy, col[0], col[1], col[2], 0.8 - i * 0.2);
       }
     }
-
-    // --- Demo mouth ---
-    let mouthVal = state.mouth;
-    if (standalone) {
-      demoMouthTimer += dt;
-      if (demoMouthPhase === 0 && demoMouthTimer >= nextDemoMouth) {
-        // Start a "speaking" burst
-        demoMouthPhase = 1;
-        demoMouthCount = Math.floor(randomBetween(6, 18));
-        demoMouthTimer = 0;
-      } else if (demoMouthPhase === 1) {
-        if (demoMouthTimer >= 120) {
-          mouthVal = Math.floor(randomBetween(0, 4));
-          demoMouthCount--;
-          demoMouthTimer = 0;
-          if (demoMouthCount <= 0) {
-            demoMouthPhase = 0;
-            mouthVal = 0;
-            nextDemoMouth = randomBetween(6000, 12000);
-          }
-        } else {
-          mouthVal = Math.floor(randomBetween(0, 4));
-        }
-      }
+    if (mode === "surprised") {
+      // Spark accents
+      const col = palette.surprised_accent || palette.eye;
+      setPixel(10, 14, col[0], col[1], col[2], 0.9);
+      setPixel(54, 14, col[0], col[1], col[2], 0.9);
+      setPixel(8,  22, col[0], col[1], col[2], 0.6);
+      setPixel(56, 22, col[0], col[1], col[2], 0.6);
     }
 
-    // --- Breathing ---
-    breathPhase += dt * 0.001;
-    const breathGlow = 0.85 + 0.15 * Math.sin(breathPhase * 1.2);
-
-    // --- Draw eyes ---
+    // -------- Eyes --------
     const isSleep = mode === "sleep";
-    let eyeShape, drawPupil = true;
+    let shapeL, shapeR, drawPupil = true;
 
+    const eyeState = state.eye_state || "open";
     if (isSleep) {
-      eyeShape = makeEyeClosed();
-      drawPupil = false;
-    } else if (blinkPhase === 1 || blinkPhase === 3) {
-      eyeShape = makeEyeHalf();
-      drawPupil = false;
-    } else if (blinkPhase === 2) {
-      eyeShape = makeEyeClosed();
-      drawPupil = false;
+      shapeL = eyeClosed(); shapeR = eyeClosed(); drawPupil = false;
+    } else if (state.blink_phase === 2) {
+      shapeL = eyeClosed(); shapeR = eyeClosed(); drawPupil = false;
+    } else if (state.blink_phase === 1 || state.blink_phase === 3) {
+      shapeL = eyeHalf(); shapeR = eyeHalf(); drawPupil = false;
+    } else if (eyeState === "wide") {
+      shapeL = eyeWide(); shapeR = eyeWide();
+    } else if (eyeState === "half") {
+      shapeL = eyeHalf(); shapeR = eyeHalf();
+    } else if (eyeState === "closed") {
+      shapeL = eyeClosed(); shapeR = eyeClosed(); drawPupil = false;
+    } else if (eyeState === "squint") {
+      // Curious — one squinted, one open (asymmetric)
+      shapeL = eyeSquint();
+      shapeR = eyeOpen();
     } else {
-      eyeShape = makeEyeOpen();
+      shapeL = eyeOpen(); shapeR = eyeOpen();
     }
 
-    const ec = EYE_COLOR;
-    // Left eye
-    for (const [dx, dy] of eyeShape) {
-      setPixel(EYE_LX + dx, EYE_Y + dy, ec[0], ec[1], ec[2], breathGlow * 0.55);
-    }
-    // Right eye
-    for (const [dx, dy] of eyeShape) {
-      setPixel(EYE_RX + dx, EYE_Y + dy, ec[0], ec[1], ec[2], breathGlow * 0.55);
-    }
+    const eyeCol = palette.eye;
+    const eyeGlow = (state.glow || 0.85) * 0.55;
+    for (const [dx, dy] of shapeL)
+      setPixel(EYE_LX + dx, EYE_Y + dy, eyeCol[0], eyeCol[1], eyeCol[2], eyeGlow);
+    for (const [dx, dy] of shapeR)
+      setPixel(EYE_RX + dx, EYE_Y + dy, eyeCol[0], eyeCol[1], eyeCol[2], eyeGlow);
 
-    // Pupils (brighter center)
+    // Pupils — bigger when surprised
     if (drawPupil) {
-      const pupil = makePupil(effectiveLookX, effectiveLookY);
-      for (const [dx, dy] of pupil) {
-        setPixel(EYE_LX + dx, EYE_Y + dy, 200, 255, 255, breathGlow);
-        setPixel(EYE_RX + dx, EYE_Y + dy, 200, 255, 255, breathGlow);
+      const big = (eyeState === "wide");
+      const pupilCol = palette.pupil || [255, 255, 255];
+      const pupilPts = pupil(state.look_x || 0, state.look_y || 0, big);
+      for (const [dx, dy] of pupilPts) {
+        setPixel(EYE_LX + dx, EYE_Y + dy, pupilCol[0], pupilCol[1], pupilCol[2], state.glow || 0.85);
+        setPixel(EYE_RX + dx, EYE_Y + dy, pupilCol[0], pupilCol[1], pupilCol[2], state.glow || 0.85);
       }
     }
 
-    // --- Draw mouth ---
+    // -------- Mouth --------
     if (!isSleep) {
-      const mc = MOUTH_COLOR;
-      const shape = MOUTH_SHAPES[Math.min(3, Math.max(0, mouthVal))];
-      const baseGlow = mouthVal > 0 ? breathGlow * 0.9 : breathGlow * 0.5;
+      const mc = palette.mouth || DEFAULT_PALETTE.mouth;
+      let shape;
+      if (mode === "surprised") {
+        shape = mouthO(3);
+      } else if (mode === "thinking") {
+        shape = mouthClosed();
+      } else if (mode === "listening") {
+        shape = mouthSlight();
+      } else if (mode === "curious") {
+        shape = mouthSmile();
+      } else if (mode === "tongue") {
+        shape = mouthOpen();
+      } else {
+        const idx = Math.min(3, Math.max(0, Math.round(state.mouth || 0)));
+        shape = MOUTH_SHAPES[idx];
+      }
+      const mouthOn = (state.mouth || 0) > 0 || mode === "surprised" || mode === "tongue";
+      const baseGlow = (mouthOn ? 0.9 : 0.55) * (state.glow || 0.85);
       for (const pt of shape) {
         const pxGlow = pt.length > 2 ? pt[2] : 1.0;
         setPixel(MOUTH_CX + pt[0], MOUTH_CY + pt[1], mc[0], mc[1], mc[2], baseGlow * pxGlow);
       }
+      // Tongue overlay
+      if (mode === "tongue") {
+        const tc = palette.tongue || DEFAULT_PALETTE.tongue;
+        for (const [dx, dy, a] of tongueShape())
+          setPixel(MOUTH_CX + dx, MOUTH_CY + dy, tc[0], tc[1], tc[2], a * (state.glow || 0.85));
+      }
     }
 
-    // --- Render ---
-    render();
+    // -------- Sleep Z's --------
+    if (isSleep) {
+      drawZs(now, palette.eye);
+    }
+
+    render(palette);
+
+    label.textContent = `${state.agent_name || "AXIOM"} · ${mode}` + (standalone ? " · demo" : "");
+
     requestAnimationFrame(tick);
   }
 

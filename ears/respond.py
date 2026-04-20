@@ -294,6 +294,30 @@ async def speak_with_face(text):
                 except:
                     pass
 
+            # Publish voice-meta.json so face-engine.py + web-face.html can drive mouth sync (v2)
+            try:
+                started_ms = time.time() * 1000.0
+                est_end_ms = started_ms + est * 1000.0
+                meta = {
+                    "schema_version": 1,
+                    "text": text,
+                    "started_at_ms": started_ms,
+                    "est_end_ms": est_end_ms,
+                    "provider": "elevenlabs",
+                    "voice_id": os.environ.get("AXIOM_ELEVEN_VOICE_ID", ""),
+                    "words": [{"s": round(wt.get("s", 0), 3),
+                               "e": round(wt.get("e", 0), 3),
+                               "w": wt.get("word", "")}
+                              for wt in word_times] if word_times else []
+                }
+                meta_path = os.path.join(BASE_DIR, "voice-meta.json")
+                tmp = meta_path + ".tmp"
+                with open(tmp, "w", encoding="utf-8") as _f:
+                    json.dump(meta, _f)
+                os.replace(tmp, meta_path)
+            except Exception as _e:
+                print(f"  voice-meta write failed: {_e}", flush=True)
+
             # Switch from thinking face to talking — redraw eyes to center
             await draw_zone(c, frame_happy(), 14, 34)
 
@@ -369,6 +393,11 @@ async def speak_with_face(text):
         try:
             os.remove(MUTE_FILE)
         except: pass
+        # Clear voice-meta so face-engine knows TTS is done (v2)
+        try:
+            os.remove(os.path.join(BASE_DIR, "voice-meta.json"))
+        except Exception:
+            pass
 
 
 if __name__ == "__main__":

@@ -43,8 +43,24 @@ SCENE_FILE = os.path.join(BASE_DIR, "scene.json")
 SAMPLE_RATE = 16000
 FRAME_MS = 30
 MUTE_FILE = os.path.join(BASE_DIR, "mute.flag")  # Brain writes this while speaking
+LISTENING_FLAG = os.path.join(BASE_DIR, "listening.flag")  # v2: face-engine reacts when user is speaking
 FRAME_SAMPLES = int(SAMPLE_RATE * FRAME_MS / 1000)  # 480
 CHANNELS = 1
+
+
+def _touch_listening():
+    try:
+        with open(LISTENING_FLAG, "w") as f:
+            f.write("1")
+    except Exception:
+        pass
+
+
+def _clear_listening():
+    try:
+        os.remove(LISTENING_FLAG)
+    except OSError:
+        pass
 
 # VAD / recording settings
 SILERO_THRESHOLD = 0.5  # Silero VAD confidence threshold (0-1, higher = stricter)
@@ -287,6 +303,7 @@ def main():
                     silence_frames = 0
                     recording = False
                     audio_buffer = []
+                    _clear_listening()
                     continue
 
                 # Sleep mode — no people on camera
@@ -297,6 +314,7 @@ def main():
                     elif ears_awake:
                         log("Ears sleeping — no people on camera")
                         ears_awake = False
+                        _clear_listening()
 
                     if not ears_awake:
                         # Still sample audio — if loud sound detected, wake up
@@ -372,6 +390,7 @@ def main():
                     record_start = time.time()
                     audio_buffer = []
                     log("Speech detected, recording...")
+                    _touch_listening()
 
                 # Buffer audio while recording
                 if recording:
@@ -380,6 +399,7 @@ def main():
                     # Stop on silence
                     if silence_frames >= SILENCE_FRAMES_STOP:
                         recording = False
+                        _clear_listening()
                         duration = time.time() - record_start
                         speech_frames = 0
                         silence_frames = 0
@@ -432,6 +452,7 @@ def main():
                     # Safety cutoff — transcribe what we have instead of throwing it away
                     if time.time() - record_start > MAX_SPEECH_SECONDS:
                         recording = False
+                        _clear_listening()
                         speech_frames = 0
                         silence_frames = 0
                         silero_model.reset_states()

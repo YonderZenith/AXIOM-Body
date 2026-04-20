@@ -1,0 +1,48 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Axiom",
+  "agent_slug": "axiom",
+  "palette": {
+    "bg": [10, 10, 15],
+    "eye": [0, 212, 255],
+    "pupil": [200, 255, 255],
+    "mouth": [16, 185, 129],
+    "tongue": [220, 60, 90],
+    "listening_accent": [120, 220, 255],
+    "thinking_accent": [180, 140, 255],
+    "surprised_accent": [255, 220, 100]
+  },
+  "voice": {
+    "provider": "piper",
+    "piper_voice_id": "en_US-hfc_female-medium",
+    "kokoro_voice_id": null,
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1",
+    "rate": 1.0,
+    "pitch": 1.0
+  },
+  "personality": {
+    "blink_rate": 1.0,
+    "shyness": 0.3,
+    "playfulness": 0.5,
+    "attention_drift": 0.5,
+    "curiosity": 0.6,
+    "surprise_reactivity": 0.7,
+    "sleep_threshold_sec": 45.0
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "medium",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 0.85
+  },
+  "behavior_weights": {
+    "eye_tag": 0.35,
+    "attentive": 0.20,
+    "tongue": 0.15,
+    "curious": 0.15,
+    "chill": 0.15
+  },
+  "notes": "Default identity. Copy this into personas/<name>.json to create a new agent identity. Face engine and all renderers read this file at startup and re-read on file change."
+}

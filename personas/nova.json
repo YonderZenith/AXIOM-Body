@@ -1,0 +1,47 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Nova",
+  "agent_slug": "nova",
+  "palette": {
+    "bg": [8, 10, 18],
+    "eye": [200, 230, 255],
+    "pupil": [255, 255, 255],
+    "mouth": [140, 180, 255],
+    "tongue": [180, 120, 255],
+    "listening_accent": [230, 240, 255],
+    "thinking_accent": [160, 200, 255],
+    "surprised_accent": [255, 255, 255]
+  },
+  "voice": {
+    "provider": "piper",
+    "piper_voice_id": "en_US-amy-medium",
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1",
+    "rate": 1.05,
+    "pitch": 1.05
+  },
+  "personality": {
+    "blink_rate": 1.2,
+    "shyness": 0.5,
+    "playfulness": 0.3,
+    "attention_drift": 0.7,
+    "curiosity": 0.5,
+    "surprise_reactivity": 0.5,
+    "sleep_threshold_sec": 30.0
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "small",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 0.75
+  },
+  "behavior_weights": {
+    "eye_tag": 0.40,
+    "attentive": 0.25,
+    "tongue": 0.05,
+    "curious": 0.15,
+    "chill": 0.15
+  },
+  "notes": "Nova — cool, observant, soft-spoken. White/ice-blue palette. More reserved than Axiom; higher attention drift. Good default for a focused/quiet agent."
+}

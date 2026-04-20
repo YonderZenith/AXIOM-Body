@@ -1,4 +1,3 @@
-config/
 *.wav
 *.mp3
 *.jpg
@@ -10,6 +9,12 @@ all-heard.txt
 new-speech.flag
 mute.flag
 voice-playing.signal
+listening.flag
+voice-meta.json
+face-state.json
+face-engine.log
+face-engine.pid
+face-screenshots/
 status.json
 *-log.txt
 *-stdout.txt
