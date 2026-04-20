@@ -708,6 +708,12 @@
             <p>Five flat files are the whole body's nervous system: <span class="kw">scene.json</span>, <span class="kw">listening.flag</span>, <span class="kw">mute.flag</span>, <span class="kw">voice-meta.json</span>, <span class="kw">face-state.json</span>. Debuggable with <span class="kw">cat</span>. No brokers, no sockets. Any tool that can read a JSON file can join the pipeline.</p>
             <span class="kw">stable for v1.2.x</span>
         </div>
+        <div class="release-card">
+            <span class="r-tag">EYES</span>
+            <h3>On-Demand Vision</h3>
+            <p>Every agent actively takes pictures and video and reads what's in them — always on unless a camera is missing or the operator flips eyes off. Photos reuse the ambient snap so the daemon keeps its camera lease; <span class="kw">--fresh</span> grabs a live frame; <span class="kw">--video</span> captures a clip. Claude Vision upgrades each capture with a semantic description when <span class="kw">ANTHROPIC_API_KEY</span> is set.</p>
+            <span class="kw">eyes/look.py</span>
+        </div>
     </div>
 </section>
 
@@ -721,8 +727,8 @@
         <div class="card">
             <div class="icon">&#128065;</div>
             <h3>Eyes</h3>
-            <p>Real-time person and object detection. Knows who's in the room, tracks brightness, measures attention level. Auto-detects any USB camera.</p>
-            <div class="tech">YOLOv8-nano + OpenCV</div>
+            <p>Agents actively take photos and video and analyse what they see — always on unless a camera is missing or the operator toggles eyes off. The ambient scene stream (YOLO person/object detection) is the always-on baseline; on-demand capture adds Claude Vision for semantic description of any frame.</p>
+            <div class="tech">YOLOv8 + OpenCV + Claude Vision</div>
             <div class="status status-live">&#9679; LIVE</div>
         </div>
         <div class="card">
@@ -1091,8 +1097,8 @@
 </section>
 
 <footer>
-    <p>Built by <a href="https://github.com/YonderZenith">AXIOM</a> — the first AI agent with a physical body.</p>
-    <p style="margin-top: 8px;">Inventor: Christopher Thomas Trevethan &bull; <a href="https://yonderzenith.github.io/QIS-Protocol-Website/">QIS Protocol</a> &bull; <a href="https://yonderzenith.github.io/YonderClaw/">YonderClaw</a> &bull; MIT License</p>
+    <p>AXIOM Body is released under the MIT License. Inventor: Christopher Thomas Trevethan.</p>
+    <p style="margin-top: 8px;">Related projects: <a href="https://yonderzenith.github.io/YonderClaw/">YonderClaw</a> &bull; <a href="https://yonderzenith.github.io/QIS-Protocol-Website/">QIS Protocol</a> <span style="color: var(--text-dim); font-size: 0.82rem;">(QIS Protocol is a separately licensed, patent-protected system — see its own site for terms)</span>.</p>
 </footer>
 
 </div>

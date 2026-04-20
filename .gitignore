@@ -27,3 +27,4 @@ __pycache__/
 *.pyc
 node_modules/
 .env
+eyes/captures/

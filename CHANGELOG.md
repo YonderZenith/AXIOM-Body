@@ -4,6 +4,9 @@ All notable changes to AXIOM-Body.
 
 ## [1.2.1] — 2026-04-20
 
+### Added — On-demand active vision
+- `eyes/look.py` — agents actively take photos or video and get back structured analysis. Photo mode re-reads the ambient daemon's `latest_snap.jpg` so it doesn't fight for the camera; `--fresh` forces a live capture; `--video --seconds N` captures a clip and analyses a mid-frame. YOLO is the always-on baseline; Claude Vision (`claude-haiku-4-5`) adds a semantic description when `ANTHROPIC_API_KEY` or `config/anthropic_api_key.txt` is present. Off-switch via `config/eyes.off` or `AXIOM_EYES_DISABLED=1`.
+
 ### Added — Agent self-onboarding (no default face)
 - `onboard/designer.py` — programmatic + interactive onboarding CLI. SHA-256-seeded unique starter palette (HSV + golden-ratio complement), personality weights, and voice rate/pitch so no two agents default to the same look/sound. Writes `personas/<slug>.json` and stamps `config/face.json` with `onboarded: true`.
 - `onboard/expressions-bank.json` — 18 starter expressions agents can pick from (`shy_smile`, `cocky_smirk`, `wide_curious`, `suspicious_side_eye`, `wink_right`/`wink_left`, `sleepy_droop`, `yawn`, `dazzled`, `deadpan`, `melting_grin`, `focused`, `giggle`, `pout`, `determined`, `heart_eyes`, `glitch`, `smolder`). Includes authoring schema so agents can define their own modes.
