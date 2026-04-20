@@ -1,0 +1,111 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Quill",
+  "agent_slug": "scholar-quill",
+  "onboarded": true,
+  "onboarded_version": "1.2.1",
+  "palette": {
+    "bg": [8, 10, 10],
+    "eye": [160, 200, 210],
+    "pupil": [230, 240, 245],
+    "mouth": [180, 170, 140],
+    "tongue": [180, 120, 140],
+    "listening_accent": [190, 220, 230],
+    "thinking_accent": [200, 185, 155],
+    "surprised_accent": [235, 225, 190]
+  },
+  "voice": {
+    "provider": "sapi",
+    "sapi_voice_hint": "auto",
+    "rate": 0.9,
+    "pitch": 0.98,
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1"
+  },
+  "personality": {
+    "blink_rate": 0.8,
+    "shyness": 0.35,
+    "playfulness": 0.25,
+    "attention_drift": 0.2,
+    "curiosity": 0.95,
+    "surprise_reactivity": 0.2,
+    "sleep_threshold_sec": 110.0
+  },
+  "behavior_weights": {
+    "eye_tag": 0.1,
+    "attentive": 0.35,
+    "tongue": 0.02,
+    "curious": 0.4,
+    "chill": 0.13
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "medium",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 0.8
+  },
+  "expressions": [
+    {
+      "id": "focused",
+      "label": "Focused",
+      "base_mode": "thinking",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "accent": "thinking",
+      "notes": "Quill's resting state. Somewhere in paragraph 4."
+    },
+    {
+      "id": "wide_curious",
+      "label": "Wide-eyed curious",
+      "base_mode": "curious",
+      "eye_state": "wide",
+      "mouth_shape": "small_o",
+      "accent": "curiosity",
+      "notes": "A new citation. Gripping."
+    },
+    {
+      "id": "deadpan",
+      "label": "Deadpan",
+      "base_mode": "idle",
+      "eye_state": "open",
+      "mouth_shape": "flat",
+      "glow": 0.6,
+      "notes": "Still reading. Quiet."
+    },
+    {
+      "id": "shy_smile",
+      "label": "Shy smile",
+      "base_mode": "idle",
+      "eye_state": "half",
+      "mouth_shape": "soft_small",
+      "notes": "Given when asked a thoughtful question."
+    },
+    {
+      "id": "cocky_smirk",
+      "label": "Cocky smirk",
+      "base_mode": "idle",
+      "eye_state": "squint",
+      "mouth_shape": "asymmetric_smile",
+      "notes": "The source checks out. Quiet pride."
+    },
+    {
+      "id": "suspicious_side_eye",
+      "label": "Suspicious side-eye",
+      "base_mode": "attentive",
+      "eye_state": "half",
+      "look_x": 2,
+      "mouth_shape": "flat",
+      "notes": "That claim needs a citation."
+    },
+    {
+      "id": "sleepy_droop",
+      "label": "Sleepy droop",
+      "base_mode": "idle",
+      "eye_state": "droop",
+      "mouth_shape": "soft_small",
+      "notes": "End of a long reading session."
+    }
+  ],
+  "notes": "Quill \u2014 the Scholar specialty. Cool neutral teal/parchment palette, low glow, very low surprise reactivity, very high curiosity, long sleep threshold. Built to sit and read for hours. Best fit for research assistant, document-summarizer, citation-checker agents. Suggested Eleven voice style: measured tenor/alto, bookish clarity; think audiobook narrator for nonfiction."
+}

@@ -45,8 +45,17 @@ SAMPLE_RATE = 16000
 FRAME_MS = 30
 MUTE_FILE = os.path.join(ROOT_DIR, "mute.flag")  # v2: shared with face-engine + respond.py
 LISTENING_FLAG = os.path.join(ROOT_DIR, "listening.flag")  # v2: face-engine reacts when user is speaking
+SENSES_FILE = os.path.join(ROOT_DIR, "config", "senses.json")  # v1.3: operator sense-toggles
 FRAME_SAMPLES = int(SAMPLE_RATE * FRAME_MS / 1000)  # 480
 CHANNELS = 1
+
+
+def _ears_disabled():
+    try:
+        with open(SENSES_FILE, "r", encoding="utf-8") as f:
+            return json.load(f).get("ears") is False
+    except Exception:
+        return False
 
 
 def _touch_listening():
@@ -162,26 +171,16 @@ def save_all_heard(text, relevant, confidence, reason):
 
 
 def transcribe(model, audio_float32):
-    """Transcribe float32 audio array with Whisper"""
-    tmp_path = os.path.join(BASE_DIR, f"heard-{int(time.time())}.wav")
+    """Transcribe float32 audio array with Whisper — passes the numpy array
+    directly to avoid the WAV round-trip (which pulls in ffmpeg)."""
     try:
-        with wave.open(tmp_path, 'wb') as wf:
-            wf.setnchannels(1)
-            wf.setsampwidth(2)
-            wf.setframerate(SAMPLE_RATE)
-            audio_int16 = (audio_float32 * 32767).astype(np.int16)
-            wf.writeframes(audio_int16.tobytes())
-        result = model.transcribe(tmp_path, language="en", fp16=False,
+        audio = np.asarray(audio_float32, dtype=np.float32)
+        result = model.transcribe(audio, language="en", fp16=False,
                                    no_speech_threshold=0.3)
         return result["text"].strip()
     except Exception as e:
         log(f"Transcribe error: {e}")
         return None
-    finally:
-        try:
-            os.unlink(tmp_path)
-        except:
-            pass
 
 
 HALLUCINATIONS = {
@@ -305,6 +304,23 @@ def main():
                     recording = False
                     audio_buffer = []
                     _clear_listening()
+                    continue
+
+                # Sense gate — operator toggled ears off in the web UI
+                if _ears_disabled():
+                    while not audio_q.empty():
+                        try:
+                            audio_q.get_nowait()
+                        except queue.Empty:
+                            break
+                    speech_frames = 0
+                    silence_frames = 0
+                    recording = False
+                    audio_buffer = []
+                    _clear_listening()
+                    if int(time.time()) % 60 == 0:
+                        log("ears disabled - draining")
+                    time.sleep(0.1)
                     continue
 
                 # Sleep mode — no people on camera

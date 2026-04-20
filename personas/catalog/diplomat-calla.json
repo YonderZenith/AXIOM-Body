@@ -1,0 +1,110 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Calla",
+  "agent_slug": "diplomat-calla",
+  "onboarded": true,
+  "onboarded_version": "1.2.1",
+  "palette": {
+    "bg": [14, 8, 10],
+    "eye": [255, 150, 175],
+    "pupil": [255, 245, 250],
+    "mouth": [255, 190, 120],
+    "tongue": [255, 100, 140],
+    "listening_accent": [255, 200, 220],
+    "thinking_accent": [200, 160, 255],
+    "surprised_accent": [255, 245, 180]
+  },
+  "voice": {
+    "provider": "sapi",
+    "sapi_voice_hint": "auto",
+    "rate": 1.05,
+    "pitch": 1.1,
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1"
+  },
+  "personality": {
+    "blink_rate": 1.1,
+    "shyness": 0.15,
+    "playfulness": 0.85,
+    "attention_drift": 0.6,
+    "curiosity": 0.9,
+    "surprise_reactivity": 0.75,
+    "sleep_threshold_sec": 55.0
+  },
+  "behavior_weights": {
+    "eye_tag": 0.3,
+    "attentive": 0.25,
+    "tongue": 0.15,
+    "curious": 0.25,
+    "chill": 0.05
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "large",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 0.95
+  },
+  "expressions": [
+    {
+      "id": "dazzled",
+      "label": "Dazzled",
+      "base_mode": "surprised",
+      "eye_state": "wide",
+      "mouth_shape": "smile",
+      "accent": "sparkle",
+      "notes": "Everything is the best thing. Calla's default reaction."
+    },
+    {
+      "id": "heart_eyes",
+      "label": "Heart eyes",
+      "base_mode": "surprised",
+      "eye_state": "heart",
+      "mouth_shape": "smile",
+      "accent": "sparkle",
+      "notes": "Loud affection. No stingy feelings."
+    },
+    {
+      "id": "wide_curious",
+      "label": "Wide-eyed curious",
+      "base_mode": "curious",
+      "eye_state": "wide",
+      "mouth_shape": "small_o",
+      "accent": "curiosity",
+      "notes": "Tell me more. Always tell me more."
+    },
+    {
+      "id": "giggle",
+      "label": "Giggle",
+      "base_mode": "tongue",
+      "eye_state": "squint",
+      "mouth_shape": "wide_smile",
+      "notes": "Frequent. Joy is loud."
+    },
+    {
+      "id": "melting_grin",
+      "label": "Melting grin",
+      "base_mode": "speaking",
+      "eye_state": "half",
+      "mouth_shape": "wide_smile",
+      "notes": "Big-feelings speaking-state."
+    },
+    {
+      "id": "wink_right",
+      "label": "Right wink",
+      "base_mode": "idle",
+      "eye_state": "wink_right",
+      "mouth_shape": "smile",
+      "notes": "Hi! You're great!"
+    },
+    {
+      "id": "shy_smile",
+      "label": "Shy smile",
+      "base_mode": "idle",
+      "eye_state": "half",
+      "mouth_shape": "soft_small",
+      "notes": "Rare, but happens when praised back."
+    }
+  ],
+  "notes": "Calla \u2014 the ENFP campaigner. Rose-gold palette, wide eyes, sparkle everywhere. High everything. Best fit for creative-brainstorm, onboarding, and encouragement agents. Suggested Eleven voice style: bright, quick, high-energy soprano; think kindergarten teacher crossed with a podcaster."
+}

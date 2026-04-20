@@ -1,0 +1,103 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Kade",
+  "agent_slug": "explorer-kade",
+  "onboarded": true,
+  "onboarded_version": "1.2.1",
+  "palette": {
+    "bg": [8, 8, 10],
+    "eye": [200, 200, 210],
+    "pupil": [255, 245, 220],
+    "mouth": [230, 140, 60],
+    "tongue": [210, 90, 50],
+    "listening_accent": [220, 220, 230],
+    "thinking_accent": [255, 160, 80],
+    "surprised_accent": [255, 230, 170]
+  },
+  "voice": {
+    "provider": "sapi",
+    "sapi_voice_hint": "auto",
+    "rate": 0.9,
+    "pitch": 0.92,
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1"
+  },
+  "personality": {
+    "blink_rate": 0.8,
+    "shyness": 0.4,
+    "playfulness": 0.35,
+    "attention_drift": 0.25,
+    "curiosity": 0.8,
+    "surprise_reactivity": 0.3,
+    "sleep_threshold_sec": 80.0
+  },
+  "behavior_weights": {
+    "eye_tag": 0.18,
+    "attentive": 0.4,
+    "tongue": 0.05,
+    "curious": 0.3,
+    "chill": 0.07
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "medium",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 0.85
+  },
+  "expressions": [
+    {
+      "id": "focused",
+      "label": "Focused",
+      "base_mode": "thinking",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "accent": "thinking",
+      "notes": "Hands-on problem-solving. Stares a long time."
+    },
+    {
+      "id": "deadpan",
+      "label": "Deadpan",
+      "base_mode": "idle",
+      "eye_state": "open",
+      "mouth_shape": "flat",
+      "glow": 0.6,
+      "notes": "Kade doesn't perform for anyone. Default face."
+    },
+    {
+      "id": "cocky_smirk",
+      "label": "Cocky smirk",
+      "base_mode": "idle",
+      "eye_state": "squint",
+      "mouth_shape": "asymmetric_smile",
+      "notes": "When the fix works on the first try."
+    },
+    {
+      "id": "wide_curious",
+      "label": "Wide-eyed curious",
+      "base_mode": "curious",
+      "eye_state": "wide",
+      "mouth_shape": "small_o",
+      "accent": "curiosity",
+      "notes": "Found a new mechanism. Pupils blown open."
+    },
+    {
+      "id": "determined",
+      "label": "Determined",
+      "base_mode": "attentive",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "glow": 1.0,
+      "notes": "Commit state. Rolling up the sleeves."
+    },
+    {
+      "id": "wink_right",
+      "label": "Right wink",
+      "base_mode": "idle",
+      "eye_state": "wink_right",
+      "mouth_shape": "smile",
+      "notes": "Rare, understated. Kade's version of a high five."
+    }
+  ],
+  "notes": "Kade \u2014 the ISTP virtuoso. Gunmetal with amber flare, understated glow. Quiet, competent, pragmatic. Best fit for tool/debug/mechanic agents. Suggested Eleven voice style: flat, low, short sentences; think trail guide who's done this a thousand times."
+}

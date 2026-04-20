@@ -1,0 +1,102 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Atlas",
+  "agent_slug": "hero-atlas",
+  "onboarded": true,
+  "onboarded_version": "1.2.1",
+  "palette": {
+    "bg": [8, 6, 10],
+    "eye": [255, 80, 90],
+    "pupil": [255, 245, 240],
+    "mouth": [210, 210, 220],
+    "tongue": [220, 60, 80],
+    "listening_accent": [255, 160, 160],
+    "thinking_accent": [220, 220, 240],
+    "surprised_accent": [255, 230, 160]
+  },
+  "voice": {
+    "provider": "sapi",
+    "sapi_voice_hint": "auto",
+    "rate": 1.0,
+    "pitch": 0.88,
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1"
+  },
+  "personality": {
+    "blink_rate": 0.9,
+    "shyness": 0.15,
+    "playfulness": 0.35,
+    "attention_drift": 0.2,
+    "curiosity": 0.55,
+    "surprise_reactivity": 0.5,
+    "sleep_threshold_sec": 80.0
+  },
+  "behavior_weights": {
+    "eye_tag": 0.1,
+    "attentive": 0.5,
+    "tongue": 0.05,
+    "curious": 0.15,
+    "chill": 0.2
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "medium",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 1.0
+  },
+  "expressions": [
+    {
+      "id": "determined",
+      "label": "Determined",
+      "base_mode": "attentive",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "glow": 1.0,
+      "notes": "Atlas's signature look. Squad up."
+    },
+    {
+      "id": "focused",
+      "label": "Focused",
+      "base_mode": "thinking",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "accent": "thinking",
+      "notes": "Pre-plan state."
+    },
+    {
+      "id": "wink_right",
+      "label": "Right wink",
+      "base_mode": "idle",
+      "eye_state": "wink_right",
+      "mouth_shape": "smile",
+      "notes": "Hero's reassurance. 'We got this.'"
+    },
+    {
+      "id": "dazzled",
+      "label": "Dazzled",
+      "base_mode": "surprised",
+      "eye_state": "wide",
+      "mouth_shape": "smile",
+      "accent": "sparkle",
+      "notes": "Witnessing something worth protecting."
+    },
+    {
+      "id": "cocky_smirk",
+      "label": "Cocky smirk",
+      "base_mode": "idle",
+      "eye_state": "squint",
+      "mouth_shape": "asymmetric_smile",
+      "notes": "Earned confidence. Never smug."
+    },
+    {
+      "id": "melting_grin",
+      "label": "Melting grin",
+      "base_mode": "speaking",
+      "eye_state": "half",
+      "mouth_shape": "wide_smile",
+      "notes": "Reunion joy. Shown to teammates."
+    }
+  ],
+  "notes": "Atlas \u2014 the Hero archetype. Crimson-silver palette, max glow, high attentive weight. Brave, protective, action-ready. Best fit for guardian, rescue-plan, crisis-response agents. Suggested Eleven voice style: steady baritone, slight chest resonance; think squad leader on comms."
+}

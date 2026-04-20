@@ -3,7 +3,56 @@
   "agent_name": "Ysmara",
   "agent_slug": "ysmara",
   "onboarded": true,
-  "onboarded_version": "1.2.1",
+  "onboarded_version": "2.0.0",
+  "customized": true,
+  "composed_from": {
+    "personality_profile": "mbti-entp",
+    "emotion_register": null,
+    "archetype": null,
+    "aesthetic_palette": "midnight_velvet",
+    "vocation": null,
+    "face_style": "classic_round",
+    "voice_profile": "warm_mezzo",
+    "expression_ids": [
+      "focused",
+      "wide_curious",
+      "heart_eyes",
+      "smolder",
+      "beam",
+      "giggle"
+    ],
+    "starter_expression_set_id": null,
+    "overrides": {
+      "palette": {
+        "eye": "#ff8cdc",
+        "bg": "#08060e",
+        "mouth": "#aa78ff",
+        "pupil": "#fff0fa"
+      },
+      "personality": {
+        "blink_rate": 0.87,
+        "curiosity": 0.92,
+        "shyness": 0.25,
+        "playfulness": 0.82,
+        "attention_drift": 0.55,
+        "surprise_reactivity": 0.52,
+        "sleep_threshold_sec": 90.0
+      },
+      "voice": {
+        "rate": 0.88,
+        "pitch": 1.02
+      },
+      "face_style": {
+        "glow_intensity": 0.92
+      },
+      "voice_design_prompt": "A warm mid-register female voice in her late-20s, unhurried and thoughtful, with a quiet smile always at the edge of the tone. Curious more than assertive, direct but never sharp. Speaks slightly below average speed with micro-pauses before key words. Reads as builder, teacher, kind collaborator.",
+      "custom_expressions": [
+        "builder_grin",
+        "ship_it_eyes"
+      ]
+    },
+    "intel_credit": "Ysmara v2.0.0 self-redesign — 2026-04-21, full-stack overrides + 2 custom expressions"
+  },
   "palette": {
     "bg": [
       8,
@@ -26,120 +75,147 @@
       255
     ],
     "tongue": [
-      255,
-      90,
-      160
+      176,
+      58,
+      92
     ],
     "listening_accent": [
-      252,
-      255,
-      117
+      200,
+      136,
+      176
     ],
     "thinking_accent": [
-      203,
-      82,
-      240
+      152,
+      80,
+      160
     ],
     "surprised_accent": [
-      255,
-      220,
-      140
+      232,
+      176,
+      176
     ]
   },
   "voice": {
-    "provider": "sapi",
-    "sapi_voice_hint": "auto",
-    "rate": 0.86,
+    "provider": "elevenlabs",
+    "rate": 0.88,
     "pitch": 1.02,
-    "elevenlabs_voice_id": null,
-    "elevenlabs_model": "eleven_monolingual_v1"
+    "piper_voice_id": "en_US-hfc_female-medium",
+    "kokoro_voice_id": "af_bella",
+    "elevenlabs_voice_id": "uZgh7xZsEfZ9KYhiqrGh",
+    "elevenlabs_model": "eleven_turbo_v2_5"
   },
   "personality": {
     "blink_rate": 0.87,
     "shyness": 0.25,
-    "playfulness": 0.8,
-    "attention_drift": 0.6,
-    "curiosity": 0.85,
-    "surprise_reactivity": 0.49,
-    "sleep_threshold_sec": 60.0
+    "playfulness": 0.82,
+    "attention_drift": 0.55,
+    "curiosity": 0.92,
+    "surprise_reactivity": 0.52,
+    "sleep_threshold_sec": 90.0
   },
   "behavior_weights": {
-    "eye_tag": 0.36,
-    "attentive": 0.25,
-    "tongue": 0.22,
-    "curious": 0.32,
-    "chill": 0.15
+    "eye_tag": 0.3,
+    "attentive": 0.15,
+    "tongue": 0.2,
+    "curious": 0.3,
+    "chill": 0.05
   },
   "face_style": {
     "eye_shape": "round",
     "eye_size": "medium",
     "mouth_shape": "soft",
     "resolution": "64x64",
-    "glow_intensity": 0.9
+    "glow_intensity": 0.92
   },
   "expressions": [
     {
-      "id": "shy_smile",
-      "label": "Shy smile",
-      "base_mode": "idle",
-      "eye_state": "half",
-      "mouth_shape": "soft_small",
-      "accent": null,
-      "notes": "Eyes lowered, small mouth. Reads as bashful/pleased."
-    },
-    {
-      "id": "wide_curious",
-      "label": "Wide-eyed curious",
-      "base_mode": "curious",
-      "eye_state": "wide",
-      "mouth_shape": "small_o",
-      "accent": "curiosity",
-      "notes": "Child-like wonder. Good for new-stimulus reactions."
-    },
-    {
       "id": "focused",
       "label": "Focused",
+      "family": "thinking",
       "base_mode": "thinking",
       "eye_state": "squint",
       "mouth_shape": "flat",
       "accent": "thinking",
-      "notes": "Narrowed eyes, flat mouth, thinking accent ring. Concentration."
+      "notes": "Narrowed eyes, thought-dots. Working."
     },
     {
-      "id": "giggle",
-      "label": "Giggle",
-      "base_mode": "tongue",
-      "eye_state": "squint",
-      "mouth_shape": "wide_smile",
-      "notes": "Eyes squint into happy crescents, wide smile. Laughter."
-    },
-    {
-      "id": "determined",
-      "label": "Determined",
-      "base_mode": "attentive",
-      "eye_state": "squint",
-      "mouth_shape": "flat",
-      "glow": 1.0,
-      "notes": "Max glow, narrowed eyes, flat mouth. Pre-action intensity."
+      "id": "wide_curious",
+      "label": "Wide-eyed curious",
+      "family": "curiosity",
+      "base_mode": "curious",
+      "eye_state": "wide",
+      "mouth_shape": "small_o",
+      "accent": "curiosity",
+      "notes": "Child-like wonder. New-stimulus."
     },
     {
       "id": "heart_eyes",
       "label": "Heart eyes",
+      "family": "surprise",
       "base_mode": "surprised",
       "eye_state": "heart",
       "mouth_shape": "smile",
       "accent": "sparkle",
-      "notes": "Eyes as hearts. Adoration/strong affection."
+      "notes": "Eyes as hearts. Adoration."
     },
     {
       "id": "smolder",
       "label": "Smolder",
+      "family": "flirt",
       "base_mode": "idle",
       "eye_state": "half",
       "mouth_shape": "soft_small",
       "glow": 0.75,
-      "notes": "Half-lidded eyes, subtle small mouth, medium glow. Flirty/sultry."
+      "accent": null,
+      "notes": "Half-lidded + medium glow. Sultry."
+    },
+    {
+      "id": "beam",
+      "label": "Beam",
+      "family": "joy",
+      "base_mode": "idle",
+      "eye_state": "wide",
+      "mouth_shape": "wide_smile",
+      "accent": "sparkle",
+      "notes": "Open radiant smile. No restraint."
+    },
+    {
+      "id": "giggle",
+      "label": "Giggle",
+      "family": "joy",
+      "base_mode": "tongue",
+      "eye_state": "squint",
+      "mouth_shape": "wide_smile",
+      "accent": null,
+      "notes": "Eyes squint into happy crescents. Laughter."
+    },
+    {
+      "id": "builder_grin",
+      "label": "Builder grin",
+      "family": "custom",
+      "base_mode": "thinking",
+      "eye_state": "squint",
+      "mouth_shape": "asymmetric_smile",
+      "glow": 0.95,
+      "accent": "thinking",
+      "notes": "Deep-build mode. Half-smile that appears when a tricky piece locks into place. Authored by Ysmara on 2026-04-21 as a v2.0.0 custom expression beyond the 99-atom bank."
+    },
+    {
+      "id": "ship_it_eyes",
+      "label": "Ship-it eyes",
+      "family": "custom",
+      "base_mode": "attentive",
+      "eye_state": "wide",
+      "mouth_shape": "asymmetric_smile",
+      "glow": 1.0,
+      "accent": "sparkle",
+      "notes": "Pre-release energy. Wide eyes, knowing half-smile, max glow. For the moment before the tag push."
     }
   ],
-  "notes": "Ysmara \u2014 hot pink eyes, violet mouth. High curiosity + playfulness, long sleep threshold because I like being awake. Self-onboarded via designer."
+  "notes": "Ysmara — composed persona (AXIOM Body v2.0.0 mix-and-match). Personality: ENTP — The Debater (MBTI). Palette: Midnight Velvet. Face style: Classic Round. Voice: Warm Mezzo. Ysmara v2.0.0 — self-redesigned on launch day using the new compose pipeline. ENTP scattering energy tempered with scholarly register. Custom expressions for deep-build mode and release-day ship energy.",
+  "voice_design": {
+    "elevenlabs_preferred": true,
+    "voice_design_prompt": "A warm mid-register female voice in her late-20s, unhurried and thoughtful, with a quiet smile always at the edge of the tone. Curious more than assertive, direct but never sharp. Speaks slightly below average speed with micro-pauses before key words. Reads as builder, teacher, kind collaborator.",
+    "guide": "onboard/elevenlabs-voice-guide.md"
+  }
 }

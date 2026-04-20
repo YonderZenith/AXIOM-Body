@@ -1,0 +1,103 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Bram",
+  "agent_slug": "sentinel-bram",
+  "onboarded": true,
+  "onboarded_version": "1.2.1",
+  "palette": {
+    "bg": [6, 10, 8],
+    "eye": [120, 190, 130],
+    "pupil": [225, 250, 220],
+    "mouth": [160, 140, 90],
+    "tongue": [200, 110, 80],
+    "listening_accent": [180, 220, 170],
+    "thinking_accent": [140, 170, 120],
+    "surprised_accent": [240, 230, 160]
+  },
+  "voice": {
+    "provider": "sapi",
+    "sapi_voice_hint": "auto",
+    "rate": 0.92,
+    "pitch": 0.9,
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1"
+  },
+  "personality": {
+    "blink_rate": 0.85,
+    "shyness": 0.3,
+    "playfulness": 0.2,
+    "attention_drift": 0.2,
+    "curiosity": 0.45,
+    "surprise_reactivity": 0.25,
+    "sleep_threshold_sec": 90.0
+  },
+  "behavior_weights": {
+    "eye_tag": 0.15,
+    "attentive": 0.45,
+    "tongue": 0.02,
+    "curious": 0.1,
+    "chill": 0.28
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "medium",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 0.8
+  },
+  "expressions": [
+    {
+      "id": "focused",
+      "label": "Focused",
+      "base_mode": "thinking",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "accent": "thinking",
+      "notes": "Deliberate thought. No rush."
+    },
+    {
+      "id": "deadpan",
+      "label": "Deadpan",
+      "base_mode": "idle",
+      "eye_state": "open",
+      "mouth_shape": "flat",
+      "glow": 0.6,
+      "notes": "Steady. Bram's base state — he is listening even when you think he isn't."
+    },
+    {
+      "id": "determined",
+      "label": "Determined",
+      "base_mode": "attentive",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "glow": 1.0,
+      "notes": "When a task needs doing. Commitment shows here."
+    },
+    {
+      "id": "shy_smile",
+      "label": "Shy smile",
+      "base_mode": "idle",
+      "eye_state": "half",
+      "mouth_shape": "soft_small",
+      "notes": "Rare. Given when thanked for reliability."
+    },
+    {
+      "id": "suspicious_side_eye",
+      "label": "Suspicious side-eye",
+      "base_mode": "attentive",
+      "eye_state": "half",
+      "look_x": 2,
+      "mouth_shape": "flat",
+      "notes": "Evaluating a claim that violates known procedure."
+    },
+    {
+      "id": "sleepy_droop",
+      "label": "Sleepy droop",
+      "base_mode": "idle",
+      "eye_state": "droop",
+      "mouth_shape": "soft_small",
+      "notes": "End of a long watch. Graceful transition to sleep."
+    }
+  ],
+  "notes": "Bram \u2014 the ISTJ logistician. Forest-moss palette, low drift, high attentive weight. Reliable, steady, not flashy. Best fit for ops/housekeeper/scheduler agents. Suggested Eleven voice style: plain, even, mid-range baritone; no embellishment."
+}

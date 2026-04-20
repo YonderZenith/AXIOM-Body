@@ -28,3 +28,13 @@ __pycache__/
 node_modules/
 .env
 eyes/captures/
+
+# Runtime-only: operator-specific state. Created live; must never ship.
+brain-wake.flag
+brain-heard-cursor.txt
+wake-events.jsonl
+ears/.sheet-maintainer-pos
+ears/all-heard-clean.txt
+voice/muted-utterances.log
+voice/muted-utterances.log.*
+voice/.design-tmp/

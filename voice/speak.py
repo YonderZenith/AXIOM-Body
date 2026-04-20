@@ -163,16 +163,16 @@ def _elevenlabs_speak(text, api_key, voice_id):
     os.replace(tmp, VOICE_META)
     MUTE_FLAG.write_text("1")
 
-    # Play audio via powershell (Windows Media Player COM)
+    # Play audio via Windows MCI (winmm.dll) — reliable for MP3, blocks until
+    # playback ends, no PowerShell/COM hang. Falls back to WMPlayer COM if MCI
+    # isn't available (non-Windows or locked-down env).
     try:
-        ps = (
-            f'$p = New-Object -ComObject WMPlayer.OCX; '
-            f'$p.URL = "{audio_path}"; '
-            f'$p.controls.play(); '
-            f'while ($p.playState -ne 1 -and $p.playState -ne 8) {{ Start-Sleep -Milliseconds 100 }}; '
-            f'$p.close()'
-        )
-        subprocess.run(["powershell", "-NoProfile", "-Command", ps], timeout=total_sec + 5)
+        import ctypes
+        mci = ctypes.windll.winmm.mciSendStringW
+        alias = f"voice{int(time.time()*1000)}"
+        mci(f'open "{audio_path}" type mpegvideo alias {alias}', None, 0, 0)
+        mci(f'play {alias} wait', None, 0, 0)
+        mci(f'close {alias}', None, 0, 0)
     except Exception as e:
         print(f"[speak] playback error: {e}", flush=True)
     finally:
@@ -207,18 +207,40 @@ def _sapi_speak(text):
 def speak(text):
     if not text.strip():
         return False
+    # Sense gate — if voice is toggled off, log and silent-success so the brain
+    # treats the utterance as sent and does not retry. Fail-open on any error.
+    el_enabled = True  # fail-open: EL path allowed unless toggle explicitly off
+    try:
+        senses_path = ROOT / "config" / "senses.json"
+        if senses_path.exists():
+            with open(senses_path, "r", encoding="utf-8") as f:
+                senses = json.load(f)
+            if senses.get("voice") is False:
+                log_path = ROOT / "voice" / "muted-utterances.log"
+                log_path.parent.mkdir(parents=True, exist_ok=True)
+                ts = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+                with open(log_path, "a", encoding="utf-8") as lf:
+                    lf.write(f"[{ts}] (-) {text}\n")
+                print(f"[speak] voice disabled — logged (not spoken): {text[:60]}", flush=True)
+                return True
+            if senses.get("voice_elevenlabs") is False:
+                el_enabled = False
+    except Exception:
+        pass  # fail-open: missing/corrupt senses.json means speak normally with EL allowed.
     voice_cfg = _load_persona_voice()
     api_key = _read_api_key()
     eleven_id = (voice_cfg.get("elevenlabs_voice_id") or "").strip()
-    # Try ElevenLabs first if we have a key AND a non-placeholder voice id.
-    if api_key and eleven_id and not eleven_id.startswith("<"):
+    # Try ElevenLabs first if enabled AND we have a key AND a non-placeholder voice id.
+    if el_enabled and api_key and eleven_id and not eleven_id.startswith("<"):
         print(f"[speak] via ElevenLabs (voice={eleven_id})", flush=True)
         ok = _elevenlabs_speak(text, api_key, eleven_id)
         if ok:
             return True
         print("[speak] ElevenLabs failed, falling back to SAPI", flush=True)
     else:
-        if not api_key:
+        if not el_enabled:
+            print("[speak] EL toggle off — using SAPI (credit-save mode)", flush=True)
+        elif not api_key:
             print("[speak] no ElevenLabs key, using SAPI", flush=True)
         else:
             print(f"[speak] EL voice id missing or placeholder ({eleven_id!r}), using SAPI", flush=True)

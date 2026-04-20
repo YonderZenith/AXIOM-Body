@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "eyes": true,
+  "ears": true,
+  "voice": true,
+  "voice_elevenlabs": true
+}

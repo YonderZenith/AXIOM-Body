@@ -51,6 +51,9 @@ MUTE_FLAG = BASE_DIR / "mute.flag"
 VOICE_META = BASE_DIR / "voice-meta.json"
 STATE_FILE = BASE_DIR / "face-state.json"
 DEFAULT_CONFIG = BASE_DIR / "config" / "face.json"
+SENSES_FILE = BASE_DIR / "config" / "senses.json"
+SENSES_SERVER = BASE_DIR / "config" / "senses-server.py"
+DEFAULT_SENSES = {"eyes": True, "ears": True, "voice": True, "voice_elevenlabs": True}
 
 TICK_SEC = 0.05                   # 20 Hz
 SCHEMA_VERSION = 2
@@ -115,6 +118,44 @@ def read_json(path):
             return json.load(f)
     except Exception:
         return None
+
+
+def read_senses():
+    """Read operator sense-toggle state. Fail-open: all senses enabled on any error."""
+    try:
+        with open(SENSES_FILE, "r", encoding="utf-8") as f:
+            j = json.load(f)
+        return {
+            "eyes": bool(j.get("eyes", True)),
+            "ears": bool(j.get("ears", True)),
+            "voice": bool(j.get("voice", True)),
+            "voice_elevenlabs": bool(j.get("voice_elevenlabs", True)),
+        }
+    except Exception:
+        return dict(DEFAULT_SENSES)
+
+
+def _spawn_senses_server():
+    """Best-effort auto-start of the senses-server sidecar if port 7899 is free."""
+    import socket
+    import subprocess
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.settimeout(0.3)
+        try:
+            s.connect(("127.0.0.1", 7899))
+            return
+        except Exception:
+            pass
+    if not SENSES_SERVER.exists():
+        return
+    try:
+        kwargs = {"stdout": subprocess.DEVNULL, "stderr": subprocess.DEVNULL, "close_fds": True}
+        if os.name == "nt":
+            kwargs["creationflags"] = 0x00000008  # DETACHED_PROCESS
+        subprocess.Popen([sys.executable, str(SENSES_SERVER)], **kwargs)
+        print("[face-engine] spawned senses-server on 127.0.0.1:7899", flush=True)
+    except Exception as e:
+        print(f"[face-engine] could not spawn senses-server: {e}", flush=True)
 
 
 def write_state_atomic(data):
@@ -471,6 +512,7 @@ class FaceEngine:
             "scene_gaze": {"x": gx, "y": gy},
             "palette": self.cfg.get("palette", {}),
             "tick_ms": int(now_ms - self.start_ms),
+            "senses": read_senses(),
         }
         write_state_atomic(state)
 
@@ -480,6 +522,7 @@ class FaceEngine:
 
 def run_loop(config_path):
     cfg = load_config(config_path)
+    _spawn_senses_server()
     engine = FaceEngine(cfg)
     print(f"[face-engine] agent={cfg.get('agent_name')} tick={int(TICK_SEC*1000)}ms", flush=True)
     print(f"[face-engine] state -> {STATE_FILE}", flush=True)

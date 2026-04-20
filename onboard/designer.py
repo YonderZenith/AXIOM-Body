@@ -37,6 +37,58 @@ ROOT = Path(__file__).resolve().parent.parent
 PERSONAS_DIR = ROOT / "personas"
 CONFIG_FILE = ROOT / "config" / "face.json"
 BANK_FILE = Path(__file__).resolve().parent / "expressions-bank.json"
+COMPONENTS_DIR = ROOT / "personas" / "catalog" / "_components"
+EL_GUIDE = ROOT / "onboard" / "elevenlabs-voice-guide.md"
+
+
+def _voice_profile_by_id(voice_profile_id):
+    path = COMPONENTS_DIR / "voice_profiles.json"
+    if not path.exists():
+        return None
+    data = json.loads(path.read_text(encoding="utf-8"))
+    for p in data.get("profiles", []):
+        if p.get("id") == voice_profile_id:
+            return p
+    return None
+
+
+def nudge_elevenlabs_if_needed(voice_profile_id=None, voice_cfg=None):
+    """Print a one-time nudge if the picked voice prefers ElevenLabs and no
+    ELEVEN_API_KEY is set. Returns True if EL is ready, False if falling back.
+    This runs in BOTH the legacy designer path and the compose path."""
+    el_preferred = False
+    if voice_profile_id:
+        vp = _voice_profile_by_id(voice_profile_id)
+        if vp and vp.get("elevenlabs_preferred"):
+            el_preferred = True
+    elif voice_cfg and voice_cfg.get("provider") == "elevenlabs":
+        el_preferred = True
+
+    has_key = bool(os.environ.get("ELEVEN_API_KEY"))
+    if el_preferred and not has_key:
+        msg = [
+            "",
+            "[voice] This persona's ideal voice is ElevenLabs voice-design,",
+            "[voice] but ELEVEN_API_KEY is not set in your environment.",
+            "[voice] To unlock agent-authored custom voices:",
+            "[voice]   1. Sign up: https://elevenlabs.io (free tier available).",
+            "[voice]   2. Copy your API key: https://elevenlabs.io/app/settings/api-keys",
+            "[voice]   3. Set it:",
+            "[voice]        setx ELEVEN_API_KEY \"sk-xxx\"   (Windows — restart shell)",
+            "[voice]        export ELEVEN_API_KEY=\"sk-xxx\" (macOS/Linux — or ~/.bashrc)",
+            "[voice]   4. Re-run onboarding, or re-run designer with --voice-design.",
+            f"[voice] Voice-creation logic: {EL_GUIDE}",
+            "[voice] Proceeding with FREE fallback (Piper / Kokoro). Persona still valid.",
+            "",
+        ]
+        print("\n".join(msg), file=sys.stderr)
+        return False
+    if el_preferred and has_key:
+        print("[voice] ELEVEN_API_KEY detected. ElevenLabs voice-design available.",
+              file=sys.stderr)
+        print(f"[voice] Voice-creation logic: {EL_GUIDE}", file=sys.stderr)
+        return True
+    return has_key  # not EL-preferred, but flag whether key is available
 
 
 def load_bank():
@@ -239,6 +291,7 @@ def main():
     parser = argparse.ArgumentParser(description="Onboard a new AXIOM-Body agent.")
     parser.add_argument("--name", required=False)
     parser.add_argument("--slug", required=False)
+    # Legacy hash-seeded path
     parser.add_argument("--eye", help="#rrggbb")
     parser.add_argument("--pupil", help="#rrggbb")
     parser.add_argument("--mouth", help="#rrggbb")
@@ -247,7 +300,7 @@ def main():
     parser.add_argument("--curiosity", type=float)
     parser.add_argument("--shyness", type=float)
     parser.add_argument("--sleep-threshold", type=float)
-    parser.add_argument("--voice-provider", choices=["sapi", "elevenlabs"])
+    parser.add_argument("--voice-provider", choices=["sapi", "elevenlabs", "piper", "kokoro"])
     parser.add_argument("--voice-id")
     parser.add_argument("--voice-rate", type=float)
     parser.add_argument("--voice-pitch", type=float)
@@ -255,15 +308,76 @@ def main():
     parser.add_argument("--notes")
     parser.add_argument("--random", action="store_true", help="Skip overrides; seed everything from slug hash.")
     parser.add_argument("--interactive", action="store_true")
+    # v2.0.0 mix-and-match compose path — any of these triggers delegation to compose.py
+    parser.add_argument("--personality", help="Component id from personality_profiles.json")
+    parser.add_argument("--emotion", help="Component id from emotion_registers.json (optional)")
+    parser.add_argument("--archetype", help="Component id from archetypes.json (optional)")
+    parser.add_argument("--palette", help="Component id from aesthetic_palettes.json")
+    parser.add_argument("--vocation", help="Component id from vocations.json (optional)")
+    parser.add_argument("--face-style", dest="face_style", help="Component id from face_styles.json")
+    parser.add_argument("--voice", dest="voice_profile", help="Component id from voice_profiles.json")
+    parser.add_argument("--starter-set", dest="starter_set",
+                        help="Pre-curated expression set from starter_expression_sets.json")
+    parser.add_argument("--list-components", action="store_true",
+                        help="Print every valid component id per category and exit.")
     args = parser.parse_args()
 
+    compose_flags = any([args.personality, args.palette, args.face_style,
+                          args.voice_profile, args.starter_set,
+                          args.emotion, args.archetype, args.vocation])
+
+    if args.list_components:
+        sys.path.insert(0, str(ROOT))
+        from personas.catalog._gen.compose import list_components
+        print(json.dumps(list_components(), indent=2))
+        return
+
     bank = load_bank()
+
+    if compose_flags:
+        # Delegate to the v2 composer.
+        sys.path.insert(0, str(ROOT))
+        from personas.catalog._gen.compose import compose_persona, write_persona as compose_write, ComposeError
+        if not args.name or not args.slug:
+            parser.error("--name and --slug are required for compose path")
+        nudge_elevenlabs_if_needed(voice_profile_id=args.voice_profile)
+        expr_ids = None
+        if args.expressions:
+            expr_ids = [e.strip() for e in args.expressions.split(",") if e.strip()]
+        try:
+            persona = compose_persona(
+                agent_name=args.name,
+                agent_slug=args.slug.lower().strip(),
+                personality_profile=args.personality,
+                emotion_register=args.emotion,
+                archetype=args.archetype,
+                aesthetic_palette=args.palette,
+                vocation=args.vocation,
+                face_style=args.face_style,
+                voice_profile=args.voice_profile,
+                expression_ids=expr_ids,
+                starter_expression_set_id=args.starter_set,
+                notes=args.notes,
+            )
+        except ComposeError as e:
+            print(f"[designer] compose ERROR: {e}", file=sys.stderr)
+            sys.exit(2)
+        persona_path, config_path = compose_write(persona)
+        print(f"[designer] wrote {persona_path}")
+        print(f"[designer] wrote {config_path}")
+        print(f"[designer] {persona['agent_name']} composed (v2 mix-and-match).")
+        print(f"  voice = {persona['voice']['provider']} (rate={persona['voice']['rate']}, pitch={persona['voice']['pitch']})")
+        print(f"  expressions = {[e['id'] for e in persona['expressions']]}")
+        return
+
+    # Legacy hash-seeded path
     if args.interactive:
         args = interactive(args, bank)
     if not args.name or not args.slug:
-        parser.error("--name and --slug are required (or use --interactive)")
+        parser.error("--name and --slug are required (or use --interactive, or pass compose flags)")
 
     persona = build_persona(args, bank)
+    nudge_elevenlabs_if_needed(voice_cfg=persona.get("voice"))
     persona_path, config_path = write_persona(persona)
     print(f"[designer] wrote {persona_path}")
     print(f"[designer] wrote {config_path}")

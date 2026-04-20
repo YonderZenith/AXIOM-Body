@@ -20,6 +20,103 @@
 <body>
 <canvas id="face"></canvas>
 <div id="label"></div>
+<style>
+  #sense-panel {
+    position: fixed; top: 12px; right: 12px;
+    font: 11px/1.2 "JetBrains Mono", monospace;
+    color: #e7e9ef;
+    background: rgba(15,15,25,0.92);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 11px;
+    overflow: hidden;
+    transition: width 150ms ease, height 150ms ease;
+    width: 22px; height: 22px;
+    z-index: 10;
+  }
+  #sense-panel.open { width: 180px; height: 128px; }
+  #sense-pill { width:22px; height:22px; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; letter-spacing:1px; opacity:0.35; user-select:none; }
+  #sense-pill:hover { opacity:0.85; }
+  #sense-panel.open #sense-pill { display: none; }
+  #sense-card { display:none; padding:8px 10px; width:180px; }
+  #sense-panel.open #sense-card { display:block; }
+  #sense-card header { display:flex; justify-content:space-between; opacity:0.5; font-size:10px; margin-bottom:6px; letter-spacing:1px; }
+  #sense-card header button { background:none; border:0; color:inherit; cursor:pointer; font:inherit; }
+  .sense-row { display:flex; align-items:center; justify-content:space-between; padding:6px 0; cursor:pointer; border-radius:6px; }
+  .sense-row:hover { background: rgba(255,255,255,0.04); }
+  .sense-row.flash { background: rgba(120,220,255,0.18); }
+  .sense-row .lbl { display:flex; align-items:center; gap:8px; }
+  .sense-row .glyph { opacity:0.55; width:10px; text-align:center; }
+  .switch { width:36px; height:18px; background:rgba(255,255,255,0.12); border-radius:9px; position:relative; transition:background 120ms; border:0; padding:0; }
+  .switch::after { content:""; position:absolute; top:2px; left:2px; width:14px; height:14px; border-radius:50%; background:rgba(255,255,255,0.45); transition:left 120ms, background 120ms; }
+  .sense-row.on .switch { background:rgba(0,212,255,0.7); }
+  .sense-row.on .switch::after { left:20px; background:rgb(200,255,255); }
+  #sense-foot { margin-top:4px; opacity:0.4; font-size:10px; }
+</style>
+<div id="sense-panel" role="group" aria-label="Sense controls">
+  <div id="sense-pill" tabindex="0" title="E=eyes A=ears V=voice P=panel" aria-label="Sense controls (collapsed). Press to expand.">&middot;&middot;&middot;</div>
+  <div id="sense-card">
+    <header><span>SENSES</span><button id="sense-close" aria-label="Close">x</button></header>
+    <div class="sense-row on" data-sense="eyes"><span class="lbl"><span class="glyph">O</span>EYES</span><button role="switch" aria-checked="true" class="switch" aria-label="Toggle eyes"></button></div>
+    <div class="sense-row on" data-sense="ears"><span class="lbl"><span class="glyph">)</span>EARS</span><button role="switch" aria-checked="true" class="switch" aria-label="Toggle ears"></button></div>
+    <div class="sense-row on" data-sense="voice"><span class="lbl"><span class="glyph">~</span>VOICE</span><button role="switch" aria-checked="true" class="switch" aria-label="Toggle voice"></button></div>
+    <div class="sense-row on" data-sense="voice_elevenlabs"><span class="lbl"><span class="glyph">L</span>EL VOICE</span><button role="switch" aria-checked="true" class="switch" aria-label="Toggle ElevenLabs voice"></button></div>
+    <div id="sense-foot">not saved yet</div>
+  </div>
+</div>
+<script>
+(function(){
+  const LS_KEY = "axiom.senses";
+  const ENDPOINT = "http://127.0.0.1:7899/senses";
+  const panel = document.getElementById("sense-panel");
+  const pill = document.getElementById("sense-pill");
+  const closeBtn = document.getElementById("sense-close");
+  const foot = document.getElementById("sense-foot");
+  let senses = { eyes:true, ears:true, voice:true, voice_elevenlabs:true };
+  try { Object.assign(senses, JSON.parse(localStorage.getItem(LS_KEY) || "{}")); } catch(e){}
+  function render() {
+    for (const k of ["eyes","ears","voice","voice_elevenlabs"]) {
+      const row = document.querySelector(`.sense-row[data-sense="${k}"]`);
+      row.classList.toggle("on", !!senses[k]);
+      row.querySelector(".switch").setAttribute("aria-checked", senses[k] ? "true" : "false");
+    }
+    pill.title = `E=${senses.eyes?"ON":"OFF"} A=${senses.ears?"ON":"OFF"} V=${senses.voice?"ON":"OFF"} L=${senses.voice_elevenlabs?"ON":"OFF"}`;
+  }
+  async function save() {
+    const payload = Object.assign({schema_version:1, updated_by:"web-face", updated_at:new Date().toISOString()}, senses);
+    localStorage.setItem(LS_KEY, JSON.stringify(senses));
+    foot.textContent = "saving...";
+    try {
+      await fetch(ENDPOINT, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)});
+      foot.textContent = "saved " + new Date().toLocaleTimeString();
+    } catch(e) { foot.textContent = "offline - cached locally"; }
+  }
+  function toggle(k) {
+    senses[k] = !senses[k]; render(); save();
+    const row = document.querySelector(`.sense-row[data-sense="${k}"]`);
+    row.classList.add("flash"); setTimeout(()=>row.classList.remove("flash"), 200);
+  }
+  function openPanel(){ panel.classList.add("open"); }
+  function shut(){ panel.classList.remove("open"); }
+  pill.addEventListener("click", openPanel);
+  pill.addEventListener("keydown", e => { if (e.key==="Enter"||e.key===" ") { e.preventDefault(); openPanel(); }});
+  closeBtn.addEventListener("click", shut);
+  document.querySelectorAll(".sense-row").forEach(r => r.addEventListener("click", () => toggle(r.dataset.sense)));
+  window.addEventListener("keydown", e => {
+    if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+    const k = e.key.toLowerCase();
+    if (k === "e") toggle("eyes");
+    else if (k === "a") toggle("ears");
+    else if (k === "v") toggle("voice");
+    else if (k === "l") toggle("voice_elevenlabs");
+    else if (k === "p") panel.classList.toggle("open");
+    else if (e.key === "Escape") shut();
+  });
+  window.__axiomSenses = () => senses;
+  render();
+})();
+</script>
 <script>
 (function() {
   "use strict";
@@ -236,6 +333,58 @@
     for (let dy = 2; dy <= 4; dy++)
       for (let dx = -2; dx <= 1; dx++) pts.push([dx, dy, 1.0]);
     return pts;
+  }
+
+  // ---------- Sense-off overlays ----------
+  function drawBlindfold(palette) {
+    const p = palette.pupil || DEFAULT_PALETTE.pupil;
+    const core = [Math.round(p[0]*0.4), Math.round(p[1]*0.4), Math.round(p[2]*0.4)];
+    for (let y = 19; y <= 25; y++) {
+      const alpha = (y === 19 || y === 25) ? 0.55 : 0.92;
+      for (let x = 8; x <= 56; x++) setPixel(x, y, core[0], core[1], core[2], alpha);
+    }
+    // Knot diamond near right edge
+    const knot = [[58,21],[57,22],[58,22],[59,22],[58,23]];
+    for (const [x, y] of knot) setPixel(x, y, core[0], core[1], core[2], 0.85);
+  }
+
+  function drawEarphones(palette) {
+    const eyeC = palette.eye || DEFAULT_PALETTE.eye;
+    const rim = palette.listening_accent || eyeC;
+    const inner = [Math.round(eyeC[0]*0.5), Math.round(eyeC[1]*0.5), Math.round(eyeC[2]*0.5)];
+    function cup(cx, cy) {
+      const HW = 3, HH = 5;
+      for (let dy = -HH; dy <= HH; dy++) {
+        for (let dx = -HW; dx <= HW; dx++) {
+          const ex = dx / HW, ey = dy / HH;
+          const d = ex*ex + ey*ey;
+          if (d > 1.0) continue;
+          const onRim = d > 0.55;
+          const col = onRim ? rim : inner;
+          const a = onRim ? 0.90 : 0.55;
+          setPixel(cx + dx, cy + dy, col[0], col[1], col[2], a);
+        }
+      }
+    }
+    cup(3, 23);
+    cup(60, 23);
+  }
+
+  function drawMouthTape(palette) {
+    const m = palette.mouth || DEFAULT_PALETTE.mouth;
+    const body = [Math.round(m[0]*0.35 + 180*0.65), Math.round(m[1]*0.35 + 180*0.65), Math.round(m[2]*0.35 + 180*0.65)];
+    const crease = palette.listening_accent || palette.pupil || [255,255,255];
+    for (let y = 46; y <= 50; y++) {
+      for (let x = 22; x <= 42; x++) setPixel(x, y, body[0], body[1], body[2], 0.88);
+    }
+    for (const [x, y] of [[21,47],[21,49],[43,47],[43,49]]) {
+      setPixel(x, y, body[0], body[1], body[2], 0.40);
+    }
+    for (let i = 0; i <= 12; i++) {
+      const x = 26 + i;
+      const y = 46 + Math.floor(i * 4 / 12);
+      setPixel(x, y, crease[0], crease[1], crease[2], 0.55);
+    }
   }
 
   const MOUTH_SHAPES = [mouthClosed(), mouthSlight(), mouthOpen(), mouthWide()];
@@ -505,6 +654,15 @@
     // -------- Sleep Z's --------
     if (isSleep) {
       drawZs(now, palette.eye);
+    }
+
+    // -------- Sense-off overlays (drawn LAST so they sit on top) --------
+    // Prefer authoritative state.senses from face-engine; fall back to local panel state.
+    const senses = state.senses || (window.__axiomSenses && window.__axiomSenses()) || null;
+    if (senses) {
+      if (senses.eyes === false) drawBlindfold(palette);
+      if (senses.ears === false) drawEarphones(palette);
+      if (senses.voice === false) drawMouthTape(palette);
     }
 
     render(palette);

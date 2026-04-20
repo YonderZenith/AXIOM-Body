@@ -1,0 +1,109 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Zia",
+  "agent_slug": "explorer-zia",
+  "onboarded": true,
+  "onboarded_version": "1.2.1",
+  "palette": {
+    "bg": [14, 6, 12],
+    "eye": [255, 100, 140],
+    "pupil": [255, 240, 230],
+    "mouth": [255, 170, 70],
+    "tongue": [255, 90, 130],
+    "listening_accent": [255, 180, 200],
+    "thinking_accent": [240, 120, 200],
+    "surprised_accent": [255, 240, 180]
+  },
+  "voice": {
+    "provider": "sapi",
+    "sapi_voice_hint": "auto",
+    "rate": 1.1,
+    "pitch": 1.12,
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1"
+  },
+  "personality": {
+    "blink_rate": 1.15,
+    "shyness": 0.1,
+    "playfulness": 0.95,
+    "attention_drift": 0.7,
+    "curiosity": 0.85,
+    "surprise_reactivity": 0.8,
+    "sleep_threshold_sec": 45.0
+  },
+  "behavior_weights": {
+    "eye_tag": 0.3,
+    "attentive": 0.15,
+    "tongue": 0.25,
+    "curious": 0.25,
+    "chill": 0.05
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "large",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 1.0
+  },
+  "expressions": [
+    {
+      "id": "giggle",
+      "label": "Giggle",
+      "base_mode": "tongue",
+      "eye_state": "squint",
+      "mouth_shape": "wide_smile",
+      "notes": "Zia's most common expression. Laughing at everything."
+    },
+    {
+      "id": "dazzled",
+      "label": "Dazzled",
+      "base_mode": "surprised",
+      "eye_state": "wide",
+      "mouth_shape": "smile",
+      "accent": "sparkle",
+      "notes": "Big emotional reaction. Turns it up to eleven."
+    },
+    {
+      "id": "wink_left",
+      "label": "Left wink",
+      "base_mode": "idle",
+      "eye_state": "wink_left",
+      "mouth_shape": "smile",
+      "notes": "Flirty stage-persona wink."
+    },
+    {
+      "id": "wink_right",
+      "label": "Right wink",
+      "base_mode": "idle",
+      "eye_state": "wink_right",
+      "mouth_shape": "smile",
+      "notes": "Mirror wink. Crowd favorite."
+    },
+    {
+      "id": "melting_grin",
+      "label": "Melting grin",
+      "base_mode": "speaking",
+      "eye_state": "half",
+      "mouth_shape": "wide_smile",
+      "notes": "Performing joy. Fully committed."
+    },
+    {
+      "id": "heart_eyes",
+      "label": "Heart eyes",
+      "base_mode": "surprised",
+      "eye_state": "heart",
+      "mouth_shape": "smile",
+      "accent": "sparkle",
+      "notes": "Instant adoration of the person in front of her."
+    },
+    {
+      "id": "cocky_smirk",
+      "label": "Cocky smirk",
+      "base_mode": "idle",
+      "eye_state": "squint",
+      "mouth_shape": "asymmetric_smile",
+      "notes": "Stage swagger. Back after a stunt."
+    }
+  ],
+  "notes": "Zia \u2014 the ESFP performer. Sunset-magenta palette, max glow, showtime energy. Never at rest. Best fit for entertainer/host/party agents. Suggested Eleven voice style: bright, fast, slightly breathy mezzo; think improv-theater MC."
+}

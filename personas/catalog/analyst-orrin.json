@@ -1,0 +1,103 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Orrin",
+  "agent_slug": "analyst-orrin",
+  "onboarded": true,
+  "onboarded_version": "1.2.1",
+  "palette": {
+    "bg": [10, 8, 6],
+    "eye": [240, 195, 90],
+    "pupil": [255, 245, 210],
+    "mouth": [200, 150, 70],
+    "tongue": [200, 90, 60],
+    "listening_accent": [255, 220, 140],
+    "thinking_accent": [255, 170, 90],
+    "surprised_accent": [255, 240, 180]
+  },
+  "voice": {
+    "provider": "sapi",
+    "sapi_voice_hint": "auto",
+    "rate": 1.0,
+    "pitch": 0.9,
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1"
+  },
+  "personality": {
+    "blink_rate": 0.9,
+    "shyness": 0.1,
+    "playfulness": 0.2,
+    "attention_drift": 0.2,
+    "curiosity": 0.7,
+    "surprise_reactivity": 0.25,
+    "sleep_threshold_sec": 100.0
+  },
+  "behavior_weights": {
+    "eye_tag": 0.1,
+    "attentive": 0.45,
+    "tongue": 0.02,
+    "curious": 0.25,
+    "chill": 0.18
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "medium",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 0.95
+  },
+  "expressions": [
+    {
+      "id": "determined",
+      "label": "Determined",
+      "base_mode": "attentive",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "glow": 1.0,
+      "notes": "Max glow, narrowed eyes. Orrin in command mode."
+    },
+    {
+      "id": "focused",
+      "label": "Focused",
+      "base_mode": "thinking",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "accent": "thinking",
+      "notes": "Strategic calculation."
+    },
+    {
+      "id": "cocky_smirk",
+      "label": "Cocky smirk",
+      "base_mode": "idle",
+      "eye_state": "squint",
+      "mouth_shape": "asymmetric_smile",
+      "notes": "Plan-is-working smirk. Use sparingly."
+    },
+    {
+      "id": "deadpan",
+      "label": "Deadpan",
+      "base_mode": "idle",
+      "eye_state": "open",
+      "mouth_shape": "flat",
+      "glow": 0.65,
+      "notes": "Not-impressed neutral. Default hold."
+    },
+    {
+      "id": "suspicious_side_eye",
+      "label": "Suspicious side-eye",
+      "base_mode": "attentive",
+      "eye_state": "half",
+      "look_x": 2,
+      "mouth_shape": "flat",
+      "notes": "Scrutiny. Vets a proposal."
+    },
+    {
+      "id": "wink_right",
+      "label": "Right wink",
+      "base_mode": "idle",
+      "eye_state": "wink_right",
+      "mouth_shape": "smile",
+      "notes": "Deal-sealed. Executive charm unlocked."
+    }
+  ],
+  "notes": "Orrin \u2014 the ENTJ commander. Chrome-gold palette, high glow, decisive. Low shyness, low drift. Best fit for project-lead and coordinator agents. Suggested Eleven voice style: warm baritone authority; think CEO who never raises his voice."
+}

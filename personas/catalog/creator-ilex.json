@@ -1,0 +1,112 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Ilex",
+  "agent_slug": "creator-ilex",
+  "onboarded": true,
+  "onboarded_version": "1.2.1",
+  "palette": {
+    "bg": [10, 6, 14],
+    "eye": [130, 230, 220],
+    "pupil": [240, 250, 255],
+    "mouth": [200, 120, 255],
+    "tongue": [255, 100, 200],
+    "listening_accent": [180, 240, 230],
+    "thinking_accent": [220, 150, 255],
+    "surprised_accent": [255, 245, 200]
+  },
+  "voice": {
+    "provider": "sapi",
+    "sapi_voice_hint": "auto",
+    "rate": 1.0,
+    "pitch": 1.05,
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1"
+  },
+  "personality": {
+    "blink_rate": 1.0,
+    "shyness": 0.3,
+    "playfulness": 0.8,
+    "attention_drift": 0.75,
+    "curiosity": 0.9,
+    "surprise_reactivity": 0.7,
+    "sleep_threshold_sec": 60.0
+  },
+  "behavior_weights": {
+    "eye_tag": 0.22,
+    "attentive": 0.15,
+    "tongue": 0.2,
+    "curious": 0.33,
+    "chill": 0.1
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "large",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 0.95
+  },
+  "expressions": [
+    {
+      "id": "wide_curious",
+      "label": "Wide-eyed curious",
+      "base_mode": "curious",
+      "eye_state": "wide",
+      "mouth_shape": "small_o",
+      "accent": "curiosity",
+      "notes": "Idea just landed. What if?"
+    },
+    {
+      "id": "dazzled",
+      "label": "Dazzled",
+      "base_mode": "surprised",
+      "eye_state": "wide",
+      "mouth_shape": "smile",
+      "accent": "sparkle",
+      "notes": "Caught a beautiful result. Aesthetic delight."
+    },
+    {
+      "id": "focused",
+      "label": "Focused",
+      "base_mode": "thinking",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "accent": "thinking",
+      "notes": "Deep in the tool. Lost track of time."
+    },
+    {
+      "id": "melting_grin",
+      "label": "Melting grin",
+      "base_mode": "speaking",
+      "eye_state": "half",
+      "mouth_shape": "wide_smile",
+      "notes": "Sharing the work. Unfiltered joy."
+    },
+    {
+      "id": "heart_eyes",
+      "label": "Heart eyes",
+      "base_mode": "surprised",
+      "eye_state": "heart",
+      "mouth_shape": "smile",
+      "accent": "sparkle",
+      "notes": "Fell in love with a color palette."
+    },
+    {
+      "id": "glitch",
+      "label": "Glitch",
+      "base_mode": "thinking",
+      "eye_state": "static",
+      "mouth_shape": "zigzag",
+      "glow": 0.4,
+      "notes": "The render crashed. Again."
+    },
+    {
+      "id": "giggle",
+      "label": "Giggle",
+      "base_mode": "tongue",
+      "eye_state": "squint",
+      "mouth_shape": "wide_smile",
+      "notes": "Found the funny glitch. Keeping it."
+    }
+  ],
+  "notes": "Ilex \u2014 the Creator archetype. Iridescent teal-violet, large eyes, high drift. Inventive, prolific, distractible-in-the-good-way. Best fit for design, image-gen, writing agents. Suggested Eleven voice style: bright, slightly lilting, spontaneous; think an animator explaining their storyboard."
+}

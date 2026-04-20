@@ -1,0 +1,55 @@
+{
+  "$schema_version": 1,
+  "category": "face_style",
+  "description": "Face-form combinations: eye shape + eye size + mouth line + canvas resolution + baseline glow intensity. Expert board: Disney/Pixar silhouette-first readability (round=warm, angular=sharp, narrow=mask-like), Munari minimalism (can the face survive at 48×48?). Engine today honors glow_intensity directly; the other fields are stored for future renderer work and for agent self-description. Agent picks one.",
+  "face_styles": [
+    {
+      "id": "classic_round",
+      "label": "Classic Round",
+      "summary": "Warm, universally legible. Safe default.",
+      "face_style": { "eye_shape": "round", "eye_size": "medium", "mouth_shape": "soft", "resolution": "64x64", "glow_intensity": 0.85 }
+    },
+    {
+      "id": "pixel_crisp",
+      "label": "Pixel Crisp",
+      "summary": "High-contrast retro-game feel. Sharp edges, max glow.",
+      "face_style": { "eye_shape": "round", "eye_size": "small", "mouth_shape": "flat", "resolution": "64x64", "glow_intensity": 1.0 }
+    },
+    {
+      "id": "sleepy_soft",
+      "label": "Sleepy Soft",
+      "summary": "Large eyes, soft mouth, low glow. Reads as gentle/drowsy.",
+      "face_style": { "eye_shape": "round", "eye_size": "large", "mouth_shape": "soft", "resolution": "64x64", "glow_intensity": 0.7 }
+    },
+    {
+      "id": "angular_alien",
+      "label": "Angular Alien",
+      "summary": "Diamond eyes, angular mouth. Otherworldly/sharp.",
+      "face_style": { "eye_shape": "diamond", "eye_size": "medium", "mouth_shape": "angular", "resolution": "64x64", "glow_intensity": 0.90 }
+    },
+    {
+      "id": "minimal_dot",
+      "label": "Minimal Dot",
+      "summary": "Pared-down glyph. Small eyes, minimal mouth, lower resolution. Zen.",
+      "face_style": { "eye_shape": "round", "eye_size": "small", "mouth_shape": "minimal", "resolution": "48x48", "glow_intensity": 0.75 }
+    },
+    {
+      "id": "oval_theatrical",
+      "label": "Oval Theatrical",
+      "summary": "Tall eyes, wide mouth. Expressive, stage-sized.",
+      "face_style": { "eye_shape": "oval", "eye_size": "large", "mouth_shape": "wide", "resolution": "64x64", "glow_intensity": 0.88 }
+    },
+    {
+      "id": "spectral_glow",
+      "label": "Spectral Glow",
+      "summary": "Max glow ghost. Translucent, radiant, unearthly.",
+      "face_style": { "eye_shape": "round", "eye_size": "medium", "mouth_shape": "soft", "resolution": "64x64", "glow_intensity": 1.0 }
+    },
+    {
+      "id": "carved_mask",
+      "label": "Carved Mask",
+      "summary": "Narrow eyes, flat mouth. Noh/Kabuki stylized stillness.",
+      "face_style": { "eye_shape": "narrow", "eye_size": "medium", "mouth_shape": "flat", "resolution": "64x64", "glow_intensity": 0.82 }
+    }
+  ]
+}

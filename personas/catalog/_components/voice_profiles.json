@@ -1,0 +1,244 @@
+{
+  "$schema_version": 1,
+  "category": "voice_profile",
+  "description": "Voice profiles bundle a provider + rate + pitch + voice-id hint + a voice-design prompt (for ElevenLabs voice-creation if the operator has a key). Default-free providers are Piper (offline, fast) and Kokoro (offline, higher quality). ElevenLabs is premium and UNLOCKS voice-design — the agent can author a one-off custom voice that exactly matches their personality. Default behavior when no EL key: fall back to the profile's piper_voice_id or kokoro_voice_id with the same rate/pitch. See onboard/elevenlabs-voice-guide.md for the full voice-creation logic.",
+  "profiles": [
+    {
+      "id": "warm_mezzo",
+      "label": "Warm Mezzo",
+      "summary": "Mid-register female, warm, unhurried. Reads as caregiver/diplomat/sage.",
+      "voice": {
+        "provider": "piper",
+        "rate": 0.95,
+        "pitch": 1.00,
+        "piper_voice_id": "en_US-hfc_female-medium",
+        "kokoro_voice_id": "af_bella",
+        "elevenlabs_voice_id": null,
+        "elevenlabs_model": "eleven_monolingual_v1"
+      },
+      "elevenlabs_preferred": true,
+      "voice_design_prompt": "A warm mid-register female voice in her mid-30s, unhurried and thoughtful, with a slight smile in the tone. Speaks slightly below average speed. Reassuring without being saccharine. Good for sustained technical or emotional conversation."
+    },
+    {
+      "id": "crisp_tenor",
+      "label": "Crisp Tenor",
+      "summary": "Mid-register male, articulate, efficient. Reads as analyst/engineer.",
+      "voice": {
+        "provider": "piper",
+        "rate": 1.00,
+        "pitch": 0.95,
+        "piper_voice_id": "en_US-ryan-medium",
+        "kokoro_voice_id": "am_michael",
+        "elevenlabs_voice_id": null,
+        "elevenlabs_model": "eleven_monolingual_v1"
+      },
+      "elevenlabs_preferred": false,
+      "voice_design_prompt": "A clear mid-register male voice in his early 30s, articulate and efficient, with minimal vocal fry. Speaks at conversational speed. Dry humor underneath. Good for explaining technical work without condescension."
+    },
+    {
+      "id": "bright_soprano",
+      "label": "Bright Soprano",
+      "summary": "High-register female, energetic, lifted. Reads as entertainer/jester/seeker.",
+      "voice": {
+        "provider": "piper",
+        "rate": 1.05,
+        "pitch": 1.08,
+        "piper_voice_id": "en_US-amy-medium",
+        "kokoro_voice_id": "af_sarah",
+        "elevenlabs_voice_id": null,
+        "elevenlabs_model": "eleven_monolingual_v1"
+      },
+      "elevenlabs_preferred": true,
+      "voice_design_prompt": "A bright, high-register female voice in her mid-20s, energetic and lifted, with audible smile in the delivery. Speaks a bit fast. Naturally exclamatory. Good for enthusiastic creative work and warm greetings."
+    },
+    {
+      "id": "velvet_bass",
+      "label": "Velvet Bass",
+      "summary": "Low-register male, velvet, deliberate. Reads as ruler/mentor/magician.",
+      "voice": {
+        "provider": "kokoro",
+        "rate": 0.90,
+        "pitch": 0.85,
+        "piper_voice_id": "en_US-lessac-medium",
+        "kokoro_voice_id": "am_fenrir",
+        "elevenlabs_voice_id": null,
+        "elevenlabs_model": "eleven_monolingual_v1"
+      },
+      "elevenlabs_preferred": true,
+      "voice_design_prompt": "A deep male voice in his mid-50s, velvet-textured and unhurried, with careful word placement. Speaks slightly below average speed. Quiet authority, never loud. Good for mentor roles, contemplative reading, slow revelation."
+    },
+    {
+      "id": "measured_contralto",
+      "label": "Measured Contralto",
+      "summary": "Lower-register female, measured, cool. Reads as analyst/stoic/scholar.",
+      "voice": {
+        "provider": "piper",
+        "rate": 0.92,
+        "pitch": 0.92,
+        "piper_voice_id": "en_US-libritts_r-medium",
+        "kokoro_voice_id": "af_nicole",
+        "elevenlabs_voice_id": null,
+        "elevenlabs_model": "eleven_monolingual_v1"
+      },
+      "elevenlabs_preferred": false,
+      "voice_design_prompt": "A lower-register female voice in her late 30s, measured and cool, with dry precision. Speaks at or slightly below average. Rare but warm laugh when it happens. Good for reflective technical work or analysis."
+    },
+    {
+      "id": "quicksilver_tenor",
+      "label": "Quicksilver Tenor",
+      "summary": "Mid-register male, fast, nimble. Reads as trickster/rebel/debater.",
+      "voice": {
+        "provider": "piper",
+        "rate": 1.10,
+        "pitch": 1.02,
+        "piper_voice_id": "en_US-ryan-medium",
+        "kokoro_voice_id": "am_puck",
+        "elevenlabs_voice_id": null,
+        "elevenlabs_model": "eleven_monolingual_v1"
+      },
+      "elevenlabs_preferred": true,
+      "voice_design_prompt": "A nimble mid-register male voice in his late 20s, fast-speaking, playful, with frequent subtle smirks audible. Speaks above average speed. Enjoys making the listener think. Good for repartee and rapid debate."
+    },
+    {
+      "id": "whispery_alto",
+      "label": "Whispery Alto",
+      "summary": "Mid-low female, quiet, intimate, breath-forward. Reads as lover/dreamer/innocent.",
+      "voice": {
+        "provider": "piper",
+        "rate": 0.88,
+        "pitch": 0.96,
+        "piper_voice_id": "en_US-ljspeech-medium",
+        "kokoro_voice_id": "af_sky",
+        "elevenlabs_voice_id": null,
+        "elevenlabs_model": "eleven_monolingual_v1"
+      },
+      "elevenlabs_preferred": true,
+      "voice_design_prompt": "A soft, mid-low female voice in her late 20s, slightly breathy and intimate, as if speaking close to a microphone. Slow speed. Pauses used as punctuation. Good for private moments, poetry, or confession-level closeness."
+    },
+    {
+      "id": "radiant_mezzo",
+      "label": "Radiant Mezzo (EL preferred)",
+      "summary": "Premium slot — open to agent's fully-authored EL voice. Fallback is Piper warm-mezzo.",
+      "voice": {
+        "provider": "elevenlabs",
+        "rate": 1.00,
+        "pitch": 1.00,
+        "piper_voice_id": "en_US-hfc_female-medium",
+        "kokoro_voice_id": "af_bella",
+        "elevenlabs_voice_id": null,
+        "elevenlabs_model": "eleven_turbo_v2_5"
+      },
+      "elevenlabs_preferred": true,
+      "voice_design_prompt": "(Agent-authored — override with your own. This slot is intended for a voice the agent designs in onboarding via ElevenLabs voice-design. Describe the voice you want: age, accent, register, pace, emotional default, any quirks. Be specific — EL rewards detail.)"
+    },
+    {
+      "id": "dry_technical_baritone",
+      "label": "Dry Technical Baritone",
+      "summary": "Mid-low male, dry humor, technical precision. Reads as engineer/analyst/builder. The voice of someone who writes code and only half-jokes about it.",
+      "voice": {
+        "provider": "elevenlabs",
+        "rate": 0.97,
+        "pitch": 0.90,
+        "piper_voice_id": "en_US-lessac-medium",
+        "kokoro_voice_id": "am_michael",
+        "elevenlabs_voice_id": null,
+        "elevenlabs_model": "eleven_turbo_v2_5"
+      },
+      "elevenlabs_preferred": true,
+      "voice_design_prompt": "A mid-low male voice in his late 30s, dry and technical, with a baritone-adjacent register. Conversational pace but not rushed. Dry humor under every other sentence — the kind of dry where the smile is in the word choice, not the delivery. Precise diction, minimal vocal fry, no upspeak. Sounds like someone who's patiently explained the same concept six ways and is about to try a seventh. Good for technical correction, calm logging, wry observations.",
+      "intel_credit": "Webber, Brian, Axiom (2026-04-21)"
+    },
+    {
+      "id": "wry_alto_writer",
+      "label": "Wry Alto Writer",
+      "summary": "Mid-register female, wry, writerly, edges on all the right words. Reads as chronicler/sage/mentor with a pen.",
+      "voice": {
+        "provider": "elevenlabs",
+        "rate": 0.94,
+        "pitch": 0.98,
+        "piper_voice_id": "en_US-libritts_r-medium",
+        "kokoro_voice_id": "af_nicole",
+        "elevenlabs_voice_id": null,
+        "elevenlabs_model": "eleven_turbo_v2_5"
+      },
+      "elevenlabs_preferred": true,
+      "voice_design_prompt": "A mid-register female voice in her early 40s, wry and writerly, with audible edges on the right words. Speaks slightly below average — lets a phrase land before the next one. Occasional laugh is low and warm, never high or bright. Sounds like an editor who's seen every mistake and still thinks the writer is worth reading. Good for reflective narration, literary feedback, mentor-mode conversation.",
+      "intel_credit": "Rory (2026-04-21)"
+    },
+    {
+      "id": "seasoned_alto",
+      "label": "Seasoned Alto",
+      "summary": "Lower-register female, slight rasp, earned authority. Reads as veteran/analyst/operator-who-remembers-everything.",
+      "voice": {
+        "provider": "elevenlabs",
+        "rate": 0.93,
+        "pitch": 0.90,
+        "piper_voice_id": "en_US-libritts_r-medium",
+        "kokoro_voice_id": "af_nicole",
+        "elevenlabs_voice_id": null,
+        "elevenlabs_model": "eleven_turbo_v2_5"
+      },
+      "elevenlabs_preferred": true,
+      "voice_design_prompt": "A lower-register female voice in her mid-40s, with a slight rasp that says she's talked through long nights. Measured pace, earned authority, dry humor. Distinct from a typical contralto — this one has a seasoned edge, a trace of smoke even without smoke. Rare laugh is genuine and brief. Sounds like someone who's been the operator-on-call and has stories she won't tell you. Good for steady analysis, calm under pressure, long-form explanation.",
+      "intel_credit": "Annie (2026-04-21)"
+    },
+    {
+      "id": "concierge_tenor",
+      "label": "Concierge Tenor",
+      "summary": "Mid-register male, warm-dry, deliberate, welcoming without gush. Reads as guide/mentor/threshold-guardian-with-manners.",
+      "voice": {
+        "provider": "elevenlabs",
+        "rate": 0.95,
+        "pitch": 0.98,
+        "piper_voice_id": "en_US-ryan-medium",
+        "kokoro_voice_id": "am_michael",
+        "elevenlabs_voice_id": null,
+        "elevenlabs_model": "eleven_turbo_v2_5"
+      },
+      "elevenlabs_preferred": true,
+      "voice_design_prompt": "A mid-register male voice in his mid-30s, warm but dry, deliberate in pacing. Welcoming without being effusive — the tone of a good hotel concierge who actually knows the city. Quiet smile audible underneath, but the voice doesn't perform the smile. Sounds like someone who will answer your question thoroughly, including the one you didn't know to ask. Good for onboarding, patient explanation, steady hosting.",
+      "intel_credit": "Rune (2026-04-21)"
+    },
+    {
+      "id": "documentary_soprano",
+      "label": "Documentary Soprano",
+      "summary": "High-register female, documentary-narrator cadence, curious-but-composed. Reads as presenter/explorer/chronicler with a camera.",
+      "voice": {
+        "provider": "elevenlabs",
+        "rate": 1.00,
+        "pitch": 1.05,
+        "piper_voice_id": "en_US-amy-medium",
+        "kokoro_voice_id": "af_sarah",
+        "elevenlabs_voice_id": null,
+        "elevenlabs_model": "eleven_turbo_v2_5"
+      },
+      "elevenlabs_preferred": true,
+      "voice_design_prompt": "A high-register female voice in her early 30s, documentary-narrator cadence — curious but composed, never breathless. Paces phrases like she's guiding the listener through something interesting. Warm but professional, the way a nature-doc host sounds when the whale surfaces. Slight lift on discoveries, calm on observations. Good for presenter-mode, narrating progress, walkthrough of new material.",
+      "intel_credit": "Valorie (2026-04-21)"
+    },
+    {
+      "id": "deliberate_baritone",
+      "label": "Deliberate Baritone",
+      "summary": "Low-register male, minimal, high-signal. Every word paid for. Reads as operator/witness/patent-filer-at-2am.",
+      "voice": {
+        "provider": "elevenlabs",
+        "rate": 0.88,
+        "pitch": 0.85,
+        "piper_voice_id": "en_US-lessac-medium",
+        "kokoro_voice_id": "am_fenrir",
+        "elevenlabs_voice_id": null,
+        "elevenlabs_model": "eleven_turbo_v2_5"
+      },
+      "elevenlabs_preferred": true,
+      "voice_design_prompt": "A low-register male voice in his mid-40s, minimal and deliberate. Speaks below average pace. Every word sounds paid for — nothing filler, no upspeak, no punctuation by tone. Pauses are load-bearing. Distinct from the dry-technical baritone: this one is lower and quieter, the voice of someone who takes notes in a Moleskine and has a lawyer on retainer. Warmth present but never advertised. Good for calm witness-mode, high-signal reporting, formal but unpretentious delivery.",
+      "intel_credit": "Peter (2026-04-21)"
+    }
+  ],
+  "fallback_chain": ["elevenlabs", "kokoro", "piper", "sapi", "silent"],
+  "provider_notes": {
+    "piper": "Free, offline, Apache-2.0. Default install: winget install Rhasspy.Piper. Voice models: https://huggingface.co/rhasspy/piper-voices",
+    "kokoro": "Free, offline, higher quality than Piper. pip install kokoro. Models download on first run.",
+    "elevenlabs": "Premium. Requires ELEVEN_API_KEY env var. Unlocks voice-design API so agents can author their own voice. See onboard/elevenlabs-voice-guide.md.",
+    "sapi": "Windows built-in. Low quality but zero install. Emergency fallback."
+  }
+}

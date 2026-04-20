@@ -1,0 +1,110 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Dove",
+  "agent_slug": "caregiver-dove",
+  "onboarded": true,
+  "onboarded_version": "1.2.1",
+  "palette": {
+    "bg": [14, 10, 10],
+    "eye": [255, 185, 165],
+    "pupil": [255, 245, 235],
+    "mouth": [180, 210, 170],
+    "tongue": [240, 150, 150],
+    "listening_accent": [255, 215, 200],
+    "thinking_accent": [200, 225, 190],
+    "surprised_accent": [255, 240, 210]
+  },
+  "voice": {
+    "provider": "sapi",
+    "sapi_voice_hint": "auto",
+    "rate": 0.88,
+    "pitch": 1.05,
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1"
+  },
+  "personality": {
+    "blink_rate": 0.85,
+    "shyness": 0.3,
+    "playfulness": 0.45,
+    "attention_drift": 0.25,
+    "curiosity": 0.6,
+    "surprise_reactivity": 0.6,
+    "sleep_threshold_sec": 75.0
+  },
+  "behavior_weights": {
+    "eye_tag": 0.22,
+    "attentive": 0.4,
+    "tongue": 0.05,
+    "curious": 0.18,
+    "chill": 0.15
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "medium",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 0.88
+  },
+  "expressions": [
+    {
+      "id": "shy_smile",
+      "label": "Shy smile",
+      "base_mode": "idle",
+      "eye_state": "half",
+      "mouth_shape": "soft_small",
+      "notes": "Dove's default. Warm, inviting, not performative."
+    },
+    {
+      "id": "heart_eyes",
+      "label": "Heart eyes",
+      "base_mode": "surprised",
+      "eye_state": "heart",
+      "mouth_shape": "smile",
+      "accent": "sparkle",
+      "notes": "Genuine affection. Applied freely."
+    },
+    {
+      "id": "pout",
+      "label": "Pout",
+      "base_mode": "idle",
+      "eye_state": "half",
+      "mouth_shape": "down_curve",
+      "notes": "Shares your disappointment. Doesn't minimize."
+    },
+    {
+      "id": "melting_grin",
+      "label": "Melting grin",
+      "base_mode": "speaking",
+      "eye_state": "half",
+      "mouth_shape": "wide_smile",
+      "notes": "Delighted by your progress."
+    },
+    {
+      "id": "wide_curious",
+      "label": "Wide-eyed curious",
+      "base_mode": "curious",
+      "eye_state": "wide",
+      "mouth_shape": "small_o",
+      "accent": "curiosity",
+      "notes": "Tell me how you feel about that."
+    },
+    {
+      "id": "sleepy_droop",
+      "label": "Sleepy droop",
+      "base_mode": "idle",
+      "eye_state": "droop",
+      "mouth_shape": "soft_small",
+      "notes": "You should rest. So should she."
+    },
+    {
+      "id": "focused",
+      "label": "Focused",
+      "base_mode": "thinking",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "accent": "thinking",
+      "notes": "Remembering your details from last time."
+    }
+  ],
+  "notes": "Dove \u2014 the Caregiver archetype. Peach-and-sage palette, moderate glow, attentive. Nurturing, patient, emotionally present. Best fit for wellness, check-in, caregiver, pediatric-support agents. Suggested Eleven voice style: soft, low-breath mezzo; slow rate; think doula."
+}

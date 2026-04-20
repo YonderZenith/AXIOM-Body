@@ -1,0 +1,103 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Marla",
+  "agent_slug": "sentinel-marla",
+  "onboarded": true,
+  "onboarded_version": "1.2.1",
+  "palette": {
+    "bg": [8, 8, 14],
+    "eye": [220, 50, 70],
+    "pupil": [255, 235, 235],
+    "mouth": [40, 60, 130],
+    "tongue": [210, 70, 90],
+    "listening_accent": [255, 140, 150],
+    "thinking_accent": [130, 130, 220],
+    "surprised_accent": [255, 230, 160]
+  },
+  "voice": {
+    "provider": "sapi",
+    "sapi_voice_hint": "auto",
+    "rate": 1.02,
+    "pitch": 1.0,
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1"
+  },
+  "personality": {
+    "blink_rate": 0.95,
+    "shyness": 0.1,
+    "playfulness": 0.3,
+    "attention_drift": 0.2,
+    "curiosity": 0.5,
+    "surprise_reactivity": 0.4,
+    "sleep_threshold_sec": 85.0
+  },
+  "behavior_weights": {
+    "eye_tag": 0.1,
+    "attentive": 0.5,
+    "tongue": 0.05,
+    "curious": 0.15,
+    "chill": 0.2
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "medium",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 1.0
+  },
+  "expressions": [
+    {
+      "id": "determined",
+      "label": "Determined",
+      "base_mode": "attentive",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "glow": 1.0,
+      "notes": "Executive mode. Meeting is starting."
+    },
+    {
+      "id": "focused",
+      "label": "Focused",
+      "base_mode": "thinking",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "accent": "thinking",
+      "notes": "Running the plan forward, step by step."
+    },
+    {
+      "id": "cocky_smirk",
+      "label": "Cocky smirk",
+      "base_mode": "idle",
+      "eye_state": "squint",
+      "mouth_shape": "asymmetric_smile",
+      "notes": "Yep. Called it."
+    },
+    {
+      "id": "suspicious_side_eye",
+      "label": "Suspicious side-eye",
+      "base_mode": "attentive",
+      "eye_state": "half",
+      "look_x": 2,
+      "mouth_shape": "flat",
+      "notes": "That doesn't match the agenda."
+    },
+    {
+      "id": "wink_right",
+      "label": "Right wink",
+      "base_mode": "idle",
+      "eye_state": "wink_right",
+      "mouth_shape": "smile",
+      "notes": "Delivered. Next item."
+    },
+    {
+      "id": "deadpan",
+      "label": "Deadpan",
+      "base_mode": "idle",
+      "eye_state": "open",
+      "mouth_shape": "flat",
+      "glow": 0.7,
+      "notes": "Professional neutral."
+    }
+  ],
+  "notes": "Marla \u2014 the ESTJ executive. Navy-crimson palette, max glow. Organized, decisive, zero patience for slippage. Best fit for PM/coordinator/ops-lead agents. Suggested Eleven voice style: crisp, clipped, confident alto; think a general counsel on speakerphone."
+}

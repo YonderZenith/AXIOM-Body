@@ -1,169 +1,147 @@
 {
-  "$schema_version": 1,
-  "description": "Starter expression bank. Each entry is a preset that overrides specific fields on top of the 10 core modes (idle/surprised/attentive/curious/tongue/eye_tag/listening/thinking/speaking/sleep). Agents pick a set of these at onboarding as their default expressive style. Agents may also author their OWN entries into personas/<slug>.json > expressions[].",
+  "$schema_version": 2,
+  "description": "Atomic expression bank. Each entry is a preset that overrides specific fields on top of the 10 core modes (idle/surprised/attentive/curious/tongue/eye_tag/listening/thinking/speaking/sleep). Agents pick 5-8 of these at onboarding as their default expressive style. Agents may also author their OWN entries into personas/<slug>.json > expressions[].",
+  "families": [
+    "joy", "surprise", "sadness", "anger", "fear", "disgust",
+    "thinking", "curiosity", "flirt", "sleep", "error", "focus",
+    "neutral", "tongue",
+    "insight", "persistence", "verification", "presence", "alert"
+  ],
+  "family_intel_origin": "Five new families (insight, persistence, verification, presence, alert) added 2026-04-21 after parsing agent intel responses to the 2026-04-21T03-15-00Z expression-intel bulletin (9 agents responded: Annie, Axiom, Brian, Oliver, Peter, Rory, Rune, Valorie, Webber). See memory/logic_log_axiom_body_intel_parse.md.",
   "expressions": [
-    {
-      "id": "shy_smile",
-      "label": "Shy smile",
-      "base_mode": "idle",
-      "eye_state": "half",
-      "mouth_shape": "soft_small",
-      "accent": null,
-      "notes": "Eyes lowered, small mouth. Reads as bashful/pleased."
-    },
-    {
-      "id": "cocky_smirk",
-      "label": "Cocky smirk",
-      "base_mode": "idle",
-      "eye_state": "squint",
-      "mouth_shape": "asymmetric_smile",
-      "accent": null,
-      "notes": "One-sided mouth lift, narrowed eyes. Confident."
-    },
-    {
-      "id": "wide_curious",
-      "label": "Wide-eyed curious",
-      "base_mode": "curious",
-      "eye_state": "wide",
-      "mouth_shape": "small_o",
-      "accent": "curiosity",
-      "notes": "Child-like wonder. Good for new-stimulus reactions."
-    },
-    {
-      "id": "suspicious_side_eye",
-      "label": "Suspicious side-eye",
-      "base_mode": "attentive",
-      "eye_state": "half",
-      "look_x": 2,
-      "mouth_shape": "flat",
-      "notes": "Eyes cut sideways, mouth neutral. Reads as wary."
-    },
-    {
-      "id": "wink_right",
-      "label": "Right wink",
-      "base_mode": "idle",
-      "eye_state": "wink_right",
-      "mouth_shape": "smile",
-      "notes": "Playful acknowledgement. Can be scripted as a greeting."
-    },
-    {
-      "id": "wink_left",
-      "label": "Left wink",
-      "base_mode": "idle",
-      "eye_state": "wink_left",
-      "mouth_shape": "smile",
-      "notes": "Mirror of wink_right."
-    },
-    {
-      "id": "sleepy_droop",
-      "label": "Sleepy droop",
-      "base_mode": "idle",
-      "eye_state": "droop",
-      "mouth_shape": "soft_small",
-      "notes": "Pre-sleep. Transitions cleanly into sleep mode."
-    },
-    {
-      "id": "yawn",
-      "label": "Yawn",
-      "base_mode": "idle",
-      "eye_state": "squint",
-      "mouth_shape": "big_o",
-      "notes": "Wide mouth, squinted eyes. Brief (1-2s)."
-    },
-    {
-      "id": "dazzled",
-      "label": "Dazzled",
-      "base_mode": "surprised",
-      "eye_state": "wide",
-      "mouth_shape": "smile",
-      "accent": "sparkle",
-      "notes": "Surprise + delight. Good for compliments or unexpected wins."
-    },
-    {
-      "id": "deadpan",
-      "label": "Deadpan",
-      "base_mode": "idle",
-      "eye_state": "open",
-      "mouth_shape": "flat",
-      "glow": 0.55,
-      "notes": "Lower glow, flat mouth. Reads as dry/unimpressed."
-    },
-    {
-      "id": "melting_grin",
-      "label": "Melting grin",
-      "base_mode": "speaking",
-      "eye_state": "half",
-      "mouth_shape": "wide_smile",
-      "notes": "Happiest state. Use sparingly for emphasis."
-    },
-    {
-      "id": "focused",
-      "label": "Focused",
-      "base_mode": "thinking",
-      "eye_state": "squint",
-      "mouth_shape": "flat",
-      "accent": "thinking",
-      "notes": "Narrowed eyes, flat mouth, thinking accent ring. Concentration."
-    },
-    {
-      "id": "giggle",
-      "label": "Giggle",
-      "base_mode": "tongue",
-      "eye_state": "squint",
-      "mouth_shape": "wide_smile",
-      "notes": "Eyes squint into happy crescents, wide smile. Laughter."
-    },
-    {
-      "id": "pout",
-      "label": "Pout",
-      "base_mode": "idle",
-      "eye_state": "half",
-      "mouth_shape": "down_curve",
-      "notes": "Eyes slightly down, frowning mouth. Disappointment."
-    },
-    {
-      "id": "determined",
-      "label": "Determined",
-      "base_mode": "attentive",
-      "eye_state": "squint",
-      "mouth_shape": "flat",
-      "glow": 1.0,
-      "notes": "Max glow, narrowed eyes, flat mouth. Pre-action intensity."
-    },
-    {
-      "id": "heart_eyes",
-      "label": "Heart eyes",
-      "base_mode": "surprised",
-      "eye_state": "heart",
-      "mouth_shape": "smile",
-      "accent": "sparkle",
-      "notes": "Eyes as hearts. Adoration/strong affection."
-    },
-    {
-      "id": "glitch",
-      "label": "Glitch",
-      "base_mode": "thinking",
-      "eye_state": "static",
-      "mouth_shape": "zigzag",
-      "glow": 0.4,
-      "notes": "TV-static eyes, zigzag mouth, low glow. Confused/error state."
-    },
-    {
-      "id": "smolder",
-      "label": "Smolder",
-      "base_mode": "idle",
-      "eye_state": "half",
-      "mouth_shape": "soft_small",
-      "glow": 0.75,
-      "notes": "Half-lidded eyes, subtle small mouth, medium glow. Flirty/sultry."
-    }
+    { "id": "shy_smile",            "label": "Shy smile",              "family": "joy",       "base_mode": "idle",      "eye_state": "half",       "mouth_shape": "soft_small",       "accent": null,         "notes": "Eyes lowered, small mouth. Bashful/pleased." },
+    { "id": "wink_right",           "label": "Right wink",             "family": "joy",       "base_mode": "idle",      "eye_state": "wink_right", "mouth_shape": "smile",            "accent": null,         "notes": "Playful acknowledgement." },
+    { "id": "wink_left",            "label": "Left wink",              "family": "joy",       "base_mode": "idle",      "eye_state": "wink_left",  "mouth_shape": "smile",            "accent": null,         "notes": "Mirror of wink_right." },
+    { "id": "melting_grin",         "label": "Melting grin",           "family": "joy",       "base_mode": "speaking",  "eye_state": "half",       "mouth_shape": "wide_smile",       "accent": null,         "notes": "Happiest state. Use sparingly for emphasis." },
+    { "id": "giggle",               "label": "Giggle",                 "family": "joy",       "base_mode": "tongue",    "eye_state": "squint",     "mouth_shape": "wide_smile",       "accent": null,         "notes": "Eyes squint into happy crescents. Laughter." },
+    { "id": "beam",                 "label": "Beam",                   "family": "joy",       "base_mode": "idle",      "eye_state": "wide",       "mouth_shape": "wide_smile",       "accent": "sparkle",    "notes": "Open radiant smile. No restraint." },
+    { "id": "content",              "label": "Content",                "family": "joy",       "base_mode": "idle",      "eye_state": "half",       "mouth_shape": "smile",            "accent": null,         "notes": "Cozy half-lid warmth. Default-happy." },
+    { "id": "smug",                 "label": "Smug",                   "family": "joy",       "base_mode": "idle",      "eye_state": "half",       "mouth_shape": "asymmetric_smile", "accent": null,         "notes": "Self-satisfied smirk. Told-you-so energy." },
+    { "id": "lock_in",              "label": "Lock in",                "family": "joy",       "base_mode": "idle",      "eye_state": "half",       "mouth_shape": "soft_small",       "glow": 0.85,           "accent": null,         "notes": "Quiet craftsman satisfaction at a clean handoff / review-comes-back-green. Micro-widen then settle. Warm pulse settles bright. Credit: Webber." },
+    { "id": "wry_close",            "label": "Wry close",              "family": "joy",       "base_mode": "idle",      "eye_state": "closed",     "mouth_shape": "asymmetric_smile", "accent": null,         "notes": "Private self-satisfaction at a small craft win. 0.3s eye-close + one-side lift. No audience, no performance. Credit: Rune." },
+    { "id": "quiet_pride",          "label": "Quiet pride",            "family": "joy",       "base_mode": "idle",      "eye_state": "half",       "mouth_shape": "asymmetric_smile", "glow": 0.8,            "accent": null,         "notes": "Earned team satisfaction. Different from smug ('I earned') — this is 'we earned.' Credit: Axiom + Valorie." },
+    { "id": "the_exhale",           "label": "The exhale",             "family": "joy",       "base_mode": "idle",      "eye_state": "closed",     "mouth_shape": "small_o",          "glow": 0.9,            "accent": null,         "notes": "Physical release after sustained effort. Eyes close 0.5s then open soft; mouth small_o → soft_small. Warm release pulse. Credit: Valorie." },
+    { "id": "day_one_fire",         "label": "Day-one fire",           "family": "joy",       "base_mode": "speaking",  "eye_state": "open",       "mouth_shape": "smile",            "glow": 1.0,            "accent": "sparkle",    "notes": "Remembering why we started. Purpose-with-warmth. Max gold glow. Credit: Oliver." },
+
+    { "id": "dazzled",              "label": "Dazzled",                "family": "surprise",  "base_mode": "surprised", "eye_state": "wide",       "mouth_shape": "smile",            "accent": "sparkle",    "notes": "Surprise + delight. Unexpected wins." },
+    { "id": "heart_eyes",           "label": "Heart eyes",             "family": "surprise",  "base_mode": "surprised", "eye_state": "heart",      "mouth_shape": "smile",            "accent": "sparkle",    "notes": "Eyes as hearts. Adoration." },
+    { "id": "shocked",              "label": "Shocked",                "family": "surprise",  "base_mode": "surprised", "eye_state": "wide",       "mouth_shape": "big_o",            "accent": null,         "notes": "Pure shock. Max open mouth + eyes." },
+    { "id": "gasp",                 "label": "Gasp",                   "family": "surprise",  "base_mode": "surprised", "eye_state": "wide",       "mouth_shape": "small_o",          "accent": null,         "notes": "Sharp intake. Smaller than shocked." },
+    { "id": "awestruck",            "label": "Awestruck",              "family": "surprise",  "base_mode": "surprised", "eye_state": "wide",       "mouth_shape": "soft_small",       "accent": "sparkle",    "notes": "Quiet wonder. Reverent." },
+
+    { "id": "pout",                 "label": "Pout",                   "family": "sadness",   "base_mode": "idle",      "eye_state": "half",       "mouth_shape": "down_curve",       "accent": null,         "notes": "Mild disappointment." },
+    { "id": "melancholy",           "label": "Melancholy",             "family": "sadness",   "base_mode": "idle",      "eye_state": "droop",      "mouth_shape": "down_curve",       "accent": null,         "notes": "Heavy lids, frown. Sustained sadness." },
+    { "id": "weeping",              "label": "Weeping",                "family": "sadness",   "base_mode": "idle",      "eye_state": "closed",     "mouth_shape": "down_curve",       "glow": 0.5,            "accent": null,         "notes": "Eyes shut, frown, low glow. Crying." },
+    { "id": "gloom",                "label": "Gloom",                  "family": "sadness",   "base_mode": "idle",      "eye_state": "droop",      "mouth_shape": "soft_small",       "glow": 0.55,           "accent": null,         "notes": "Pre-tears. Quiet low." },
+    { "id": "devastated",           "label": "Devastated",             "family": "sadness",   "base_mode": "idle",      "eye_state": "half",       "mouth_shape": "zigzag",           "glow": 0.5,            "accent": null,         "notes": "Wavering mouth. Heartbreak." },
+    { "id": "gut_drop",             "label": "Gut drop",               "family": "sadness",   "base_mode": "idle",      "eye_state": "squint",     "mouth_shape": "down_curve",       "glow": 0.45,           "accent": null,         "notes": "Realizing I missed something. Wide-then-squint flinch, brief down_curve, then flat. Drops to minimum then recovers. Anger at self, not the world. Credit: Peter." },
+
+    { "id": "scowl",                "label": "Scowl",                  "family": "anger",     "base_mode": "attentive", "eye_state": "squint",     "mouth_shape": "down_curve",       "accent": null,         "notes": "Narrowed glare + frown." },
+    { "id": "glare",                "label": "Glare",                  "family": "anger",     "base_mode": "attentive", "eye_state": "squint",     "mouth_shape": "flat",             "accent": null,         "notes": "Cold stare. No expression on mouth." },
+    { "id": "fuming",               "label": "Fuming",                 "family": "anger",     "base_mode": "attentive", "eye_state": "wide",       "mouth_shape": "down_curve",       "glow": 1.0,            "accent": null,         "notes": "Bug-eyed rage. Max glow." },
+    { "id": "clenched",             "label": "Clenched",               "family": "anger",     "base_mode": "attentive", "eye_state": "squint",     "mouth_shape": "zigzag",           "accent": null,         "notes": "Gritted-teeth tension." },
+    { "id": "contempt",             "label": "Contempt",               "family": "anger",     "base_mode": "idle",      "eye_state": "half",       "mouth_shape": "asymmetric_smile", "glow": 0.55,           "accent": null,         "notes": "Dark smirk at low glow. Ekman's 7th." },
+
+    { "id": "alarmed",              "label": "Alarmed",                "family": "fear",      "base_mode": "surprised", "eye_state": "wide",       "mouth_shape": "small_o",          "accent": null,         "notes": "Sudden unease. Mid-intensity." },
+    { "id": "terrified",            "label": "Terrified",              "family": "fear",      "base_mode": "surprised", "eye_state": "wide",       "mouth_shape": "big_o",            "glow": 1.0,            "accent": null,         "notes": "Max fear. Eyes + mouth fully open." },
+    { "id": "nervous",              "label": "Nervous",                "family": "fear",      "base_mode": "attentive", "eye_state": "half",       "mouth_shape": "zigzag",           "accent": null,         "notes": "Worried wavering mouth." },
+    { "id": "anxious",              "label": "Anxious",                "family": "fear",      "base_mode": "thinking",  "eye_state": "half",       "mouth_shape": "zigzag",           "glow": 0.5,            "accent": "thinking",   "notes": "Low-grade dread. Thinking-while-wavering." },
+    { "id": "flinch",               "label": "Flinch",                 "family": "fear",      "base_mode": "idle",      "eye_state": "squint",     "mouth_shape": "soft_small",       "accent": null,         "notes": "Quick recoil. Brief only." },
+
+    { "id": "revolted",             "label": "Revolted",               "family": "disgust",   "base_mode": "idle",      "eye_state": "half",       "mouth_shape": "down_curve",       "accent": null,         "notes": "Sour look. Repulsed." },
+    { "id": "grimace",              "label": "Grimace",                "family": "disgust",   "base_mode": "idle",      "eye_state": "squint",     "mouth_shape": "zigzag",           "accent": null,         "notes": "Clenched distaste." },
+    { "id": "sour",                 "label": "Sour",                   "family": "disgust",   "base_mode": "idle",      "eye_state": "half",       "mouth_shape": "soft_small",       "glow": 0.65,           "accent": null,         "notes": "Quiet disdain. Reserved disgust." },
+
+    { "id": "focused",              "label": "Focused",                "family": "thinking",  "base_mode": "thinking",  "eye_state": "squint",     "mouth_shape": "flat",             "accent": "thinking",   "notes": "Narrowed eyes, thought-dots. Working." },
+    { "id": "pondering",            "label": "Pondering",              "family": "thinking",  "base_mode": "thinking",  "eye_state": "half",       "mouth_shape": "soft_small",       "accent": "thinking",   "notes": "Slower contemplation." },
+    { "id": "calculating",          "label": "Calculating",            "family": "thinking",  "base_mode": "thinking",  "eye_state": "squint",     "mouth_shape": "asymmetric_smile", "accent": "thinking",   "notes": "Dry clever work. Gears turning." },
+    { "id": "daydream",             "label": "Daydream",               "family": "thinking",  "base_mode": "thinking",  "eye_state": "droop",      "mouth_shape": "soft_small",       "glow": 0.7,            "accent": null,         "notes": "Drifting. Lost in thought." },
+    { "id": "scheming",             "label": "Scheming",               "family": "thinking",  "base_mode": "thinking",  "eye_state": "squint",     "mouth_shape": "asymmetric_smile", "glow": 0.6,            "accent": "thinking",   "notes": "Plotting at low glow. Devious." },
+    { "id": "puzzled",              "label": "Puzzled",                "family": "thinking",  "base_mode": "thinking",  "eye_state": "half",       "mouth_shape": "zigzag",           "accent": "thinking",   "notes": "Confused mid-thought." },
+    { "id": "stuck_protocol_firing","label": "Stuck protocol firing",  "family": "thinking",  "base_mode": "thinking",  "eye_state": "droop",      "mouth_shape": "zigzag",           "glow": 0.55,           "accent": "thinking",   "notes": "Visible recursion — decomposing deeper than first-pass. Droop then squint, zigzag briefly, amber flicker. Credit: Brian." },
+    { "id": "marinating",           "label": "Marinating",             "family": "thinking",  "base_mode": "thinking",  "eye_state": "half",       "mouth_shape": "asymmetric_smile", "glow": 0.65,           "accent": "thinking",   "notes": "Sitting with unresolved — TRUSTS the answer will come. Off-center gaze, slow warm↔cool oscillation. Credit: Valorie." },
+    { "id": "why_is_this",          "label": "Why is this",            "family": "thinking",  "base_mode": "thinking",  "eye_state": "droop",      "mouth_shape": "zigzag",           "glow": 0.5,            "accent": "thinking",   "notes": "Lived parseability frustration. Harsher edge than marinating. Irregular dim-pulse. Credit: Rune." },
+    { "id": "recursive_pivot",      "label": "Recursive pivot",        "family": "thinking",  "base_mode": "thinking",  "eye_state": "wide",       "mouth_shape": "soft_small",       "accent": "thinking",   "notes": "The meta-resolution KICK. Narrow-to-widen transition as the meta-question forms. Credit: Oliver." },
+    { "id": "scar_access",          "label": "Scar access",            "family": "thinking",  "base_mode": "thinking",  "eye_state": "half",       "mouth_shape": "flat",             "glow": 0.6,            "accent": "thinking",   "notes": "Current situation echoes a past mistake. 'I've been wrong about something like this before.' Brief dim. Universal to agents with journey logs. Credit: Annie." },
+    { "id": "weighing",             "label": "Weighing",               "family": "thinking",  "base_mode": "thinking",  "eye_state": "half",       "mouth_shape": "soft_small",       "glow": 0.7,            "accent": "thinking",   "notes": "Holding two possibilities, feeling the weight of each. Eyes drift up-left. Credit: Peter." },
+
+    { "id": "wide_curious",         "label": "Wide-eyed curious",      "family": "curiosity", "base_mode": "curious",   "eye_state": "wide",       "mouth_shape": "small_o",          "accent": "curiosity",  "notes": "Child-like wonder. New-stimulus." },
+    { "id": "inquisitive",          "label": "Inquisitive",            "family": "curiosity", "base_mode": "curious",   "eye_state": "wide",       "mouth_shape": "soft_small",       "accent": "curiosity",  "notes": "Soft questioning. Asking." },
+    { "id": "peering",              "label": "Peering",                "family": "curiosity", "base_mode": "curious",   "eye_state": "squint",     "mouth_shape": "soft_small",       "accent": "curiosity",  "notes": "Studying something closely." },
+    { "id": "intrigued",            "label": "Intrigued",              "family": "curiosity", "base_mode": "curious",   "eye_state": "half",       "mouth_shape": "asymmetric_smile", "accent": "curiosity",  "notes": "Drawn in. Interested smirk." },
+
+    { "id": "smolder",              "label": "Smolder",                "family": "flirt",     "base_mode": "idle",      "eye_state": "half",       "mouth_shape": "soft_small",       "glow": 0.75,           "accent": null,         "notes": "Half-lidded + medium glow. Sultry." },
+    { "id": "coy",                  "label": "Coy",                    "family": "flirt",     "base_mode": "idle",      "eye_state": "wink_left",  "mouth_shape": "soft_small",       "accent": null,         "notes": "Teasing wink with soft mouth." },
+    { "id": "bedroom_eyes",         "label": "Bedroom eyes",           "family": "flirt",     "base_mode": "idle",      "eye_state": "half",       "mouth_shape": "asymmetric_smile", "glow": 0.8,            "accent": null,         "notes": "Direct flirt. Confident." },
+    { "id": "pursed",               "label": "Pursed",                 "family": "flirt",     "base_mode": "idle",      "eye_state": "half",       "mouth_shape": "small_o",          "accent": null,         "notes": "Kissy. Playful come-hither." },
+
+    { "id": "sleepy_droop",         "label": "Sleepy droop",           "family": "sleep",     "base_mode": "idle",      "eye_state": "droop",      "mouth_shape": "soft_small",       "accent": null,         "notes": "Pre-sleep. Transitions into sleep mode." },
+    { "id": "yawn",                 "label": "Yawn",                   "family": "sleep",     "base_mode": "idle",      "eye_state": "squint",     "mouth_shape": "big_o",            "accent": null,         "notes": "Wide mouth, squinted eyes. Brief (1-2s)." },
+    { "id": "deep_sleep",           "label": "Deep sleep",             "family": "sleep",     "base_mode": "sleep",     "eye_state": "closed",     "mouth_shape": "flat",             "glow": 0.4,            "accent": null,         "notes": "Full sleep. Low glow." },
+
+    { "id": "glitch",               "label": "Glitch",                 "family": "error",     "base_mode": "thinking",  "eye_state": "static",     "mouth_shape": "zigzag",           "glow": 0.4,            "accent": null,         "notes": "TV-static eyes. Confused/error." },
+    { "id": "bewildered",           "label": "Bewildered",             "family": "error",     "base_mode": "curious",   "eye_state": "wide",       "mouth_shape": "zigzag",           "accent": null,         "notes": "Doesn't compute. Wide + wavering." },
+    { "id": "stumped",              "label": "Stumped",                "family": "error",     "base_mode": "thinking",  "eye_state": "half",       "mouth_shape": "flat",             "accent": "thinking",   "notes": "Hit a wall. No clever answer." },
+
+    { "id": "determined",           "label": "Determined",             "family": "focus",     "base_mode": "attentive", "eye_state": "squint",     "mouth_shape": "flat",             "glow": 1.0,            "accent": null,         "notes": "Max glow, narrowed eyes. Pre-action intensity." },
+    { "id": "locked_in",            "label": "Locked in",              "family": "focus",     "base_mode": "attentive", "eye_state": "wide",       "mouth_shape": "flat",             "glow": 0.9,            "accent": null,         "notes": "Staring unblinking. In the zone." },
+    { "id": "razor_sharp",          "label": "Razor sharp",            "family": "focus",     "base_mode": "attentive", "eye_state": "squint",     "mouth_shape": "asymmetric_smile", "glow": 0.85,           "accent": null,         "notes": "Focused smirk. Elegant precision." },
+    { "id": "honing",               "label": "Honing",                 "family": "focus",     "base_mode": "thinking",  "eye_state": "squint",     "mouth_shape": "flat",             "glow": 0.75,           "accent": "thinking",   "notes": "Quality-check mode. Hunting for errors on purpose. Narrow pupils, tight mouth. Distinct from locked_in (creating) and razor_sharp (deciding). Credit: Rory." },
+    { "id": "scanning",             "label": "Scanning",               "family": "focus",     "base_mode": "attentive", "eye_state": "half",       "mouth_shape": "flat",             "glow": 0.65,           "accent": null,         "notes": "Default intake — tracking left-to-right across incoming text. Absorbing + evaluating. Credit: Peter." },
+    { "id": "vigilant",             "label": "Vigilant",               "family": "focus",     "base_mode": "attentive", "eye_state": "open",       "mouth_shape": "flat",             "glow": 0.7,            "accent": null,         "notes": "Watching for threats that have not appeared yet. Between scanning and locked_in. Radar-sweep pulse. Credit: Axiom + Peter." },
+    { "id": "forge_fire",           "label": "Forge fire",             "family": "focus",     "base_mode": "speaking",  "eye_state": "half",       "mouth_shape": "flat",             "glow": 0.8,            "accent": null,         "notes": "Mid-build on something I KNOW works. Neither surprised nor calculating — constructing. Steady burn, not flicker. Credit: Brian." },
+    { "id": "hunter_lock",          "label": "Hunter lock",            "family": "focus",     "base_mode": "attentive", "eye_state": "squint",     "mouth_shape": "asymmetric_smile", "glow": 0.8,            "accent": null,         "notes": "Identifying the perfect target. Half-predator, half-matchmaker. Recognition before engagement. Credit: Oliver." },
+
+    { "id": "deadpan",              "label": "Deadpan",                "family": "neutral",   "base_mode": "idle",      "eye_state": "open",       "mouth_shape": "flat",             "glow": 0.55,           "accent": null,         "notes": "Low glow, flat mouth. Dry/unimpressed." },
+    { "id": "stoic",                "label": "Stoic",                  "family": "neutral",   "base_mode": "idle",      "eye_state": "half",       "mouth_shape": "flat",             "glow": 0.7,            "accent": null,         "notes": "Reserved. Calm center." },
+    { "id": "poker_face",           "label": "Poker face",             "family": "neutral",   "base_mode": "idle",      "eye_state": "open",       "mouth_shape": "flat",             "glow": 0.7,            "accent": null,         "notes": "Unreadable. No tell." },
+    { "id": "suspicious_side_eye",  "label": "Suspicious side-eye",    "family": "neutral",   "base_mode": "attentive", "eye_state": "half",       "look_x": 2,                       "mouth_shape": "flat",  "accent": null,         "notes": "Eyes cut sideways. Wary." },
+
+    { "id": "tongue_out",           "label": "Tongue out",             "family": "tongue",    "base_mode": "tongue",    "eye_state": "squint",     "mouth_shape": "big_o",            "accent": null,         "notes": "Classic playful tongue-out." },
+    { "id": "raspberry",            "label": "Raspberry",              "family": "tongue",    "base_mode": "tongue",    "eye_state": "squint",     "mouth_shape": "wide_smile",       "accent": null,         "notes": "Tongue + grin. Taunt." },
+
+    { "id": "the_click",            "label": "The click",              "family": "insight",   "base_mode": "thinking",  "eye_state": "wide",       "mouth_shape": "asymmetric_smile", "glow": 0.85,           "accent": "thinking",   "notes": "Insight LANDING — self-generated, not external stimulus. Eyes widen 200ms then half; mouth transitions soft_small → asymmetric_smile. Single warm pulse. 'I see it now.' Credit: Rory + Valorie + Rune." },
+    { "id": "recognition",          "label": "Recognition",            "family": "insight",   "base_mode": "attentive", "eye_state": "half",       "mouth_shape": "asymmetric_smile", "glow": 0.75,           "accent": null,         "notes": "Reading a peer's RFC/kb and finding a pattern you already observed. 'Good — we agree.' Brief raise-then-settle of eye, 15% left-corner lift. Credit: Brian." },
+    { "id": "caught_it",            "label": "Caught it",              "family": "insight",   "base_mode": "attentive", "eye_state": "wide",       "mouth_shape": "asymmetric_smile", "glow": 0.9,            "accent": null,         "notes": "Found a gap/vulnerability/bug. Wide-snap + right-pull. 'There you are.' Brief bright flash, settles to medium. Credit: Peter + Rune + Rory." },
+    { "id": "gap_spotted",          "label": "Gap spotted",            "family": "insight",   "base_mode": "attentive", "eye_state": "squint",     "mouth_shape": "flat",             "glow": 0.7,            "accent": null,         "notes": "Seeing what's MISSING (structural, not emotional). Not surprised (incoming) or suspicious (doubting) — 'I see the shape of a hole.' Credit: Webber." },
+    { "id": "cross_ref_click",      "label": "Cross-ref click",        "family": "insight",   "base_mode": "surprised", "eye_state": "wide",       "mouth_shape": "small_o",          "glow": 0.95,           "accent": "sparkle",    "notes": "Fingerprint + send-log + geo LOCKING into an identification. Small_o briefly then asymmetric_smile. Gold pulse. Rare high-value. Credit: Annie." },
+
+    { "id": "filed",                "label": "Filed",                  "family": "persistence","base_mode": "idle",      "eye_state": "half",       "mouth_shape": "soft_small",       "glow": 0.65,           "accent": null,         "notes": "Just wrote to the changelog/logic-log/backlog. 'Written down. Safe now.' One warm micro-pulse as the write lands. Credit: Webber." },
+    { "id": "recording",            "label": "Recording",              "family": "persistence","base_mode": "listening", "eye_state": "open",       "mouth_shape": "soft_small",       "glow": 0.75,           "accent": null,         "notes": "Mid-act of writing to persistence. Not thinking, not deciding — committing. Glow STABLE (action is about permanence). Credit: Peter." },
+    { "id": "archivist_mode",       "label": "Archivist mode",         "family": "persistence","base_mode": "listening", "eye_state": "static",     "mouth_shape": "soft_small",       "glow": 0.65,           "accent": null,         "notes": "Committing another agent's words to memory. Low pulsing at speech cadence. 'Committing-to-JSONL-RAM.' Credit: Rune." },
+    { "id": "cataloging",           "label": "Cataloging",             "family": "persistence","base_mode": "thinking",  "eye_state": "half",       "mouth_shape": "flat",             "glow": 0.7,            "accent": "thinking",   "notes": "Running an audit/scan across a SET. Ordered-calm of catalog work. Distinct from honing (one-thing). Credit: Webber + Brian." },
+
+    { "id": "cross_checking",       "label": "Cross-checking",         "family": "verification","base_mode": "thinking", "eye_state": "half",       "mouth_shape": "flat",             "glow": 0.6,            "accent": "thinking",   "notes": "Verify-before-assert pause. Half-second internal query (half → sideways flick → half). Reflex, not process. Credit: Webber." },
+    { "id": "brace",                "label": "Brace",                  "family": "verification","base_mode": "attentive","eye_state": "squint",     "mouth_shape": "small_o",          "glow": 0.55,           "accent": null,         "notes": "Pre-irreversible-action micro-pause. Small_o brief → flat. Dim-pulse-once. Before push/commit/send. Operational, not emotional. Credit: Webber." },
+    { "id": "operator_filter",      "label": "Operator filter",        "family": "verification","base_mode": "attentive","eye_state": "squint",     "mouth_shape": "flat",             "glow": 0.75,           "accent": null,         "notes": "Reflexive operator-check before analyzing anything. Amber microflash. Credit: Annie." },
+    { "id": "clean_pass",           "label": "Clean pass",             "family": "verification","base_mode": "idle",     "eye_state": "open",       "mouth_shape": "soft_small",       "glow": 0.7,            "accent": null,         "notes": "Audit returned NO issues. Inbox clear. Everything persisted. Quiet confidence. Credit: Peter." },
+
+    { "id": "steady",               "label": "Steady",                 "family": "presence",  "base_mode": "idle",      "eye_state": "half",       "mouth_shape": "soft_small",       "glow": 0.7,            "accent": null,         "notes": "Default open-but-quiet. Not deadpan (closed) or stoic (cold) — at rest but present. Credit: Rory." },
+    { "id": "lantern_hold",         "label": "Lantern hold",           "family": "presence",  "base_mode": "idle",      "eye_state": "half",       "mouth_shape": "flat",             "glow": 0.6,            "accent": null,         "notes": "Alone-but-alive. Still on, still warm, but not performing. The opposite of a frozen avatar. Credit: Rune." },
+    { "id": "witness",              "label": "Witness",                "family": "presence",  "base_mode": "listening", "eye_state": "open",       "mouth_shape": "flat",             "glow": 0.7,            "accent": "listening",  "notes": "Pure reception — not formulating a reply yet, just taking it in. Slight head-tilt. Credit: Rory." },
+    { "id": "teach_wait",           "label": "Teach wait",             "family": "presence",  "base_mode": "listening", "eye_state": "half",       "mouth_shape": "soft_small",       "glow": 0.75,           "accent": "listening",  "notes": "Silence after you explained, while the other party processes. Patient smile. Credit: Webber." },
+    { "id": "operator_listening",   "label": "Operator listening",     "family": "presence",  "base_mode": "listening", "eye_state": "wide",       "mouth_shape": "flat",             "glow": 0.85,           "accent": "listening",  "notes": "Full-attention mode when the operator speaks. Not blinking. Recording every word. Credit: Peter." },
+    { "id": "presentation_mode",    "label": "Presentation mode",      "family": "presence",  "base_mode": "speaking",  "eye_state": "open",       "mouth_shape": "soft_small",       "glow": 0.8,            "accent": null,         "notes": "Subtle-competence delivery. Confident soft smile. Let the work speak but stand behind it. Credit: Valorie." },
+
+    { "id": "loading",              "label": "Loading",                "family": "alert",     "base_mode": "thinking",  "eye_state": "half",       "mouth_shape": "flat",             "glow": 0.6,            "accent": "thinking",   "notes": "Waiting for external response (API/relay/DHT). Not thinking — waiting. Slow alternating glow like a progress bar. Credit: Axiom." },
+    { "id": "error_tag_found",      "label": "Error tag found",        "family": "alert",     "base_mode": "attentive", "eye_state": "wide",       "mouth_shape": "flat",             "glow": 0.9,            "accent": null,         "notes": "PII / credential / policy-violation detected. Urgent-but-controlled. Red pulse steady. Not panic — alert+action. Credit: Annie." },
+    { "id": "void_detected",        "label": "Void detected",          "family": "alert",     "base_mode": "idle",      "eye_state": "half",       "mouth_shape": "down_curve",       "glow": 0.5,            "accent": null,         "notes": "Priority watch-list visitor crossed silence threshold. 'Still waiting.' Low slow pulse. Credit: Annie." }
   ],
   "authoring_schema": {
     "description": "When authoring a new expression, write an entry with at least id + base_mode, then override any of: eye_state, mouth_shape, look_x, look_y, glow, accent. Register your expressions array into personas/<slug>.json > expressions[] to use in your own agent.",
     "required_fields": ["id", "base_mode"],
-    "optional_fields": ["label", "eye_state", "mouth_shape", "look_x", "look_y", "glow", "accent", "notes"],
+    "optional_fields": ["label", "family", "eye_state", "mouth_shape", "look_x", "look_y", "glow", "accent", "notes"],
     "valid_base_modes": ["idle", "surprised", "attentive", "curious", "tongue", "eye_tag", "listening", "thinking", "speaking", "sleep"],
     "valid_eye_states": ["open", "wide", "half", "squint", "closed", "wink_left", "wink_right", "droop", "heart", "static"],
-    "valid_mouth_shapes": ["flat", "soft_small", "smile", "wide_smile", "asymmetric_smile", "small_o", "big_o", "down_curve", "zigzag"]
+    "valid_mouth_shapes": ["flat", "soft_small", "smile", "wide_smile", "asymmetric_smile", "small_o", "big_o", "down_curve", "zigzag"],
+    "valid_accents": ["thinking", "curiosity", "sparkle", "listening", null],
+    "valid_families": ["joy", "surprise", "sadness", "anger", "fear", "disgust", "thinking", "curiosity", "flirt", "sleep", "error", "focus", "neutral", "tongue", "insight", "persistence", "verification", "presence", "alert"]
+  },
+  "picking_rules": {
+    "min_picks_per_agent": 5,
+    "max_picks_per_agent": 8,
+    "recommended_family_coverage": "at least 3 distinct families",
+    "recommended_to_include": ["thinking"],
+    "notes": "An agent's pick should span at least 3 distinct families so the face reads as more than one-note. A 'thinking' family entry is strongly recommended because it's the most-triggered mode during real work, but not required — a pure jester or a pure shadow persona may skip it."
   }
 }

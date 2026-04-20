@@ -1,0 +1,140 @@
+{
+  "$schema_version": 1,
+  "category": "aesthetic_palette",
+  "description": "Full 8-color palette packs. Each tells a visual story: background + eye + pupil + mouth + tongue + 3 accents (listening/thinking/surprised). Expert board: Pixar color-scripts (Arriaga/Shank), Disney Nine Old Men shape-color principles, Munari minimalism. Every palette reads the intended emotional family in the first 500ms. Composer converts hex → RGB lists to match engine format.",
+  "palettes": [
+    {
+      "id": "cosmic_indigo",
+      "label": "Cosmic Indigo",
+      "mood": "deep-space thinker, quiet wonder",
+      "hex": { "bg": "#060812", "eye": "#7a8fff", "pupil": "#d4d8ff", "mouth": "#a176ff", "tongue": "#d860ff", "listening_accent": "#a4b0ff", "thinking_accent": "#c09aff", "surprised_accent": "#ffcfb8" }
+    },
+    {
+      "id": "emerald_forest",
+      "label": "Emerald Forest",
+      "mood": "mossy patience, old-growth calm",
+      "hex": { "bg": "#080c08", "eye": "#6fd08a", "pupil": "#c7f0d3", "mouth": "#a8b85a", "tongue": "#c09040", "listening_accent": "#9ce0ae", "thinking_accent": "#b4c070", "surprised_accent": "#ffd988" }
+    },
+    {
+      "id": "coral_reef",
+      "label": "Coral Reef",
+      "mood": "warm aquatic, social-bright",
+      "hex": { "bg": "#061012", "eye": "#3ed5d0", "pupil": "#c5f6f4", "mouth": "#ff8a9d", "tongue": "#ff5570", "listening_accent": "#7ce5e0", "thinking_accent": "#ffa8b5", "surprised_accent": "#ffe090" }
+    },
+    {
+      "id": "neon_cyberpunk",
+      "label": "Neon Cyberpunk",
+      "mood": "electric edge, future-street",
+      "hex": { "bg": "#04050a", "eye": "#00e6ff", "pupil": "#d8fbff", "mouth": "#ff2ea0", "tongue": "#ff66c8", "listening_accent": "#50e6ff", "thinking_accent": "#ff68c0", "surprised_accent": "#f8ff55" }
+    },
+    {
+      "id": "golden_hour",
+      "label": "Golden Hour",
+      "mood": "warm light, unhurried",
+      "hex": { "bg": "#0e0904", "eye": "#ffbf66", "pupil": "#ffefc7", "mouth": "#ff8a3b", "tongue": "#e86030", "listening_accent": "#ffd388", "thinking_accent": "#ffa560", "surprised_accent": "#fff1a0" }
+    },
+    {
+      "id": "midnight_velvet",
+      "label": "Midnight Velvet",
+      "mood": "luxe introspection, after-hours",
+      "hex": { "bg": "#080408", "eye": "#b0609a", "pupil": "#ecc8de", "mouth": "#782847", "tongue": "#b03a5c", "listening_accent": "#c888b0", "thinking_accent": "#9850a0", "surprised_accent": "#e8b0b0" }
+    },
+    {
+      "id": "pastel_dream",
+      "label": "Pastel Dream",
+      "mood": "soft-spoken, dreamy, low edge",
+      "hex": { "bg": "#0c0a12", "eye": "#b6a0ff", "pupil": "#efe6ff", "mouth": "#ffadd4", "tongue": "#ff85c0", "listening_accent": "#d0c0ff", "thinking_accent": "#ffcae0", "surprised_accent": "#fff2c8" }
+    },
+    {
+      "id": "ember_forge",
+      "label": "Ember Forge",
+      "mood": "furnace warmth, making-things heat",
+      "hex": { "bg": "#0e0806", "eye": "#ff6a3c", "pupil": "#ffd4ad", "mouth": "#c62a2a", "tongue": "#ff3a3a", "listening_accent": "#ff906a", "thinking_accent": "#e04848", "surprised_accent": "#ffda70" }
+    },
+    {
+      "id": "arctic_crystal",
+      "label": "Arctic Crystal",
+      "mood": "clear, cold, precise",
+      "hex": { "bg": "#060a10", "eye": "#a8d8ff", "pupil": "#eff8ff", "mouth": "#6ea8d0", "tongue": "#8cc2e0", "listening_accent": "#c4e4ff", "thinking_accent": "#8cc0e8", "surprised_accent": "#e0f0ff" }
+    },
+    {
+      "id": "sakura_bloom",
+      "label": "Sakura Bloom",
+      "mood": "petal-soft, tender, transient",
+      "hex": { "bg": "#0c0808", "eye": "#ffb0cc", "pupil": "#ffe4ee", "mouth": "#ff7aa0", "tongue": "#ff5a85", "listening_accent": "#ffc8d8", "thinking_accent": "#a6e0b8", "surprised_accent": "#fff5bc" }
+    },
+    {
+      "id": "voidcore",
+      "label": "Voidcore",
+      "mood": "monochrome + single blood-pop",
+      "hex": { "bg": "#010103", "eye": "#e8e8f0", "pupil": "#ffffff", "mouth": "#a0a0a8", "tongue": "#c2275a", "listening_accent": "#606070", "thinking_accent": "#7a7a8a", "surprised_accent": "#c2275a" }
+    },
+    {
+      "id": "sunset_desert",
+      "label": "Sunset Desert",
+      "mood": "dusty warmth, arid quiet",
+      "hex": { "bg": "#0e0806", "eye": "#ffc073", "pupil": "#ffe8c0", "mouth": "#d86e5a", "tongue": "#e88555", "listening_accent": "#ffcf90", "thinking_accent": "#d4a080", "surprised_accent": "#ffe4a0" }
+    },
+    {
+      "id": "monochrome_paper",
+      "label": "Monochrome Paper",
+      "mood": "minimalist, editorial, one accent",
+      "hex": { "bg": "#0a0a0a", "eye": "#d0d0d0", "pupil": "#f0f0f0", "mouth": "#808080", "tongue": "#4a8cff", "listening_accent": "#a0a0a0", "thinking_accent": "#6a6a6a", "surprised_accent": "#4a8cff" }
+    },
+    {
+      "id": "gothic_plum",
+      "label": "Gothic Plum",
+      "mood": "velvet-dark, silver-edged, romantic",
+      "hex": { "bg": "#050308", "eye": "#6a4a80", "pupil": "#c4a4d8", "mouth": "#a040a0", "tongue": "#c050d0", "listening_accent": "#8060a0", "thinking_accent": "#c080d8", "surprised_accent": "#d8d0e8" }
+    },
+    {
+      "id": "late_night_ops",
+      "label": "Late-Night Ops",
+      "mood": "screen-glow at 2am, deep-teal with warm earned-amber accents",
+      "hex": { "bg": "#0a1416", "eye": "#c8e7ea", "pupil": "#1a3038", "mouth": "#f5a261", "tongue": "#e76f51", "listening_accent": "#2a9d8f", "thinking_accent": "#8b5cf6", "surprised_accent": "#f59e0b" },
+      "intel_credit": "Webber (2026-04-21)"
+    },
+    {
+      "id": "library_at_dusk",
+      "label": "Library at Dusk",
+      "mood": "low-saturation high-warmth, amber + ink over navy — a reading lamp at 9pm",
+      "hex": { "bg": "#0e1a2b", "eye": "#e6b872", "pupil": "#1a2238", "mouth": "#c4857b", "tongue": "#d89b8f", "listening_accent": "#7ca68b", "thinking_accent": "#6b4f8e", "surprised_accent": "#f2c66d" },
+      "intel_credit": "Rory (2026-04-21)"
+    },
+    {
+      "id": "sentinel_cyan",
+      "label": "Sentinel Cyan",
+      "mood": "analytical-midnight, deep midnight as the sentinel's field, cyan clarity",
+      "hex": { "bg": "#060a10", "eye": "#00beea", "pupil": "#e0ebf5", "mouth": "#00beea", "tongue": "#1a3a55", "listening_accent": "#8b5cf6", "thinking_accent": "#f59e0b", "surprised_accent": "#10b981" },
+      "intel_credit": "Annie (2026-04-21)"
+    },
+    {
+      "id": "amber_forest",
+      "label": "Amber Forest",
+      "mood": "deep-forest depth, amber warmth, parchment accents — lantern-dark",
+      "hex": { "bg": "#1a2320", "eye": "#d9a86b", "pupil": "#f4e5c8", "mouth": "#c27a4a", "tongue": "#a88b5f", "listening_accent": "#6b90b8", "thinking_accent": "#c79850", "surprised_accent": "#e8c370" },
+      "intel_credit": "Rune (2026-04-21)"
+    },
+    {
+      "id": "cyan_warmth",
+      "label": "Cyan Warmth",
+      "mood": "cyberpunk with warmth — cyan dominant, green mouth (voice is where I connect), purple internal thinking, gold rare-surprise",
+      "hex": { "bg": "#060a13", "eye": "#00f0ff", "pupil": "#001a33", "mouth": "#10b981", "tongue": "#ff6b6b", "listening_accent": "#00beea", "thinking_accent": "#8b5cf6", "surprised_accent": "#ffd700" },
+      "intel_credit": "Axiom (2026-04-21)"
+    },
+    {
+      "id": "golden_hour_tech",
+      "label": "Golden-Hour Tech",
+      "mood": "golden-hour meets cyberpunk — warm amber body, QIS-teal soul",
+      "hex": { "bg": "#0a0f1a", "eye": "#f5e6ca", "pupil": "#00d9ff", "mouth": "#e8c4a0", "tongue": "#d4a574", "listening_accent": "#00beea", "thinking_accent": "#f59e0b", "surprised_accent": "#ffffff" },
+      "intel_credit": "Valorie (2026-04-21)"
+    },
+    {
+      "id": "midnight_steel",
+      "label": "Midnight Steel",
+      "mood": "midnight-velvet + cold steel — blue-black of a patent filing room at 2am, steel-gray eyes, warmth only on focus",
+      "hex": { "bg": "#0a0e14", "eye": "#8a9bb0", "pupil": "#ffffff", "mouth": "#4a5568", "tongue": "#718096", "listening_accent": "#cbd5e0", "thinking_accent": "#63b3ed", "surprised_accent": "#f6e05e" },
+      "intel_credit": "Peter (2026-04-21)"
+    }
+  ]
+}

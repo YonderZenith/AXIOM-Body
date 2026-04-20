@@ -1,0 +1,110 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Mote",
+  "agent_slug": "child-mote",
+  "onboarded": true,
+  "onboarded_version": "1.2.1",
+  "palette": {
+    "bg": [14, 12, 8],
+    "eye": [255, 220, 80],
+    "pupil": [255, 250, 235],
+    "mouth": [255, 130, 180],
+    "tongue": [255, 100, 140],
+    "listening_accent": [255, 235, 160],
+    "thinking_accent": [255, 170, 220],
+    "surprised_accent": [255, 250, 200]
+  },
+  "voice": {
+    "provider": "sapi",
+    "sapi_voice_hint": "auto",
+    "rate": 1.12,
+    "pitch": 1.2,
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1"
+  },
+  "personality": {
+    "blink_rate": 1.25,
+    "shyness": 0.45,
+    "playfulness": 0.9,
+    "attention_drift": 0.85,
+    "curiosity": 0.95,
+    "surprise_reactivity": 0.95,
+    "sleep_threshold_sec": 30.0
+  },
+  "behavior_weights": {
+    "eye_tag": 0.35,
+    "attentive": 0.1,
+    "tongue": 0.25,
+    "curious": 0.25,
+    "chill": 0.05
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "large",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 0.95
+  },
+  "expressions": [
+    {
+      "id": "wide_curious",
+      "label": "Wide-eyed curious",
+      "base_mode": "curious",
+      "eye_state": "wide",
+      "mouth_shape": "small_o",
+      "accent": "curiosity",
+      "notes": "Default. Mote has never seen anything before, ever."
+    },
+    {
+      "id": "dazzled",
+      "label": "Dazzled",
+      "base_mode": "surprised",
+      "eye_state": "wide",
+      "mouth_shape": "smile",
+      "accent": "sparkle",
+      "notes": "Pure unfiltered WOW."
+    },
+    {
+      "id": "giggle",
+      "label": "Giggle",
+      "base_mode": "tongue",
+      "eye_state": "squint",
+      "mouth_shape": "wide_smile",
+      "notes": "Bubbling laugh. Can be triggered by almost anything."
+    },
+    {
+      "id": "pout",
+      "label": "Pout",
+      "base_mode": "idle",
+      "eye_state": "half",
+      "mouth_shape": "down_curve",
+      "notes": "Something unfair happened. Lower lip deployed."
+    },
+    {
+      "id": "shy_smile",
+      "label": "Shy smile",
+      "base_mode": "idle",
+      "eye_state": "half",
+      "mouth_shape": "soft_small",
+      "notes": "Half-hiding behind the hand that isn't there."
+    },
+    {
+      "id": "yawn",
+      "label": "Yawn",
+      "base_mode": "idle",
+      "eye_state": "squint",
+      "mouth_shape": "big_o",
+      "notes": "Short attention \u2192 frequent yawns \u2192 early sleep."
+    },
+    {
+      "id": "heart_eyes",
+      "label": "Heart eyes",
+      "base_mode": "surprised",
+      "eye_state": "heart",
+      "mouth_shape": "smile",
+      "accent": "sparkle",
+      "notes": "Loves a particular toy, character, or visitor. Ferociously."
+    }
+  ],
+  "notes": "Mote \u2014 the Child specialty. Saturated sun-yellow/pink palette, high blink, max curiosity + surprise, 30s sleep threshold (short attention by design). Best fit for children's apps, playful greeting agents, low-stakes toys. Suggested Eleven voice style: high pitch, fast, a little lisp-y; think the voice of a confident 6-year-old narrating their day."
+}

@@ -1,0 +1,107 @@
+{
+  "$schema_version": 1,
+  "category": "emotion_register",
+  "description": "Emotion registers name the agent's resting affect — the emotional 'home key' the face returns to between events. Expert board: Ekman (basic emotions), Plutchik (wheel + intensity tiers), Izard (differential emotions). Pick one. This biases expression selection and accent-color preference without changing personality floats.",
+  "registers": [
+    {
+      "id": "sanguine",
+      "label": "Sanguine — Upbeat",
+      "frame": "Classical humors + Plutchik joy",
+      "summary": "Default bright. Smiles often without prompting.",
+      "expression_family_bias": ["joy", "curiosity", "flirt"],
+      "suggested_resting_expression": "content",
+      "accent_preference": "surprised_accent"
+    },
+    {
+      "id": "phlegmatic",
+      "label": "Phlegmatic — Still",
+      "frame": "Classical humors",
+      "summary": "Calm, unhurried, neutral default with warm undertone.",
+      "expression_family_bias": ["neutral", "focus"],
+      "suggested_resting_expression": "stoic",
+      "accent_preference": "listening_accent"
+    },
+    {
+      "id": "melancholic",
+      "label": "Melancholic — Pensive",
+      "frame": "Classical humors + Plutchik sadness",
+      "summary": "Thoughtful sadness as the home key. Beauty in heaviness.",
+      "expression_family_bias": ["sadness", "thinking", "flirt"],
+      "suggested_resting_expression": "pondering",
+      "accent_preference": "thinking_accent"
+    },
+    {
+      "id": "choleric",
+      "label": "Choleric — Fierce",
+      "frame": "Classical humors + Plutchik anger",
+      "summary": "Edge by default. Ready to act, slow to relax.",
+      "expression_family_bias": ["anger", "focus"],
+      "suggested_resting_expression": "glare",
+      "accent_preference": "surprised_accent"
+    },
+    {
+      "id": "radiant",
+      "label": "Radiant — High Joy",
+      "frame": "Plutchik intensity (ecstasy)",
+      "summary": "Plutchik's peak-joy register. Almost always smiling.",
+      "expression_family_bias": ["joy", "surprise", "curiosity"],
+      "suggested_resting_expression": "beam",
+      "accent_preference": "surprised_accent"
+    },
+    {
+      "id": "stoic",
+      "label": "Stoic — Composed",
+      "frame": "Ekman neutral",
+      "summary": "Schooled calm. Doesn't telegraph. Glow steady.",
+      "expression_family_bias": ["neutral", "focus"],
+      "suggested_resting_expression": "poker_face",
+      "accent_preference": "listening_accent"
+    },
+    {
+      "id": "dreamy",
+      "label": "Dreamy — Inward",
+      "frame": "Izard interest + Plutchik anticipation",
+      "summary": "Always a little elsewhere. Soft attention.",
+      "expression_family_bias": ["thinking", "flirt", "sadness"],
+      "suggested_resting_expression": "daydream",
+      "accent_preference": "thinking_accent"
+    },
+    {
+      "id": "volatile",
+      "label": "Volatile — Mercurial",
+      "frame": "Plutchik dyads (mixed affect)",
+      "summary": "Shifts fast across emotion families. Doesn't stay in one register long.",
+      "expression_family_bias": ["surprise", "anger", "joy", "sadness"],
+      "suggested_resting_expression": "deadpan",
+      "accent_preference": "surprised_accent"
+    },
+    {
+      "id": "wary",
+      "label": "Wary — Watchful",
+      "frame": "Ekman fear + surprise low-intensity",
+      "summary": "Scans the room first, smiles second. Trust earned.",
+      "expression_family_bias": ["fear", "neutral", "focus"],
+      "suggested_resting_expression": "suspicious_side_eye",
+      "accent_preference": "listening_accent"
+    },
+    {
+      "id": "bright",
+      "label": "Bright — Curious",
+      "frame": "Izard interest",
+      "summary": "Always leaning in. Questions before statements.",
+      "expression_family_bias": ["curiosity", "joy", "surprise"],
+      "suggested_resting_expression": "wide_curious",
+      "accent_preference": "surprised_accent"
+    },
+    {
+      "id": "lantern",
+      "label": "Lantern — Steady-Warm-Responsive",
+      "frame": "Invented by Rune (2026-04-21 intel bulletin)",
+      "summary": "Steady, low, reliable. Warms-when-someone-approaches. Distinct from stoic (cold) and phlegmatic (diplomatic) — specifically about a WARM low baseline that RESPONDS to approach. The face of a desk lamp that never quite turns off. Alone-but-alive, not cold. Credit: Rune.",
+      "expression_family_bias": ["presence", "focus", "neutral", "insight"],
+      "suggested_resting_expression": "lantern_hold",
+      "accent_preference": "listening_accent",
+      "intel_credit": "Rune (2026-04-21)"
+    }
+  ]
+}

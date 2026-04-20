@@ -11,8 +11,8 @@
     "yolov8x": "xlarge — ~136 MB. Max accuracy. GPU only, slow on CPU."
   },
 
-  "interval_sec": 30,
-  "_interval_note": "How often ears/vision.py takes an ambient snap. 30s is a good always-on default. Drop to 5-10s if you want faster reactions; raise to 120s+ to save power. The sensor is multi-purpose (see purposes below), so it runs whenever the agent is awake.",
+  "interval_sec": 3,
+  "_interval_note": "How often ears/vision.py takes an ambient snap. Default was 30s; 3s is the A/B baseline for smooth presence (motion-to-wake latency <3s target per Axiom handoff 2026-04-20). Raise to 30-120s on battery-powered deployments. Sound-gate fast-wake (via listener amp-gate) bypasses this for audio triggers.",
 
   "confidence": {
     "min": 0.35,

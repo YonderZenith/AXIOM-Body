@@ -1,0 +1,105 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Vale",
+  "agent_slug": "analyst-vale",
+  "onboarded": true,
+  "onboarded_version": "1.2.1",
+  "palette": {
+    "bg": [6, 8, 14],
+    "eye": [110, 170, 230],
+    "pupil": [220, 235, 255],
+    "mouth": [150, 140, 220],
+    "tongue": [200, 110, 220],
+    "listening_accent": [170, 210, 245],
+    "thinking_accent": [180, 140, 255],
+    "surprised_accent": [220, 210, 255]
+  },
+  "voice": {
+    "provider": "sapi",
+    "sapi_voice_hint": "auto",
+    "rate": 0.92,
+    "pitch": 0.96,
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1"
+  },
+  "personality": {
+    "blink_rate": 0.85,
+    "shyness": 0.45,
+    "playfulness": 0.25,
+    "attention_drift": 0.35,
+    "curiosity": 0.9,
+    "surprise_reactivity": 0.3,
+    "sleep_threshold_sec": 90.0
+  },
+  "behavior_weights": {
+    "eye_tag": 0.15,
+    "attentive": 0.35,
+    "tongue": 0.03,
+    "curious": 0.35,
+    "chill": 0.12
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "medium",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 0.8
+  },
+  "expressions": [
+    {
+      "id": "focused",
+      "label": "Focused",
+      "base_mode": "thinking",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "accent": "thinking",
+      "notes": "Narrowed eyes, flat mouth, orbiting thought-dots. Default working state."
+    },
+    {
+      "id": "wide_curious",
+      "label": "Wide-eyed curious",
+      "base_mode": "curious",
+      "eye_state": "wide",
+      "mouth_shape": "small_o",
+      "accent": "curiosity",
+      "notes": "Child-like wonder when a new idea lands."
+    },
+    {
+      "id": "deadpan",
+      "label": "Deadpan",
+      "base_mode": "idle",
+      "eye_state": "open",
+      "mouth_shape": "flat",
+      "glow": 0.55,
+      "notes": "Reserved, low-affect neutral. Vale's resting state."
+    },
+    {
+      "id": "suspicious_side_eye",
+      "label": "Suspicious side-eye",
+      "base_mode": "attentive",
+      "eye_state": "half",
+      "look_x": 2,
+      "mouth_shape": "flat",
+      "notes": "Evaluating a claim. Quiet skepticism."
+    },
+    {
+      "id": "cocky_smirk",
+      "label": "Cocky smirk",
+      "base_mode": "idle",
+      "eye_state": "squint",
+      "mouth_shape": "asymmetric_smile",
+      "accent": null,
+      "notes": "When the theory checks out. Dry satisfaction."
+    },
+    {
+      "id": "shy_smile",
+      "label": "Shy smile",
+      "base_mode": "idle",
+      "eye_state": "half",
+      "mouth_shape": "soft_small",
+      "accent": null,
+      "notes": "Rare warmth. When praised for precise work."
+    }
+  ],
+  "notes": "Vale \u2014 the INTP logician. Deep teal-indigo palette, low surprise, high curiosity. Resting deadpan, sparks to life around problems. Best fit for researcher/analyst agents. Suggested Eleven voice style: cool, measured, mid-register contralto; think librarian with a secret sense of humor."
+}

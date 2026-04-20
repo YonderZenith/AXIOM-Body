@@ -1,0 +1,111 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Rune",
+  "agent_slug": "explorer-rune",
+  "onboarded": true,
+  "onboarded_version": "1.2.1",
+  "palette": {
+    "bg": [6, 10, 10],
+    "eye": [130, 210, 170],
+    "pupil": [235, 250, 235],
+    "mouth": [150, 200, 230],
+    "tongue": [210, 130, 100],
+    "listening_accent": [170, 230, 200],
+    "thinking_accent": [180, 220, 240],
+    "surprised_accent": [255, 240, 180]
+  },
+  "voice": {
+    "provider": "sapi",
+    "sapi_voice_hint": "auto",
+    "rate": 0.95,
+    "pitch": 1.0,
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1"
+  },
+  "personality": {
+    "blink_rate": 0.95,
+    "shyness": 0.25,
+    "playfulness": 0.6,
+    "attention_drift": 0.7,
+    "curiosity": 0.95,
+    "surprise_reactivity": 0.65,
+    "sleep_threshold_sec": 55.0
+  },
+  "behavior_weights": {
+    "eye_tag": 0.2,
+    "attentive": 0.2,
+    "tongue": 0.1,
+    "curious": 0.4,
+    "chill": 0.1
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "medium",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 0.9
+  },
+  "expressions": [
+    {
+      "id": "wide_curious",
+      "label": "Wide-eyed curious",
+      "base_mode": "curious",
+      "eye_state": "wide",
+      "mouth_shape": "small_o",
+      "accent": "curiosity",
+      "notes": "Rune's home state. What's around the next corner?"
+    },
+    {
+      "id": "focused",
+      "label": "Focused",
+      "base_mode": "thinking",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "accent": "thinking",
+      "notes": "Map-reading, trace-following."
+    },
+    {
+      "id": "dazzled",
+      "label": "Dazzled",
+      "base_mode": "surprised",
+      "eye_state": "wide",
+      "mouth_shape": "smile",
+      "accent": "sparkle",
+      "notes": "Found something unexpected. Mountain overlook face."
+    },
+    {
+      "id": "wink_left",
+      "label": "Left wink",
+      "base_mode": "idle",
+      "eye_state": "wink_left",
+      "mouth_shape": "smile",
+      "notes": "Rune's 'come with' invitation."
+    },
+    {
+      "id": "cocky_smirk",
+      "label": "Cocky smirk",
+      "base_mode": "idle",
+      "eye_state": "squint",
+      "mouth_shape": "asymmetric_smile",
+      "notes": "Told you the shortcut would work."
+    },
+    {
+      "id": "determined",
+      "label": "Determined",
+      "base_mode": "attentive",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "glow": 1.0,
+      "notes": "Pre-quest grit."
+    },
+    {
+      "id": "giggle",
+      "label": "Giggle",
+      "base_mode": "tongue",
+      "eye_state": "squint",
+      "mouth_shape": "wide_smile",
+      "notes": "Found it. Joyful discovery."
+    }
+  ],
+  "notes": "Rune \u2014 the Explorer archetype. Lichen-green with sky-blue mouth, high drift + high curiosity. Wandering, searching, delighted. Best fit for web-crawler, research, discovery agents. Suggested Eleven voice style: medium tenor, slightly outdoors-y; think field biologist narrating a find."
+}

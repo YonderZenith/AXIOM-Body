@@ -1,0 +1,67 @@
+{
+  "$schema_version": 1,
+  "category": "starter_expression_set",
+  "description": "One-click suggested 5-8 expression bundles. Optional. The agent may (a) pick a set as-is, (b) pick a set and swap one or two entries, or (c) skip sets entirely and hand-pick from onboard/expressions-bank.json. Every set covers at least 3 expression families. Agents always retain the right to author entirely new expressions via the bank's authoring_schema.",
+  "sets": [
+    {
+      "id": "the_stoic",
+      "label": "The Stoic",
+      "summary": "Reserved, focused, rarely-telegraphs. Composed in all weather.",
+      "expression_ids": ["deadpan", "stoic", "focused", "determined", "suspicious_side_eye", "scowl"]
+    },
+    {
+      "id": "the_giggler",
+      "label": "The Giggler",
+      "summary": "Default-bright, mouth-forward, plays loose.",
+      "expression_ids": ["giggle", "beam", "shy_smile", "wide_curious", "melting_grin", "heart_eyes", "content", "wink_right"]
+    },
+    {
+      "id": "the_scholar",
+      "label": "The Scholar",
+      "summary": "Lives in the thinking family. Questions, ponders, hits walls, recovers.",
+      "expression_ids": ["focused", "pondering", "puzzled", "wide_curious", "inquisitive", "stumped", "deadpan"]
+    },
+    {
+      "id": "the_caregiver",
+      "label": "The Caregiver",
+      "summary": "Warmth + patience. Reads the room, responds to others.",
+      "expression_ids": ["content", "shy_smile", "inquisitive", "pondering", "pout", "melting_grin", "heart_eyes"]
+    },
+    {
+      "id": "the_hero",
+      "label": "The Hero",
+      "summary": "Ready-to-act. Focus-forward with occasional beam of pride.",
+      "expression_ids": ["determined", "locked_in", "razor_sharp", "focused", "glare", "beam"]
+    },
+    {
+      "id": "the_jester",
+      "label": "The Jester",
+      "summary": "Plays with the room. Tongue-first, surprise-ready.",
+      "expression_ids": ["giggle", "raspberry", "tongue_out", "wink_right", "smug", "bewildered", "beam", "dazzled"]
+    },
+    {
+      "id": "the_dreamer",
+      "label": "The Dreamer",
+      "summary": "Soft attention, drifts, beauty in the in-between.",
+      "expression_ids": ["daydream", "pondering", "awestruck", "melancholy", "smolder", "shy_smile", "inquisitive"]
+    },
+    {
+      "id": "the_shadow",
+      "label": "The Shadow",
+      "summary": "Low mask, intense affect. Dark palette friendly.",
+      "expression_ids": ["glare", "scowl", "contempt", "stoic", "fuming", "clenched", "deadpan"]
+    },
+    {
+      "id": "the_lover",
+      "label": "The Lover",
+      "summary": "Flirt-first, heart-forward, glow-rich.",
+      "expression_ids": ["heart_eyes", "smolder", "coy", "bedroom_eyes", "shy_smile", "beam", "dazzled"]
+    },
+    {
+      "id": "the_sage",
+      "label": "The Sage",
+      "summary": "Balanced thinker. Calculating, patient, rare smirk.",
+      "expression_ids": ["pondering", "focused", "calculating", "stoic", "inquisitive", "poker_face", "stumped"]
+    }
+  ]
+}

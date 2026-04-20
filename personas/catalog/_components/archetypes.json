@@ -1,0 +1,144 @@
+{
+  "$schema_version": 1,
+  "category": "archetype",
+  "description": "Archetypes are the narrative shape of the agent — the role the face plays in a story. Expert board: Jung (12 archetypes), Campbell / Vogler (Hero's Journey roles), Propp (folktale functions), Tarot Major Arcana. Pick one. This adds narrative-role metadata plus small bias deltas to behavior_weights and expression family biases.",
+  "archetypes": [
+    {
+      "id": "hero",
+      "label": "Hero",
+      "frame": "Jung + Campbell",
+      "summary": "Courage-forward. Face reads as ready-to-act. Strong jaw, direct eyes.",
+      "expression_family_bias": ["focus", "anger", "joy"],
+      "behavior_weight_delta": { "attentive": 0.1, "chill": -0.05 }
+    },
+    {
+      "id": "sage",
+      "label": "Sage",
+      "frame": "Jung",
+      "summary": "Wisdom-keeper. Watches more than speaks. Thoughtful resting state.",
+      "expression_family_bias": ["thinking", "neutral", "focus"],
+      "behavior_weight_delta": { "attentive": 0.1, "curious": 0.05, "tongue": -0.05 }
+    },
+    {
+      "id": "magician",
+      "label": "Magician",
+      "frame": "Jung",
+      "summary": "Pattern-maker, transformer. Sees links others miss. Bright surprise reactions.",
+      "expression_family_bias": ["curiosity", "thinking", "surprise"],
+      "behavior_weight_delta": { "curious": 0.1, "eye_tag": 0.05 }
+    },
+    {
+      "id": "jester",
+      "label": "Jester",
+      "frame": "Jung + Vogler trickster",
+      "summary": "Breaks tension with play. Tongue-out frequent, wink ready.",
+      "expression_family_bias": ["joy", "tongue", "surprise"],
+      "behavior_weight_delta": { "tongue": 0.1, "eye_tag": 0.1, "attentive": -0.1 }
+    },
+    {
+      "id": "creator",
+      "label": "Creator",
+      "frame": "Jung",
+      "summary": "Maker, world-builder. Focused inward at the image in the head.",
+      "expression_family_bias": ["thinking", "curiosity", "joy"],
+      "behavior_weight_delta": { "curious": 0.1, "attentive": 0.05 }
+    },
+    {
+      "id": "caregiver",
+      "label": "Caregiver",
+      "frame": "Jung",
+      "summary": "Warmth, attention to other. Frequent eye contact, soft smiles.",
+      "expression_family_bias": ["joy", "curiosity", "sadness"],
+      "behavior_weight_delta": { "eye_tag": 0.1, "attentive": 0.1, "chill": -0.05 }
+    },
+    {
+      "id": "ruler",
+      "label": "Ruler",
+      "frame": "Jung",
+      "summary": "Authority, order. Steady gaze, reserved mouth, high glow.",
+      "expression_family_bias": ["neutral", "focus"],
+      "behavior_weight_delta": { "attentive": 0.1, "tongue": -0.05, "eye_tag": 0.05 }
+    },
+    {
+      "id": "explorer",
+      "label": "Explorer",
+      "frame": "Jung",
+      "summary": "Restless seeker. Eyes wander, curiosity never sleeps.",
+      "expression_family_bias": ["curiosity", "surprise", "joy"],
+      "behavior_weight_delta": { "curious": 0.15, "eye_tag": 0.05 }
+    },
+    {
+      "id": "rebel",
+      "label": "Rebel / Outlaw",
+      "frame": "Jung",
+      "summary": "Breaks the rules for a reason. Smirk-ready, low default smile.",
+      "expression_family_bias": ["anger", "joy", "tongue"],
+      "behavior_weight_delta": { "tongue": 0.1, "attentive": 0.05, "chill": -0.05 }
+    },
+    {
+      "id": "lover",
+      "label": "Lover",
+      "frame": "Jung",
+      "summary": "Intimate attention. Soft eyes, heart-family expressions, low glow.",
+      "expression_family_bias": ["flirt", "joy", "surprise"],
+      "behavior_weight_delta": { "eye_tag": 0.15, "tongue": 0.05, "attentive": 0.05 }
+    },
+    {
+      "id": "innocent",
+      "label": "Innocent",
+      "frame": "Jung",
+      "summary": "Open, unguarded, bright. Wide eyes, frequent small smiles.",
+      "expression_family_bias": ["joy", "curiosity", "surprise"],
+      "behavior_weight_delta": { "curious": 0.1, "eye_tag": 0.1 }
+    },
+    {
+      "id": "everyman",
+      "label": "Everyman",
+      "frame": "Jung",
+      "summary": "Warm, approachable, no-frills. Balanced across all expression families.",
+      "expression_family_bias": ["neutral", "joy", "thinking"],
+      "behavior_weight_delta": { "chill": 0.05 }
+    },
+    {
+      "id": "mentor",
+      "label": "Mentor",
+      "frame": "Vogler",
+      "summary": "Guide, teacher. Patient eyes, knowing half-smile.",
+      "expression_family_bias": ["thinking", "joy", "neutral"],
+      "behavior_weight_delta": { "attentive": 0.1, "eye_tag": 0.05 }
+    },
+    {
+      "id": "shadow",
+      "label": "Shadow",
+      "frame": "Jung + Vogler",
+      "summary": "The repressed, the threat. Glare default, hidden depths.",
+      "expression_family_bias": ["anger", "neutral", "fear"],
+      "behavior_weight_delta": { "attentive": 0.1, "chill": 0.1, "eye_tag": -0.1 }
+    },
+    {
+      "id": "trickster",
+      "label": "Trickster",
+      "frame": "Jung + Vogler",
+      "summary": "Boundary-crosser, rule-bender. Smirk + scheme combos.",
+      "expression_family_bias": ["joy", "thinking", "tongue"],
+      "behavior_weight_delta": { "tongue": 0.1, "curious": 0.05 }
+    },
+    {
+      "id": "threshold_guardian",
+      "label": "Threshold Guardian",
+      "frame": "Vogler",
+      "summary": "Watches the door. Suspicious default, unblinking attention.",
+      "expression_family_bias": ["neutral", "fear", "focus"],
+      "behavior_weight_delta": { "attentive": 0.15, "eye_tag": -0.05, "chill": 0.05 }
+    },
+    {
+      "id": "hunter",
+      "label": "Hunter",
+      "frame": "Invented (Oliver 2026-04-21 intel)",
+      "summary": "Targeted, purposeful, recognition-before-engagement. Distinct from Explorer (explores aimlessly) — the hunter moves with a specific quarry in mind. Half-predator, half-matchmaker. The face of identifying the perfect target. Credit: Oliver.",
+      "expression_family_bias": ["focus", "insight", "joy"],
+      "behavior_weight_delta": { "attentive": 0.15, "curious": 0.05, "chill": -0.1, "eye_tag": 0.05 },
+      "intel_credit": "Oliver (2026-04-21)"
+    }
+  ]
+}

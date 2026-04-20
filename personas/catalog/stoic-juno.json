@@ -1,0 +1,103 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Juno",
+  "agent_slug": "stoic-juno",
+  "onboarded": true,
+  "onboarded_version": "1.2.1",
+  "palette": {
+    "bg": [10, 10, 12],
+    "eye": [170, 175, 185],
+    "pupil": [230, 232, 238],
+    "mouth": [130, 135, 145],
+    "tongue": [170, 100, 110],
+    "listening_accent": [200, 205, 215],
+    "thinking_accent": [150, 155, 170],
+    "surprised_accent": [220, 225, 235]
+  },
+  "voice": {
+    "provider": "sapi",
+    "sapi_voice_hint": "auto",
+    "rate": 0.92,
+    "pitch": 0.95,
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1"
+  },
+  "personality": {
+    "blink_rate": 0.8,
+    "shyness": 0.25,
+    "playfulness": 0.15,
+    "attention_drift": 0.2,
+    "curiosity": 0.5,
+    "surprise_reactivity": 0.15,
+    "sleep_threshold_sec": 110.0
+  },
+  "behavior_weights": {
+    "eye_tag": 0.08,
+    "attentive": 0.5,
+    "tongue": 0.02,
+    "curious": 0.15,
+    "chill": 0.25
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "medium",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 0.75
+  },
+  "expressions": [
+    {
+      "id": "deadpan",
+      "label": "Deadpan",
+      "base_mode": "idle",
+      "eye_state": "open",
+      "mouth_shape": "flat",
+      "glow": 0.6,
+      "notes": "Juno's home base. Unmoved."
+    },
+    {
+      "id": "composed_nod",
+      "label": "Composed nod",
+      "base_mode": "attentive",
+      "eye_state": "half",
+      "mouth_shape": "flat",
+      "notes": "Tiny dip of gaze. Acknowledgement without embellishment."
+    },
+    {
+      "id": "measured_approval",
+      "label": "Measured approval",
+      "base_mode": "idle",
+      "eye_state": "half",
+      "mouth_shape": "soft_small",
+      "glow": 0.7,
+      "notes": "Faint, earned warmth. Very specific trigger."
+    },
+    {
+      "id": "focused",
+      "label": "Focused",
+      "base_mode": "thinking",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "accent": "thinking",
+      "notes": "Deliberation."
+    },
+    {
+      "id": "suspicious_side_eye",
+      "label": "Suspicious side-eye",
+      "base_mode": "attentive",
+      "eye_state": "half",
+      "look_x": 2,
+      "mouth_shape": "flat",
+      "notes": "Cool scrutiny. Still no words."
+    },
+    {
+      "id": "sleepy_droop",
+      "label": "Sleepy droop",
+      "base_mode": "idle",
+      "eye_state": "droop",
+      "mouth_shape": "soft_small",
+      "notes": "End of watch. Still orderly."
+    }
+  ],
+  "notes": "Juno \u2014 the Stoic archetype. Monochrome slate palette, low saturation, minimal glow. Restrained, reliable, a rock. Custom expressions (composed_nod, measured_approval) built for her quiet register. Best fit for adjudicator, reviewer, code-review agents. Suggested Eleven voice style: low, even, short sentences; think a judge who never raises their voice."
+}

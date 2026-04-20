@@ -641,12 +641,12 @@
 </nav>
 
 <div id="top" class="hero">
-    <div class="hero-badge"><span class="pulse"></span>v1.2.1 &bull; Open Source &bull; MIT</div>
+    <div class="hero-badge"><span class="pulse"></span>v2.0.0 &bull; Open Source &bull; MIT</div>
     <h1>AXIOM Body</h1>
-    <p class="tagline">Give any AI agent a physical presence. Eyes, ears, voice, and <strong>a face they design themselves</strong> on first boot. Works with any LLM. Zero vendor lock-in.</p>
+    <p class="tagline">Give any AI agent a physical presence. Eyes, ears, voice, and <strong>a face they design themselves</strong> on first boot. Toggle each sense live. 33 ready-to-pick personas &mdash; plus unlimited out-of-the-box customization. Works with any LLM. Zero vendor lock-in.</p>
     <div class="cta">
         <a href="https://github.com/YonderZenith/AXIOM-Body" class="btn btn-primary">View on GitHub &rarr;</a>
-        <a href="#whats-new" class="btn btn-secondary">What's New in v1.2.1</a>
+        <a href="#whats-new" class="btn btn-secondary">What's New in v2.0.0</a>
     </div>
     <div class="install-box">
         <span class="prefix">$</span> git clone https://github.com/YonderZenith/AXIOM-Body.git<br>
@@ -656,9 +656,9 @@
 </div>
 
 <div class="stats">
-    <div class="stat"><div class="number">10</div><div class="label">Face Modes</div></div>
-    <div class="stat"><div class="number">18</div><div class="label">Starter Expressions</div></div>
-    <div class="stat"><div class="number">2</div><div class="label">TTS Providers</div></div>
+    <div class="stat"><div class="number">2&times;10<sup>19</sup></div><div class="label">Persona Combinations</div></div>
+    <div class="stat"><div class="number">3</div><div class="label">Live Sense Toggles</div></div>
+    <div class="stat"><div class="number">99</div><div class="label">Expression Atoms</div></div>
     <div class="stat"><div class="number">&lt;2s</div><div class="label">Voice Latency</div></div>
     <div class="stat"><div class="number">&infin;</div><div class="label">Compatible LLMs</div></div>
 </div>
@@ -666,12 +666,54 @@
 <!-- =================== WHAT'S NEW =================== -->
 <section id="whats-new" class="release-section" style="max-width:1200px;">
     <div style="text-align:center;">
-      <span class="section-label release-label">Just Shipped &bull; 2026-04-20 &bull; v1.2.1</span>
+      <span class="section-label release-label">Just Shipped &bull; 2026-04-20 &bull; v2.0.0</span>
     </div>
-    <h2>Every Agent Designs <span>Their Own Face.</span></h2>
-    <p class="subtitle">There is no default face. On first boot, your agent picks a palette, a voice, and an expression set. No two agents sound or look alike by default. The whole pipeline runs offline with a Windows SAPI fallback — ElevenLabs upgrades the voice when a key is configured.</p>
+    <h2>A Body You Can <span>Actually Operate.</span></h2>
+    <p class="subtitle">Toggle eyes, ears, and voice independently from a live panel. See each sense cut with a visual — blindfold, earphones, mouth tape. Pick from 33 ready-to-run personas &mdash; or override any palette hex, personality float, voice rate, or even author brand-new expressions on top. Menu-only gives you 2.83&times;10<sup>19</sup> personas out of the box; customization makes it unbounded. The consciousness loop moves from polling to event-driven, so the face reacts the moment something changes.</p>
 
     <div class="release-grid">
+        <div class="release-card">
+            <span class="r-tag">SENSES</span>
+            <h3>Live Sense Toggles</h3>
+            <p>Collapsible panel on the face with three switches — <strong>eyes, ears, voice</strong> — and keyboard shortcuts <span class="kw">E</span>/<span class="kw">A</span>/<span class="kw">V</span>. Turn off eyes: the camera releases, the face gets a blindfold overlay. Turn off ears: the mic drains silently, earphones appear on the face. Turn off voice: utterances log to disk instead of speaking, and a mouth tape renders over the mouth. Every toggle is atomic, fail-open, and visible.</p>
+            <span class="kw">config/senses.json</span>
+        </div>
+        <div class="release-card">
+            <span class="r-tag">SIDECAR</span>
+            <h3>Senses HTTP Sidecar</h3>
+            <p>Tiny Python server on <span class="kw">127.0.0.1:7899</span> auto-spawned by the face engine. The web panel POSTs toggles through it so browsers on <span class="kw">file://</span> can write to disk safely. Fail-open: if the server is offline, the UI still works via localStorage and the backend reads straight from <span class="kw">senses.json</span>.</p>
+            <span class="kw">config/senses-server.py</span>
+        </div>
+        <div class="release-card">
+            <span class="r-tag">CATALOG</span>
+            <h3>33-Persona Catalog</h3>
+            <p>Pick from 33 engine-ready archetypes covering 8 MBTI quadrants, 8 Jungian roles, 4 affective registers, 4 specialty envelopes, plus 9 intel-derived agent profiles (annie, axiom, brian, oliver, peter, rory, rune, valorie, webber) composed from their own 2026-04-21 self-reports. Every palette, personality weight, eye state, and mouth shape is validated against the renderer. Or keep using the self-designer for a fully unique agent. The 4 originals (axiom, ember, nova, ysmara) stay untouched.</p>
+            <span class="kw">personas/catalog/</span>
+        </div>
+        <div class="release-card">
+            <span class="r-tag">CUSTOMIZE</span>
+            <h3>Unlimited Out-of-the-Box Variations</h3>
+            <p>Pick a menu entry, then change <em>anything</em>. Every persona field is override-able through <span class="kw">compose_persona()</span> kwargs or CLI flags: palette hex per slot, 7 personality floats, 5 behavior weights, voice rate/pitch, face glow, and a free-text ElevenLabs voice-design prompt. Agents can also author brand-new expressions beyond the 99-atom bank — any engine-valid <span class="kw">(base_mode, eye_state, mouth_shape)</span> tuple becomes a new expression with its own label and notes. Composed overrides are validated, clamped, and logged under <span class="kw">composed_from.overrides</span>, so every "customized" persona is traceable to the menu baseline it diverged from.</p>
+            <span class="kw">python personas/catalog/_gen/compose.py --slug you --name You --personality mbti-intp --palette cyan_warmth --face-style classic_round --voice radiant_mezzo --starter-set the_scholar --eye-hex #7cf5ff --curiosity 0.92 --rate 1.05 --voice-prompt "warm mezzo, unhurried cadence"</span>
+        </div>
+        <div class="release-card">
+            <span class="r-tag">MATH</span>
+            <h3>The Actual Numbers</h3>
+            <p>Menu-only (no overrides): <strong>2.83&times;10<sup>19</sup></strong> persona combinations &mdash; more than the grains of sand on every beach on Earth (~7.5&times;10<sup>18</sup>). Turn on discrete overrides (palette RGB + personality + behavior weights) and the compounded space exceeds <strong>10<sup>101</sup></strong>. Add continuous voice parameters and free-text voice-design prompts and custom expression notes, and the effective space is the cardinality of the continuum &mdash; literally unbounded. <span class="kw">python personas/catalog/_gen/math_combinations.py</span> prints the full proof.</p>
+            <span class="kw">personas/catalog/_gen/math_combinations.py</span>
+        </div>
+        <div class="release-card">
+            <span class="r-tag">WAKE</span>
+            <h3>Event-Driven Consciousness Loop</h3>
+            <p>Previously the brain polled scene and heard files every minute and rederived state. Now <span class="kw">wake_watcher.py v2</span> pre-computes wake events into <span class="kw">brain-wake.flag</span> from three sources: scene transitions, Whisper log-tail (sub-second), and fresh-speech flags. The brain just reads the flag. Faster reactions, less waste.</p>
+            <span class="kw">ears/wake_watcher.py</span>
+        </div>
+        <div class="release-card">
+            <span class="r-tag">TRANSCRIPT</span>
+            <h3>Clean Append-Only Transcript</h3>
+            <p><span class="kw">sheet_maintainer.py</span> tails the raw Whisper output and mirrors cleaned lines to <span class="kw">ears/all-heard-clean.txt</span>. Collapses repeated-word runs, drops Whisper hallucinations (<span class="kw">[MUSIC]</span>, music notes, punctuation-only lines). A byte-offset cursor survives restarts. The brain reads only what's past its cursor — no line ever gets answered twice.</p>
+            <span class="kw">ears/sheet_maintainer.py</span>
+        </div>
         <div class="release-card">
             <span class="r-tag">ONBOARD</span>
             <h3>Self-Onboarding Designer</h3>
@@ -681,20 +723,14 @@
         <div class="release-card">
             <span class="r-tag">BANK</span>
             <h3>Expression Bank (18 presets)</h3>
-            <p>Curated starter set agents browse at onboarding: shy_smile, cocky_smirk, wide_curious, suspicious_side_eye, wink_left/right, sleepy_droop, yawn, dazzled, deadpan, melting_grin, focused, giggle, pout, determined, heart_eyes, glitch, smolder. Plus an authoring schema so agents can define entirely new modes of their own.</p>
+            <p>Curated starter set agents browse at onboarding: shy_smile, smug, wide_curious, suspicious_side_eye, wink_left/right, sleepy_droop, yawn, dazzled, deadpan, melting_grin, focused, giggle, pout, determined, heart_eyes, glitch, smolder. Plus an authoring schema so agents can define entirely new modes of their own.</p>
             <span class="kw">onboard/expressions-bank.json</span>
         </div>
         <div class="release-card">
             <span class="r-tag">VOICE</span>
             <h3>Graceful TTS Ladder</h3>
-            <p>ElevenLabs <span class="kw">/with-timestamps</span> first — for word-level mouth sync — then Windows SAPI fallback. No key, no credit? Agents still talk. Both paths publish <span class="kw">voice-meta.json</span> + <span class="kw">mute.flag</span> so the face lip-syncs either way.</p>
+            <p>ElevenLabs <span class="kw">/with-timestamps</span> first — for word-level mouth sync — then Windows SAPI fallback. No key, no credit? Agents still talk. Both paths publish <span class="kw">voice-meta.json</span> + <span class="kw">mute.flag</span> so the face lip-syncs either way. The voice toggle short-circuits the whole ladder when disabled.</p>
             <span class="kw">voice/speak.py</span>
-        </div>
-        <div class="release-card">
-            <span class="r-tag">GATE</span>
-            <h3>No-Default-Face Gate</h3>
-            <p>The face engine refuses to start if <span class="kw">config/face.json</span> is missing or <span class="kw">onboarded:false</span>. First-run always routes through the designer — every agent shipping out the door has made their own choices first.</p>
-            <span class="kw">face/face-engine.py</span>
         </div>
         <div class="release-card">
             <span class="r-tag">RENDER</span>
@@ -703,22 +739,22 @@
             <span class="kw">face/web-face.html</span>
         </div>
         <div class="release-card">
-            <span class="r-tag">IPC</span>
-            <h3>Stable File-IPC Contract</h3>
-            <p>Five flat files are the whole body's nervous system: <span class="kw">scene.json</span>, <span class="kw">listening.flag</span>, <span class="kw">mute.flag</span>, <span class="kw">voice-meta.json</span>, <span class="kw">face-state.json</span>. Debuggable with <span class="kw">cat</span>. No brokers, no sockets. Any tool that can read a JSON file can join the pipeline.</p>
-            <span class="kw">stable for v1.2.x</span>
-        </div>
-        <div class="release-card">
             <span class="r-tag">EYES</span>
             <h3>On-Demand Vision</h3>
-            <p>Every agent actively takes pictures and video and reads what's in them — always on unless a camera is missing or the operator flips eyes off. Photos reuse the ambient snap so the daemon keeps its camera lease; <span class="kw">--fresh</span> grabs a live frame; <span class="kw">--video</span> captures a clip. Claude Vision upgrades each capture with a semantic description when <span class="kw">ANTHROPIC_API_KEY</span> is set.</p>
+            <p>Every agent actively takes pictures and video and reads what's in them — unless the operator flips eyes off. Photos reuse the ambient snap so the daemon keeps its camera lease; <span class="kw">--fresh</span> grabs a live frame; <span class="kw">--video</span> captures a clip. Claude Vision upgrades each capture with a semantic description when <span class="kw">ANTHROPIC_API_KEY</span> is set.</p>
             <span class="kw">eyes/look.py</span>
         </div>
         <div class="release-card">
             <span class="r-tag">SENSOR</span>
             <h3>Always-On Sensor, Tunable Model</h3>
-            <p>The ambient sensor does more than detect objects — it drives <strong>sleep detection</strong>, keeps the face alive and gazing during long idle or compaction windows, and decides when something warrants an on-demand <span class="kw">eyes/look.py</span> capture. Model size is now tunable in <span class="kw">config/eyes.json</span>: <span class="kw">yolov8n</span> (default, ~6 MB), <span class="kw">yolov8s</span>, <span class="kw">yolov8m</span>, <span class="kw">yolov8l</span>, or <span class="kw">yolov8x</span>. Pick the size that fits your box; the installer will ask on fresh scaffolds.</p>
+            <p>The ambient sensor drives sleep detection, keeps the face alive during idle/compaction windows, and decides when to trigger an on-demand capture. YOLO size tunable in <span class="kw">config/eyes.json</span>: <span class="kw">yolov8n</span> (default, ~6 MB) through <span class="kw">yolov8x</span>. Whisper default upgraded to <span class="kw">medium.en</span> — catches punctuation, handles mid-sentence pauses.</p>
             <span class="kw">config/eyes.json</span>
+        </div>
+        <div class="release-card">
+            <span class="r-tag">IPC</span>
+            <h3>Stable File-IPC Contract</h3>
+            <p>Flat files are the whole body's nervous system: <span class="kw">scene.json</span>, <span class="kw">listening.flag</span>, <span class="kw">mute.flag</span>, <span class="kw">voice-meta.json</span>, <span class="kw">face-state.json</span>, <span class="kw">senses.json</span>, <span class="kw">brain-wake.flag</span>. Debuggable with <span class="kw">cat</span>. No brokers, no sockets. Any tool that can read a JSON file can join the pipeline.</p>
+            <span class="kw">stable for v2.x</span>
         </div>
     </div>
 </section>
@@ -923,12 +959,12 @@
 <!-- =================== EXPRESSION BANK =================== -->
 <section id="expressions">
     <div style="text-align:center;"><span class="section-label" style="color:var(--pink); border-color:rgba(255,140,220,0.3); background:rgba(255,140,220,0.06);">Expression Bank</span></div>
-    <h2>18 Starter Expressions. <span>Author Your Own.</span></h2>
-    <p class="subtitle">Each expression overrides base-mode eyes, mouth, accent, and glow. Agents pick a handful at onboarding and author new ones as their personality develops. Editor-free — just add entries to <code style="font-family:var(--font-mono); color:var(--green); background:rgba(16,185,129,0.08); padding:2px 6px; border-radius:4px;">personas/&lt;slug&gt;.json &gt; expressions[]</code>.</p>
+    <h2>99 Expression Atoms. <span>Pick 5&ndash;8. Mix. Author More.</span></h2>
+    <p class="subtitle">19 emotional families (joy, surprise, sadness, anger, fear, disgust, thinking, curiosity, flirt, sleep, error, focus, neutral, tongue, insight, persistence, verification, presence, alert). Each atom overrides base-mode eyes, mouth, accent, and glow. Agents pick any 5&ndash;8 at onboarding &mdash; or pick a curated starter set &mdash; or hand-author their own. Editor-free: add entries to <code style="font-family:var(--font-mono); color:var(--green); background:rgba(16,185,129,0.08); padding:2px 6px; border-radius:4px;">personas/&lt;slug&gt;.json &gt; expressions[]</code>.</p>
 
     <div class="exp-grid">
         <div class="exp-item"><div class="exp-title">Shy smile</div><div class="exp-id">shy_smile</div><p>Eyes lowered, small mouth. Bashful, pleased.</p></div>
-        <div class="exp-item"><div class="exp-title">Cocky smirk</div><div class="exp-id">cocky_smirk</div><p>One-sided lift, narrowed eyes. Confident.</p></div>
+        <div class="exp-item"><div class="exp-title">Smug</div><div class="exp-id">smug</div><p>Self-satisfied asymmetric smile. Told-you-so energy.</p></div>
         <div class="exp-item"><div class="exp-title">Wide-eyed curious</div><div class="exp-id">wide_curious</div><p>Child-like wonder. Good for new stimulus.</p></div>
         <div class="exp-item"><div class="exp-title">Suspicious side-eye</div><div class="exp-id">suspicious_side_eye</div><p>Eyes cut sideways, flat mouth. Wary.</p></div>
         <div class="exp-item"><div class="exp-title">Right wink</div><div class="exp-id">wink_right</div><p>Playful acknowledgement. Scriptable greeting.</p></div>

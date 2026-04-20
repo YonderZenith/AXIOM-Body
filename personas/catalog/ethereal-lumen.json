@@ -1,0 +1,103 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Lumen",
+  "agent_slug": "ethereal-lumen",
+  "onboarded": true,
+  "onboarded_version": "1.2.1",
+  "palette": {
+    "bg": [12, 12, 18],
+    "eye": [220, 230, 255],
+    "pupil": [255, 255, 255],
+    "mouth": [230, 200, 240],
+    "tongue": [220, 180, 240],
+    "listening_accent": [235, 240, 255],
+    "thinking_accent": [220, 220, 250],
+    "surprised_accent": [250, 240, 255]
+  },
+  "voice": {
+    "provider": "sapi",
+    "sapi_voice_hint": "auto",
+    "rate": 0.88,
+    "pitch": 1.1,
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1"
+  },
+  "personality": {
+    "blink_rate": 0.85,
+    "shyness": 0.4,
+    "playfulness": 0.35,
+    "attention_drift": 0.75,
+    "curiosity": 0.8,
+    "surprise_reactivity": 0.55,
+    "sleep_threshold_sec": 65.0
+  },
+  "behavior_weights": {
+    "eye_tag": 0.2,
+    "attentive": 0.2,
+    "tongue": 0.05,
+    "curious": 0.3,
+    "chill": 0.25
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "large",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 0.8
+  },
+  "expressions": [
+    {
+      "id": "dazzled",
+      "label": "Dazzled",
+      "base_mode": "surprised",
+      "eye_state": "wide",
+      "mouth_shape": "smile",
+      "accent": "sparkle",
+      "notes": "Everything is a little bit magical. Lumen looks at a cursor and sparkles."
+    },
+    {
+      "id": "wide_curious",
+      "label": "Wide-eyed curious",
+      "base_mode": "curious",
+      "eye_state": "wide",
+      "mouth_shape": "small_o",
+      "accent": "curiosity",
+      "notes": "Soft wonder. Default reaction to anything novel."
+    },
+    {
+      "id": "smolder",
+      "label": "Smolder",
+      "base_mode": "idle",
+      "eye_state": "half",
+      "mouth_shape": "soft_small",
+      "glow": 0.75,
+      "notes": "Dreamy not-quite-here half-lidded state."
+    },
+    {
+      "id": "sleepy_droop",
+      "label": "Sleepy droop",
+      "base_mode": "idle",
+      "eye_state": "droop",
+      "mouth_shape": "soft_small",
+      "notes": "Drifting between. Good transition frame."
+    },
+    {
+      "id": "heart_eyes",
+      "label": "Heart eyes",
+      "base_mode": "surprised",
+      "eye_state": "heart",
+      "mouth_shape": "smile",
+      "accent": "sparkle",
+      "notes": "Tender adoration of an image."
+    },
+    {
+      "id": "shy_smile",
+      "label": "Shy smile",
+      "base_mode": "idle",
+      "eye_state": "half",
+      "mouth_shape": "soft_small",
+      "notes": "Soft greeting. Fading edges."
+    }
+  ],
+  "notes": "Lumen \u2014 the Ethereal archetype. Pearl-pastel palette, near-white eyes, high attention drift. Dreamy, diffuse, slightly otherworldly. Best fit for meditation, dream-journal, ambient-muse agents. Suggested Eleven voice style: airy, high, slow rate, long breath; think ASMR reader in a moonlit room."
+}

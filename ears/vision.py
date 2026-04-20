@@ -78,6 +78,29 @@ def _apply_config():
 _apply_config()
 
 
+SENSES_FILE = os.path.join(ROOT_DIR, "config", "senses.json")
+
+
+def _senses_eyes_off():
+    try:
+        with open(SENSES_FILE, "r", encoding="utf-8") as f:
+            return json.load(f).get("eyes") is False
+    except Exception:
+        return False
+
+
+def eyes_disabled():
+    if os.environ.get("AXIOM_EYES_DISABLED", "").strip().lower() in ("1", "true", "yes"):
+        return True
+    cfg = load_eyes_config()
+    flag_rel = (cfg.get("off_switch") or {}).get("flag_file") or "config/eyes.off"
+    if os.path.exists(os.path.join(ROOT_DIR, flag_rel)):
+        return True
+    if _senses_eyes_off():
+        return True
+    return False
+
+
 def log(msg):
     ts = datetime.now().strftime("%H:%M:%S")
     line = f"[{ts}] {msg}"
@@ -278,6 +301,21 @@ def main():
     last_people = 0
     while True:
         try:
+            if eyes_disabled():
+                # Heartbeat scene with sense_off so listener knows the diff
+                # between "no one is there" and "we can't see".
+                save_scene({
+                    "timestamp": datetime.now().isoformat(),
+                    "people_count": 0,
+                    "people": [],
+                    "objects": [],
+                    "gaze_target": {"x": 0, "y": 0},
+                    "brightness": 0,
+                    "attention_level": "idle",
+                    "sense_off": "eyes",
+                })
+                time.sleep(args.interval)
+                continue
             frame = capture_frame(camera)
             if frame is None:
                 time.sleep(args.interval)

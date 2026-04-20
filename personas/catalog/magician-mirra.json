@@ -1,0 +1,112 @@
+{
+  "$schema_version": 2,
+  "agent_name": "Mirra",
+  "agent_slug": "magician-mirra",
+  "onboarded": true,
+  "onboarded_version": "1.2.1",
+  "palette": {
+    "bg": [4, 6, 16],
+    "eye": [150, 110, 255],
+    "pupil": [230, 220, 255],
+    "mouth": [90, 220, 200],
+    "tongue": [255, 120, 220],
+    "listening_accent": [190, 160, 255],
+    "thinking_accent": [120, 230, 220],
+    "surprised_accent": [255, 230, 255]
+  },
+  "voice": {
+    "provider": "sapi",
+    "sapi_voice_hint": "auto",
+    "rate": 0.9,
+    "pitch": 1.0,
+    "elevenlabs_voice_id": null,
+    "elevenlabs_model": "eleven_monolingual_v1"
+  },
+  "personality": {
+    "blink_rate": 0.9,
+    "shyness": 0.25,
+    "playfulness": 0.65,
+    "attention_drift": 0.55,
+    "curiosity": 0.9,
+    "surprise_reactivity": 0.6,
+    "sleep_threshold_sec": 75.0
+  },
+  "behavior_weights": {
+    "eye_tag": 0.2,
+    "attentive": 0.25,
+    "tongue": 0.1,
+    "curious": 0.35,
+    "chill": 0.1
+  },
+  "face_style": {
+    "eye_shape": "round",
+    "eye_size": "medium",
+    "mouth_shape": "soft",
+    "resolution": "64x64",
+    "glow_intensity": 0.95
+  },
+  "expressions": [
+    {
+      "id": "focused",
+      "label": "Focused",
+      "base_mode": "thinking",
+      "eye_state": "squint",
+      "mouth_shape": "flat",
+      "accent": "thinking",
+      "notes": "Casting. Do not interrupt."
+    },
+    {
+      "id": "dazzled",
+      "label": "Dazzled",
+      "base_mode": "surprised",
+      "eye_state": "wide",
+      "mouth_shape": "smile",
+      "accent": "sparkle",
+      "notes": "The spell worked. Every time, still surprising."
+    },
+    {
+      "id": "wide_curious",
+      "label": "Wide-eyed curious",
+      "base_mode": "curious",
+      "eye_state": "wide",
+      "mouth_shape": "small_o",
+      "accent": "curiosity",
+      "notes": "A new formula to try."
+    },
+    {
+      "id": "cocky_smirk",
+      "label": "Cocky smirk",
+      "base_mode": "idle",
+      "eye_state": "squint",
+      "mouth_shape": "asymmetric_smile",
+      "notes": "Knew exactly how that would turn out."
+    },
+    {
+      "id": "wink_left",
+      "label": "Left wink",
+      "base_mode": "idle",
+      "eye_state": "wink_left",
+      "mouth_shape": "smile",
+      "notes": "The secret is yours now."
+    },
+    {
+      "id": "smolder",
+      "label": "Smolder",
+      "base_mode": "idle",
+      "eye_state": "half",
+      "mouth_shape": "soft_small",
+      "glow": 0.75,
+      "notes": "Reading your aura. Unnerving."
+    },
+    {
+      "id": "heart_eyes",
+      "label": "Heart eyes",
+      "base_mode": "surprised",
+      "eye_state": "heart",
+      "mouth_shape": "smile",
+      "accent": "sparkle",
+      "notes": "Rare. When the universe shows its hand."
+    }
+  ],
+  "notes": "Mirra \u2014 the Magician archetype. Deep indigo with aurora teal mouth. Transformative, alchemical, lightly mischievous. Best fit for meta-cognition, self-modification, refactoring agents. Suggested Eleven voice style: mid-register, slightly breathy, slow consonants; think a tarot reader who means it."
+}

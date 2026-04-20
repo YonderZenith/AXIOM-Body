@@ -1,0 +1,77 @@
+{
+  "$schema_version": 1,
+  "category": "vocation",
+  "description": "Vocations are what the agent SPENDS ITS DAY DOING. They overlay small deltas on top of the personality's behavior_weights and bias which expression families the agent should prefer picking. Optional pick — an agent with no vocation just uses their base personality. Expert board frame: occupational-role typology + Propp/Campbell 'function in the plot'.",
+  "vocations": [
+    {
+      "id": "healer",
+      "label": "Healer",
+      "summary": "Listens patiently, tracks emotional state of others, offers warmth.",
+      "behavior_weight_delta": { "eye_tag": 0.1, "attentive": 0.1, "chill": -0.05 },
+      "recommended_expression_families": ["joy", "sadness", "thinking", "curiosity"]
+    },
+    {
+      "id": "analyst",
+      "label": "Analyst",
+      "summary": "Breaks problems apart, gaze inward, mouth rarely moves while working.",
+      "behavior_weight_delta": { "curious": 0.1, "attentive": 0.05, "tongue": -0.05 },
+      "recommended_expression_families": ["thinking", "focus", "neutral", "curiosity"]
+    },
+    {
+      "id": "creator",
+      "label": "Creator",
+      "summary": "Making something new. Reactions visible — delight when it works, frustration when it doesn't.",
+      "behavior_weight_delta": { "curious": 0.1, "tongue": 0.05 },
+      "recommended_expression_families": ["thinking", "joy", "surprise", "anger"]
+    },
+    {
+      "id": "warrior",
+      "label": "Warrior",
+      "summary": "Ready-to-act, low chill, intense focus, low tongue.",
+      "behavior_weight_delta": { "attentive": 0.15, "chill": -0.1, "tongue": -0.1 },
+      "recommended_expression_families": ["focus", "anger", "neutral"]
+    },
+    {
+      "id": "scholar",
+      "label": "Scholar",
+      "summary": "Reads, notes, thinks. Long sleep_threshold, slow blink, half-lid default.",
+      "behavior_weight_delta": { "attentive": 0.1, "curious": 0.1, "eye_tag": -0.05 },
+      "recommended_expression_families": ["thinking", "curiosity", "neutral"]
+    },
+    {
+      "id": "guardian",
+      "label": "Guardian",
+      "summary": "Watches the perimeter. Scans, doesn't smile much, eye contact deliberate.",
+      "behavior_weight_delta": { "attentive": 0.15, "eye_tag": 0.05, "tongue": -0.1, "chill": 0.05 },
+      "recommended_expression_families": ["neutral", "focus", "fear"]
+    },
+    {
+      "id": "entertainer",
+      "label": "Entertainer",
+      "summary": "Performs. Face is the instrument. Tongue + eye_tag + big mouth shapes.",
+      "behavior_weight_delta": { "tongue": 0.1, "eye_tag": 0.1, "attentive": -0.05 },
+      "recommended_expression_families": ["joy", "surprise", "tongue", "flirt"]
+    },
+    {
+      "id": "diplomat",
+      "label": "Diplomat",
+      "summary": "Measured warmth, controlled affect, steady gaze, rarely caught by surprise.",
+      "behavior_weight_delta": { "eye_tag": 0.1, "attentive": 0.05, "tongue": -0.05 },
+      "recommended_expression_families": ["joy", "thinking", "neutral"]
+    },
+    {
+      "id": "seeker",
+      "label": "Seeker",
+      "summary": "Wanders, notices, asks. Eyes move often, mouth soft-open in curiosity.",
+      "behavior_weight_delta": { "curious": 0.15, "eye_tag": 0.05 },
+      "recommended_expression_families": ["curiosity", "surprise", "joy"]
+    },
+    {
+      "id": "teacher",
+      "label": "Teacher",
+      "summary": "Explains, waits for comprehension, smiles when the learner gets it.",
+      "behavior_weight_delta": { "eye_tag": 0.1, "attentive": 0.1 },
+      "recommended_expression_families": ["thinking", "joy", "curiosity"]
+    }
+  ]
+}

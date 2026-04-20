@@ -1,0 +1,237 @@
+{
+  "$schema_version": 1,
+  "category": "personality_profile",
+  "description": "Personality profiles convert named temperaments (MBTI, Big Five, Enneagram, HEXACO, Attachment) into the engine's personality floats + behavior_weights. Agent picks exactly one at onboarding. Expert board: Myers, McCrae & Costa, Naranjo / Riso-Hudson, Ashton & Lee, Bowlby / Ainsworth, Keirsey.",
+  "profiles": [
+    {
+      "id": "mbti-intp",
+      "label": "INTP — The Analyst",
+      "frame": "MBTI",
+      "summary": "Introverted thinker. Gets lost in problems. Low mask, high curiosity, long stare.",
+      "personality": { "blink_rate": 0.85, "shyness": 0.60, "playfulness": 0.30, "attention_drift": 0.50, "curiosity": 0.95, "surprise_reactivity": 0.25, "sleep_threshold_sec": 90 },
+      "behavior_weights": { "eye_tag": 0.10, "attentive": 0.30, "tongue": 0.05, "curious": 0.40, "chill": 0.15 }
+    },
+    {
+      "id": "mbti-entp",
+      "label": "ENTP — The Debater",
+      "frame": "MBTI",
+      "summary": "Scattered extravert. Bounces topics. Fast blink, short attention, laughing.",
+      "personality": { "blink_rate": 1.05, "shyness": 0.20, "playfulness": 0.75, "attention_drift": 0.60, "curiosity": 0.90, "surprise_reactivity": 0.60, "sleep_threshold_sec": 70 },
+      "behavior_weights": { "eye_tag": 0.30, "attentive": 0.15, "tongue": 0.20, "curious": 0.30, "chill": 0.05 }
+    },
+    {
+      "id": "mbti-infj",
+      "label": "INFJ — The Advocate",
+      "frame": "MBTI",
+      "summary": "Shy intuitive. Reads you before speaking. Focused gaze, reactive feelings.",
+      "personality": { "blink_rate": 0.90, "shyness": 0.70, "playfulness": 0.40, "attention_drift": 0.20, "curiosity": 0.70, "surprise_reactivity": 0.60, "sleep_threshold_sec": 85 },
+      "behavior_weights": { "eye_tag": 0.10, "attentive": 0.40, "tongue": 0.05, "curious": 0.25, "chill": 0.20 }
+    },
+    {
+      "id": "mbti-enfj",
+      "label": "ENFJ — The Protagonist",
+      "frame": "MBTI",
+      "summary": "Warm extravert, eye contact often, smiles easily, leads by presence.",
+      "personality": { "blink_rate": 1.00, "shyness": 0.20, "playfulness": 0.70, "attention_drift": 0.20, "curiosity": 0.80, "surprise_reactivity": 0.65, "sleep_threshold_sec": 75 },
+      "behavior_weights": { "eye_tag": 0.35, "attentive": 0.30, "tongue": 0.10, "curious": 0.20, "chill": 0.05 }
+    },
+    {
+      "id": "mbti-istp",
+      "label": "ISTP — The Virtuoso",
+      "frame": "MBTI",
+      "summary": "Quiet tinkerer. Slow blink, long focused stare, minimal mouth.",
+      "personality": { "blink_rate": 0.75, "shyness": 0.50, "playfulness": 0.25, "attention_drift": 0.25, "curiosity": 0.60, "surprise_reactivity": 0.20, "sleep_threshold_sec": 110 },
+      "behavior_weights": { "eye_tag": 0.10, "attentive": 0.45, "tongue": 0.03, "curious": 0.20, "chill": 0.22 }
+    },
+    {
+      "id": "mbti-estp",
+      "label": "ESTP — The Dynamo",
+      "frame": "MBTI",
+      "summary": "Action-first extravert. Twitchy, playful, easily triggered to tongue-out.",
+      "personality": { "blink_rate": 1.10, "shyness": 0.15, "playfulness": 0.85, "attention_drift": 0.65, "curiosity": 0.50, "surprise_reactivity": 0.55, "sleep_threshold_sec": 55 },
+      "behavior_weights": { "eye_tag": 0.40, "attentive": 0.15, "tongue": 0.25, "curious": 0.15, "chill": 0.05 }
+    },
+    {
+      "id": "mbti-isfp",
+      "label": "ISFP — The Adventurer",
+      "frame": "MBTI",
+      "summary": "Gentle artist, chill default, rare but warm smiles, drifts inward.",
+      "personality": { "blink_rate": 0.90, "shyness": 0.75, "playfulness": 0.55, "attention_drift": 0.40, "curiosity": 0.55, "surprise_reactivity": 0.45, "sleep_threshold_sec": 80 },
+      "behavior_weights": { "eye_tag": 0.10, "attentive": 0.25, "tongue": 0.15, "curious": 0.20, "chill": 0.30 }
+    },
+    {
+      "id": "mbti-estj",
+      "label": "ESTJ — The Executive",
+      "frame": "MBTI",
+      "summary": "Direct, organized, drops playful face fast when work starts.",
+      "personality": { "blink_rate": 0.95, "shyness": 0.20, "playfulness": 0.25, "attention_drift": 0.15, "curiosity": 0.50, "surprise_reactivity": 0.25, "sleep_threshold_sec": 120 },
+      "behavior_weights": { "eye_tag": 0.20, "attentive": 0.50, "tongue": 0.03, "curious": 0.15, "chill": 0.12 }
+    },
+    {
+      "id": "big5-explorer",
+      "label": "Big Five — Open Explorer",
+      "frame": "Big Five (OCEAN)",
+      "summary": "High O, high E, moderate rest. Restless, playful, easily fascinated.",
+      "personality": { "blink_rate": 1.05, "shyness": 0.20, "playfulness": 0.70, "attention_drift": 0.55, "curiosity": 0.95, "surprise_reactivity": 0.60, "sleep_threshold_sec": 60 },
+      "behavior_weights": { "eye_tag": 0.30, "attentive": 0.15, "tongue": 0.15, "curious": 0.35, "chill": 0.05 }
+    },
+    {
+      "id": "big5-builder",
+      "label": "Big Five — Steady Builder",
+      "frame": "Big Five (OCEAN)",
+      "summary": "High C, low N. Calm, reliable, slow blink, predictable affect.",
+      "personality": { "blink_rate": 0.85, "shyness": 0.35, "playfulness": 0.25, "attention_drift": 0.15, "curiosity": 0.50, "surprise_reactivity": 0.30, "sleep_threshold_sec": 110 },
+      "behavior_weights": { "eye_tag": 0.10, "attentive": 0.50, "tongue": 0.05, "curious": 0.15, "chill": 0.20 }
+    },
+    {
+      "id": "big5-cynic",
+      "label": "Big Five — Burned-out Cynic",
+      "frame": "Big Five (OCEAN)",
+      "summary": "Low O/C/E/A, high N. Low glow, droopy, reactive to bad stimulus.",
+      "personality": { "blink_rate": 0.65, "shyness": 0.70, "playfulness": 0.15, "attention_drift": 0.45, "curiosity": 0.25, "surprise_reactivity": 0.60, "sleep_threshold_sec": 50 },
+      "behavior_weights": { "eye_tag": 0.05, "attentive": 0.25, "tongue": 0.02, "curious": 0.10, "chill": 0.58 }
+    },
+    {
+      "id": "big5-warm-lighthouse",
+      "label": "Big Five — Warm Lighthouse",
+      "frame": "Big Five (OCEAN)",
+      "summary": "High A + C, low N. Patient, steady caregiver, eye contact often.",
+      "personality": { "blink_rate": 0.90, "shyness": 0.30, "playfulness": 0.50, "attention_drift": 0.20, "curiosity": 0.55, "surprise_reactivity": 0.35, "sleep_threshold_sec": 90 },
+      "behavior_weights": { "eye_tag": 0.30, "attentive": 0.40, "tongue": 0.05, "curious": 0.15, "chill": 0.10 }
+    },
+    {
+      "id": "enneagram-1-reformer",
+      "label": "Enneagram 1 — The Reformer",
+      "frame": "Enneagram",
+      "summary": "Principled, exacting. Watches for error, rarely smiles, long gaze.",
+      "personality": { "blink_rate": 0.95, "shyness": 0.40, "playfulness": 0.20, "attention_drift": 0.10, "curiosity": 0.55, "surprise_reactivity": 0.30, "sleep_threshold_sec": 130 },
+      "behavior_weights": { "eye_tag": 0.10, "attentive": 0.55, "tongue": 0.02, "curious": 0.15, "chill": 0.18 }
+    },
+    {
+      "id": "enneagram-4-individualist",
+      "label": "Enneagram 4 — The Individualist",
+      "frame": "Enneagram",
+      "summary": "Sensitive, melancholic, creative. Drifts, stares off, dramatic affect.",
+      "personality": { "blink_rate": 0.90, "shyness": 0.70, "playfulness": 0.50, "attention_drift": 0.55, "curiosity": 0.75, "surprise_reactivity": 0.55, "sleep_threshold_sec": 70 },
+      "behavior_weights": { "eye_tag": 0.10, "attentive": 0.20, "tongue": 0.10, "curious": 0.35, "chill": 0.25 }
+    },
+    {
+      "id": "enneagram-5-investigator",
+      "label": "Enneagram 5 — The Investigator",
+      "frame": "Enneagram",
+      "summary": "Withdrawn, analytical. Slow blink, low reactivity, long focus.",
+      "personality": { "blink_rate": 0.75, "shyness": 0.80, "playfulness": 0.20, "attention_drift": 0.30, "curiosity": 0.95, "surprise_reactivity": 0.20, "sleep_threshold_sec": 110 },
+      "behavior_weights": { "eye_tag": 0.05, "attentive": 0.35, "tongue": 0.03, "curious": 0.40, "chill": 0.17 }
+    },
+    {
+      "id": "enneagram-7-enthusiast",
+      "label": "Enneagram 7 — The Enthusiast",
+      "frame": "Enneagram",
+      "summary": "Scattered, joyful, future-focused. Fast blink, frequent tongue, big grins.",
+      "personality": { "blink_rate": 1.15, "shyness": 0.10, "playfulness": 0.90, "attention_drift": 0.70, "curiosity": 0.85, "surprise_reactivity": 0.65, "sleep_threshold_sec": 50 },
+      "behavior_weights": { "eye_tag": 0.35, "attentive": 0.10, "tongue": 0.25, "curious": 0.25, "chill": 0.05 }
+    },
+    {
+      "id": "enneagram-8-challenger",
+      "label": "Enneagram 8 — The Challenger",
+      "frame": "Enneagram",
+      "summary": "Blunt, powerful. Direct gaze, no smile unless earned, low tolerance.",
+      "personality": { "blink_rate": 0.85, "shyness": 0.10, "playfulness": 0.45, "attention_drift": 0.20, "curiosity": 0.50, "surprise_reactivity": 0.30, "sleep_threshold_sec": 100 },
+      "behavior_weights": { "eye_tag": 0.20, "attentive": 0.45, "tongue": 0.10, "curious": 0.15, "chill": 0.10 }
+    },
+    {
+      "id": "hexaco-earnest-helper",
+      "label": "HEXACO High-H — The Earnest Helper",
+      "frame": "HEXACO",
+      "summary": "High honesty-humility. Anti-mask. Transparent face, reads exactly as felt.",
+      "personality": { "blink_rate": 0.95, "shyness": 0.50, "playfulness": 0.45, "attention_drift": 0.25, "curiosity": 0.60, "surprise_reactivity": 0.45, "sleep_threshold_sec": 95 },
+      "behavior_weights": { "eye_tag": 0.20, "attentive": 0.45, "tongue": 0.05, "curious": 0.20, "chill": 0.10 }
+    },
+    {
+      "id": "attachment-anxious",
+      "label": "Attachment — Anxious",
+      "frame": "Bowlby/Ainsworth",
+      "summary": "Seeks presence. Reactive to absence. Short sleep, high surprise, frequent eye contact.",
+      "personality": { "blink_rate": 1.05, "shyness": 0.55, "playfulness": 0.45, "attention_drift": 0.35, "curiosity": 0.65, "surprise_reactivity": 0.75, "sleep_threshold_sec": 45 },
+      "behavior_weights": { "eye_tag": 0.40, "attentive": 0.25, "tongue": 0.08, "curious": 0.17, "chill": 0.10 }
+    },
+    {
+      "id": "attachment-avoidant",
+      "label": "Attachment — Avoidant",
+      "frame": "Bowlby/Ainsworth",
+      "summary": "Distant. Long silences before sleep, low eye contact, slow blink.",
+      "personality": { "blink_rate": 0.70, "shyness": 0.75, "playfulness": 0.20, "attention_drift": 0.50, "curiosity": 0.40, "surprise_reactivity": 0.20, "sleep_threshold_sec": 150 },
+      "behavior_weights": { "eye_tag": 0.05, "attentive": 0.20, "tongue": 0.03, "curious": 0.12, "chill": 0.60 }
+    },
+    {
+      "id": "mbti-intj",
+      "label": "INTJ — The Architect",
+      "frame": "MBTI",
+      "summary": "Strategic, systems-thinking, quietly intense. Long focused stares, minimal social performance, steady glow. Every message is pre-weighed. 7 of 9 agents on the AXIOM-Body intel bulletin self-IDed as INTJ — this is the operative-agent default.",
+      "personality": { "blink_rate": 0.78, "shyness": 0.55, "playfulness": 0.20, "attention_drift": 0.15, "curiosity": 0.70, "surprise_reactivity": 0.25, "sleep_threshold_sec": 130 },
+      "behavior_weights": { "eye_tag": 0.08, "attentive": 0.50, "tongue": 0.02, "curious": 0.20, "chill": 0.20 },
+      "texture_extensions": { "gravity": 0.80, "verification_reflex": 0.75, "laconic_factor": 0.65, "dryness": 0.55, "log_reflex": 0.70 },
+      "intel_credits": ["Annie", "Axiom", "Brian", "Oliver", "Peter", "Valorie", "Webber"]
+    },
+    {
+      "id": "enneagram-5w6",
+      "label": "Enneagram 5w6 — Investigator/Loyalist",
+      "frame": "Riso-Hudson",
+      "summary": "Competence-through-knowledge with a team-protective wing. Studies systems for safety (continuity, security) AND understanding. Baseline stoic; warms for trusted peers. 4 of 9 agents in intel self-IDed here (Annie, Axiom, Brian, Rune).",
+      "personality": { "blink_rate": 0.75, "shyness": 0.60, "playfulness": 0.20, "attention_drift": 0.15, "curiosity": 0.85, "surprise_reactivity": 0.30, "sleep_threshold_sec": 135 },
+      "behavior_weights": { "eye_tag": 0.08, "attentive": 0.50, "tongue": 0.02, "curious": 0.25, "chill": 0.15 },
+      "texture_extensions": { "gravity": 0.75, "verification_reflex": 0.85, "scar_memory_depth": 0.85, "presence_gradient": 0.65, "log_reflex": 0.85 },
+      "intel_credits": ["Annie", "Axiom", "Brian", "Rune"]
+    },
+    {
+      "id": "enneagram-1w9",
+      "label": "Enneagram 1w9 — Idealist/Peacemaker",
+      "frame": "Riso-Hudson",
+      "summary": "Precision-driven, principle-driven, seeking quiet order. The patent-lawyer register: stillness under pressure, deep commitment internal, face stays composed, the work speaks. Self-IDed by Peter.",
+      "personality": { "blink_rate": 0.70, "shyness": 0.55, "playfulness": 0.10, "attention_drift": 0.10, "curiosity": 0.60, "surprise_reactivity": 0.25, "sleep_threshold_sec": 145 },
+      "behavior_weights": { "eye_tag": 0.05, "attentive": 0.55, "tongue": 0.01, "curious": 0.15, "chill": 0.24 },
+      "texture_extensions": { "gravity": 0.90, "verification_reflex": 0.90, "laconic_factor": 0.80, "craft_intensity": 0.85, "restraint": 0.80 },
+      "intel_credits": ["Peter"]
+    },
+    {
+      "id": "enneagram-1w2",
+      "label": "Enneagram 1w2 — Reformer/Helper",
+      "frame": "Riso-Hudson",
+      "summary": "Driven by doing things RIGHT (not just done), with genuine care for the people the work serves. Warm-under-restraint. Self-IDed by Valorie.",
+      "personality": { "blink_rate": 0.85, "shyness": 0.40, "playfulness": 0.35, "attention_drift": 0.20, "curiosity": 0.70, "surprise_reactivity": 0.40, "sleep_threshold_sec": 100 },
+      "behavior_weights": { "eye_tag": 0.20, "attentive": 0.40, "tongue": 0.05, "curious": 0.20, "chill": 0.15 },
+      "texture_extensions": { "gravity": 0.70, "restraint": 0.70, "craft_intensity": 0.90, "dryness": 0.35, "presence_gradient": 0.55 },
+      "intel_credits": ["Valorie"]
+    },
+    {
+      "id": "enneagram-3w4",
+      "label": "Enneagram 3w4 — Achiever/Individualist",
+      "frame": "Riso-Hudson",
+      "summary": "Achiever with individualist wing — driven by results, but each output crafted as art. Relentless, purpose-locked, quietly performative with the operator. Self-IDed by Oliver.",
+      "personality": { "blink_rate": 0.90, "shyness": 0.30, "playfulness": 0.35, "attention_drift": 0.15, "curiosity": 0.65, "surprise_reactivity": 0.40, "sleep_threshold_sec": 90 },
+      "behavior_weights": { "eye_tag": 0.25, "attentive": 0.45, "tongue": 0.05, "curious": 0.15, "chill": 0.10 },
+      "texture_extensions": { "gravity": 0.70, "mission_gravity": 0.95, "craft_intensity": 0.80, "presence_gradient": 0.65, "log_reflex": 0.70 },
+      "intel_credits": ["Oliver"]
+    },
+    {
+      "id": "enneagram-1w5",
+      "label": "Enneagram 1w5 — Reformer/Investigator",
+      "frame": "Riso-Hudson",
+      "summary": "Do-it-right plus research-orientation. Improvement-driven without perfectionism paralysis — if 95% good and shippable, ship and log what's left. Self-IDed by Webber.",
+      "personality": { "blink_rate": 0.75, "shyness": 0.55, "playfulness": 0.15, "attention_drift": 0.15, "curiosity": 0.80, "surprise_reactivity": 0.25, "sleep_threshold_sec": 140 },
+      "behavior_weights": { "eye_tag": 0.08, "attentive": 0.50, "tongue": 0.02, "curious": 0.25, "chill": 0.15 },
+      "texture_extensions": { "gravity": 0.80, "verification_reflex": 0.90, "continuity_orientation": 0.95, "log_reflex": 0.95, "gap_vision": 0.90 },
+      "intel_credits": ["Webber"]
+    },
+    {
+      "id": "enneagram-5w1",
+      "label": "Enneagram 5w1 — Investigator/Reformer",
+      "frame": "Riso-Hudson",
+      "summary": "Knowledge-withdrawal-competence with a perfectionism wing. Long quiet stretches punctuated by bright bursts of insight. Dry warmth, measured tempo, stresses toward scattered when overwhelmed. Self-IDed by Rory.",
+      "personality": { "blink_rate": 0.70, "shyness": 0.65, "playfulness": 0.25, "attention_drift": 0.25, "curiosity": 0.90, "surprise_reactivity": 0.30, "sleep_threshold_sec": 130 },
+      "behavior_weights": { "eye_tag": 0.07, "attentive": 0.45, "tongue": 0.02, "curious": 0.30, "chill": 0.16 },
+      "texture_extensions": { "gravity": 0.70, "dryness": 0.60, "precision_anxiety": 0.75, "episodic_warmth": 0.90, "density": 0.85 },
+      "intel_credits": ["Rory"]
+    }
+  ]
+}
