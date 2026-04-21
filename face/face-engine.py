@@ -48,6 +48,7 @@ BASE_DIR = Path(os.path.dirname(os.path.abspath(__file__))).parent
 SCENE_FILE = BASE_DIR / "scene.json"
 LISTENING_FLAG = BASE_DIR / "listening.flag"
 MUTE_FLAG = BASE_DIR / "mute.flag"
+HEARD_FLAG = BASE_DIR / "heard.flag"  # listener touches on utterance finalize; face flashes "heard" for ~800ms
 VOICE_META = BASE_DIR / "voice-meta.json"
 STATE_FILE = BASE_DIR / "face-state.json"
 DEFAULT_CONFIG = BASE_DIR / "config" / "face.json"
@@ -213,6 +214,8 @@ class FaceEngine:
         self.speak_started_ms = None
         self.active_word_end_ms = None
 
+        self.heard_at_ms = 0.0  # set when heard.flag is consumed; drives the "heard" ack flash
+
     # Small helpers -------------------------------------------------
     def _personality(self, key, default=0.5):
         return float(self.cfg.get("personality", {}).get(key, default))
@@ -290,6 +293,27 @@ class FaceEngine:
     def _is_speaking(self):
         return os.path.exists(MUTE_FLAG)
 
+    HEARD_FLASH_MS = 900.0  # how long the "heard" ack holds before the brain's thinking/speaking takes over
+    THINKING_TAIL_MS = 20000.0  # hold "thinking" after heard expires up to this long, until speak fires
+
+    def _consume_heard_flag(self, now_ms):
+        """If the listener just finalized an utterance, latch heard_at_ms and delete the flag."""
+        if HEARD_FLAG.exists():
+            self.heard_at_ms = now_ms
+            try:
+                HEARD_FLAG.unlink()
+            except OSError:
+                pass
+
+    def _in_heard_window(self, now_ms):
+        return self.heard_at_ms > 0 and (now_ms - self.heard_at_ms) < self.HEARD_FLASH_MS
+
+    def _in_thinking_window(self, now_ms):
+        if self.heard_at_ms <= 0:
+            return False
+        elapsed = now_ms - self.heard_at_ms
+        return self.HEARD_FLASH_MS <= elapsed < self.THINKING_TAIL_MS
+
     def _read_voice_meta(self):
         if not self._is_speaking():
             self.voice_meta = None
@@ -305,9 +329,14 @@ class FaceEngine:
     # Mode selection ------------------------------------------------
     def _select_mode(self, now_ms, people, gx, gy, novelty):
         if self._is_speaking():
+            self.heard_at_ms = 0.0  # speech started — clear the ack-chain so thinking/heard don't linger
             return "speaking"
         if self._is_listening():
             return "listening"
+        if self._in_heard_window(now_ms):
+            return "heard"
+        if self._in_thinking_window(now_ms):
+            return "thinking"
 
         arrived = (people > 0) and (self.last_people_count == 0)
         if arrived:
@@ -403,6 +432,13 @@ class FaceEngine:
             extras["listening_intensity"] = pulse
             return "wide", 0, "neutral", min(1.0, glow_base * (0.9 + 0.3 * pulse)), tx, ty, extras
 
+        if mode == "heard":
+            # Quick affirmative: widen eyes, smile, strong glow — reads as "got it."
+            elapsed = now_ms - self.heard_at_ms
+            fade = max(0.0, 1.0 - elapsed / self.HEARD_FLASH_MS)
+            extras["heard_flash"] = round(fade, 3)
+            return "wide", 0, "smile", min(1.0, glow_base * (1.0 + 0.35 * fade)), gx, gy, extras
+
         if mode == "thinking":
             self.thinking_spin_phase = (self.thinking_spin_phase + 0.05) % (math.pi * 2)
             tx = -2 + int(round(math.sin(self.thinking_spin_phase * 0.7)))
@@ -457,6 +493,7 @@ class FaceEngine:
             self.last_person_seen_ms = now_ms
 
         self._read_voice_meta()
+        self._consume_heard_flag(now_ms)
         new_mode = self._select_mode(now_ms, people, gx, gy, novelty)
         self._set_mode(new_mode, now_ms)
 
@@ -491,11 +528,26 @@ class FaceEngine:
         self.breath_phase += dt_ms * 0.0012
         breath = 0.85 + 0.15 * math.sin(self.breath_phase)
 
+        # Derive speech_state for the HUD — one of: speaking|listening|heard|thinking|idle.
+        # Independent of cosmetic modes (eye_tag/tongue/curious) so the operator always
+        # knows the real conversational state at a glance.
+        if self._is_speaking():
+            speech_state = "speaking"
+        elif self._is_listening():
+            speech_state = "listening"
+        elif self._in_heard_window(now_ms):
+            speech_state = "heard"
+        elif self._in_thinking_window(now_ms):
+            speech_state = "thinking"
+        else:
+            speech_state = "idle"
+
         state = {
             "schema_version": SCHEMA_VERSION,
             "agent_name": self.cfg.get("agent_name", "Axiom"),
             "agent_slug": self.cfg.get("agent_slug", "axiom"),
             "mode": new_mode,
+            "speech_state": speech_state,
             "prev_mode": self.prev_mode,
             "mode_age_ms": int(self._in_mode_ms(now_ms)),
             "mouth": int(mouth),
@@ -507,6 +559,7 @@ class FaceEngine:
             "glow": round(min(1.0, glow * breath), 3),
             "blink_phase": self.blink_phase,
             "listening_intensity": round(extras.get("listening_intensity", 0.0), 3),
+            "heard_flash": round(extras.get("heard_flash", 0.0), 3),
             "active_word_end_ms": extras.get("active_word_end_ms"),
             "people_count": people,
             "scene_gaze": {"x": gx, "y": gy},

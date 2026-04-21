@@ -31,6 +31,7 @@ eyes/captures/
 
 # Runtime-only: operator-specific state. Created live; must never ship.
 brain-wake.flag
+heard.flag
 brain-heard-cursor.txt
 wake-events.jsonl
 ears/.sheet-maintainer-pos

@@ -36,7 +36,7 @@
         "playfulness": 0.82,
         "attention_drift": 0.55,
         "surprise_reactivity": 0.52,
-        "sleep_threshold_sec": 90.0
+        "sleep_threshold_sec": 45.0
       },
       "voice": {
         "rate": 0.88,
@@ -111,7 +111,7 @@
     "attention_drift": 0.55,
     "curiosity": 0.92,
     "surprise_reactivity": 0.52,
-    "sleep_threshold_sec": 90.0
+    "sleep_threshold_sec": 45.0
   },
   "behavior_weights": {
     "eye_tag": 0.3,

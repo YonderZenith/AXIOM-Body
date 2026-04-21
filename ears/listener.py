@@ -45,6 +45,7 @@ SAMPLE_RATE = 16000
 FRAME_MS = 30
 MUTE_FILE = os.path.join(ROOT_DIR, "mute.flag")  # v2: shared with face-engine + respond.py
 LISTENING_FLAG = os.path.join(ROOT_DIR, "listening.flag")  # v2: face-engine reacts when user is speaking
+HEARD_FLAG = os.path.join(ROOT_DIR, "heard.flag")  # v2.0.0: touched when an utterance just finalized — face-engine flashes an ack
 SENSES_FILE = os.path.join(ROOT_DIR, "config", "senses.json")  # v1.3: operator sense-toggles
 FRAME_SAMPLES = int(SAMPLE_RATE * FRAME_MS / 1000)  # 480
 CHANNELS = 1
@@ -70,6 +71,14 @@ def _clear_listening():
     try:
         os.remove(LISTENING_FLAG)
     except OSError:
+        pass
+
+
+def _touch_heard(text):
+    try:
+        with open(HEARD_FLAG, "w", encoding="utf-8") as f:
+            f.write(text[:200])
+    except Exception:
         pass
 
 # VAD / recording settings
@@ -442,6 +451,8 @@ def main():
                                     pass
                                 # Also save to heard.txt (latest utterance)
                                 save_heard(text, "stream", "transcribed")
+                                # Ack the operator visually — face-engine flashes on heard.flag
+                                _touch_heard(text)
                                 # Write flag for brain — new speech available
                                 try:
                                     with open(FLAG_FILE, 'w', encoding='utf-8') as ff:
@@ -485,6 +496,7 @@ def main():
                                 except:
                                     pass
                                 save_heard(text, "stream", "transcribed")
+                                _touch_heard(text)
                                 try:
                                     with open(FLAG_FILE, 'w', encoding='utf-8') as ff:
                                         json.dump({

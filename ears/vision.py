@@ -222,6 +222,36 @@ def analyze_frame(frame):
             if label == "person":
                 people.append(det)
 
+    # Reject "person" detections that are near-certain false positives:
+    # (a) bbox dominates the frame AND (b) heavily overlaps a bed/couch/chair.
+    # YOLOv8n routinely mislabels rumpled bedding / draped blankets as people
+    # with high confidence, which keeps people_count>0 forever and blocks sleep.
+    FURNITURE = {"bed", "couch", "chair"}
+    furniture = [d for d in detections if d["label"] in FURNITURE]
+    def _iou(a, b):
+        ax1, ay1 = a["center_x"] - a["width"] / 2, a["center_y"] - a["height"] / 2
+        ax2, ay2 = ax1 + a["width"], ay1 + a["height"]
+        bx1, by1 = b["center_x"] - b["width"] / 2, b["center_y"] - b["height"] / 2
+        bx2, by2 = bx1 + b["width"], by1 + b["height"]
+        ix1, iy1 = max(ax1, bx1), max(ay1, by1)
+        ix2, iy2 = min(ax2, bx2), min(ay2, by2)
+        inter = max(0.0, ix2 - ix1) * max(0.0, iy2 - iy1)
+        union = a["width"] * a["height"] + b["width"] * b["height"] - inter
+        return inter / union if union > 0 else 0.0
+    kept_people = []
+    for p in people:
+        dominating = p["size"] > 0.5
+        over_furniture = any(_iou(p, f) > 0.4 for f in furniture)
+        if dominating and over_furniture:
+            # Drop from people list and mark the detection as furniture-miscall.
+            for d in detections:
+                if d is p:
+                    d["label"] = "furniture_miscall"
+                    break
+            continue
+        kept_people.append(p)
+    people = kept_people
+
     # Determine eye gaze target (look at closest/largest person)
     gaze_x, gaze_y = 0, 0
     if people:
