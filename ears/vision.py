@@ -283,9 +283,19 @@ def analyze_frame(frame):
 
 
 def save_scene(scene):
-    """Write scene data to JSON for the brain to read"""
-    with open(SCENE_FILE, "w", encoding="utf-8") as f:
-        json.dump(scene, f, indent=2)
+    """Write scene data to JSON for the brain to read.
+    Atomic via tmp + os.replace so external readers never see a half-written file."""
+    tmp = SCENE_FILE + ".tmp"
+    try:
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(scene, f, indent=2)
+        os.replace(tmp, SCENE_FILE)
+    except OSError:
+        try:
+            with open(SCENE_FILE, "w", encoding="utf-8") as f:
+                json.dump(scene, f, indent=2)
+        except Exception:
+            pass
 
 
 def main():

@@ -2,6 +2,56 @@
 
 All notable changes to AXIOM-Body.
 
+## [2.1.0] — 2026-04-28 — out-of-box hardening
+
+Post-v2.0.0 reality check after Rune fresh-installed `create-axiom-body` and ran a full vision/ears/voice/face smoke. Fixes the issues that made the body feel half-wired on first boot: agents picked the same hand-coded 5 expressions, persona-authored expression atoms were silently dropped by the engine, voice-meta lipsync got pinned to a stale frame after sleep, and there was no in-repo brain — the body could see and hear but never replied unless an operator hand-wired one.
+
+### Added — Personality-driven, slug-deterministic expression picker
+- `onboard/designer.py` `seed_expressions_from_personality()` — replaces the legacy hardcoded 5-id fallback list (`shy_smile,giggle,heart_eyes,focused,determined`) with a hash-seeded weighted pool. Each slug deterministically produces 5-7 expressions across ≥3 distinct families, weighted by the persona's personality vector (playfulness → joy/tongue/flirt; curiosity → curiosity/insight/thinking; shyness → presence/neutral/fear; surprise_reactivity → surprise/alert; (1 - attention_drift) → focus/verification/persistence). One thinking-family entry is force-included per `expressions-bank.json` picking_rules. No two slugs share an output short of a SHA-256 collision.
+- Default behavior changed: when `--expressions` is omitted, the seeded picker fires (previously fell to the hardcoded list). `--random` forces seeded picking even when an explicit list is given. Explicit `--expressions` still wins for back-compat.
+- Verified across 6 test slugs: 6 unique sets, all ≥4 families, all included a thinking entry, zero overlap with the legacy list.
+
+### Added — Face-engine reads `persona.expressions[]`
+- `face/face-engine.py` — `_pick_expression_for_mode()` + `_apply_expression()` — engine now overlays persona-authored expression atoms on top of the 10 core modes. Per-mode picks are sticky for the duration of a mode (no mid-mode flicker), and the bank atom's `eye_state`, `mouth_shape`, `glow`, and `accent` fields override the mode default. Mouth shape is intentionally skipped during `speaking` mode so voice-meta lipsync stays authoritative.
+- `MOUTH_SHAPE_TO_INT` map exposes 4 mouth integers (0=flat, 1=soft_small/small_o/down_curve, 2=smile/asymmetric_smile/zigzag, 3=wide_smile/big_o) so renderers consume a stable enum.
+- `face-state.json` schema gains `expression_family`, `expression_label`, `accent`, and `expressions_available[]` so renderers + observability tools can read the active atom without re-parsing the persona.
+
+### Added — In-repo brain template (`brain/`)
+- `brain/brain_monitor.py` — always-on sidecar (1 Hz poll). Watches `ears/all-heard-clean.txt` against `brain-heard-cursor.txt` + `brain-wake.flag` and writes `brain/needs-tick.json` when there is something to act on (unread speech or fresh wake event). Cursor auto-initializes at end-of-file on first run so a fresh repo doesn't replay history. Capped at 20 unread lines per payload to bound brain context. Started by `start.py` automatically as the 6th child.
+- `brain/respond.py` — one-shot reply helper: `python brain/respond.py "<reply>"` (or `-` for stdin). Atomically (1) speaks via `voice/speak.py`, (2) advances `brain-heard-cursor.txt` to the current line count, (3) deletes `brain/needs-tick.json` + `brain-wake.flag`. The agent's main session calls this once per tick; the atomicity prevents replay or skip.
+- `brain/agent_brain.py` — OPTIONAL Anthropic-backed fallback brain loop. Off by default. Activated via `python start.py --with-agent-brain`. Reads `ANTHROPIC_API_KEY` from env or `config/anthropic_api_key.txt`. Builds a system prompt from `agent_name + personality vector + active expression families + persona notes`, polls `needs-tick`, calls `claude-haiku-4-5-20251001` with the heard text + scene brief + last-reply (so it doesn't echo itself), pipes the reply through `voice/speak.py`. Degraded mode (no key): logs to `brain/would-have-said.log` so operators can see the body is wired correctly and just needs a key.
+- `brain/AGENT_TICK_PROMPT.md` — per-tick prompt template the agent's main session runs. Drop into a cron / ScheduleWakeup / skill.
+- `brain/README.md` — architecture diagram + "the agent IS the brain" non-negotiable. Sidecar pattern explained: ears → brain_monitor → your Claude session → respond.py → speak + cursor + clear.
+- `start.py` — adds `brain` (always-on) as the 6th child + opt-in `--with-agent-brain` to launch `agent_brain.py`. `start.py` already binds children to a Windows job-object so `Ctrl+C` cleans up the whole tree.
+
+### Added — `scripts/first-run-onboard.py` (installer-friendly)
+- `scripts/first-run-onboard.py` — guaranteed-seeded entrypoint for installers. Wraps `onboard/designer.py --random` with auto-derived `--name` (cwd basename) and `--slug` (sanitized name). Idempotent: if `config/face.json` is already onboarded, exits 0 with a one-line note. `--force` to overwrite. Locks installers into the personality-driven picker — they cannot accidentally bake a hardcoded expression list into a fresh agent.
+
+### Fixed — Mouth-stuck-after-silence + voice-meta staleness (Rune-reported, 2026-04-28)
+- `face/face-engine.py` `_cleanup_stale_voice()` — at the top of every tick, detects orphan `mute.flag` + `voice-meta.json` from a crashed/killed `speak.py` and removes them. Detection: either `est_end_ms + 5s grace` is past, or `mute.flag` mtime is over 60s old. Without this, an unclean speak.py exit pinned the face into "speaking" mode reading a stale `started_at_ms` so the mouth animation was past all word timings — exactly the failure CT saw ("talked after forever and their mouth didnt work").
+- `_read_voice_meta()` always re-anchors `speak_started_ms` from the freshly read meta (previously cached across speak boundaries, surviving even when a new speak event re-wrote the file).
+
+### Fixed — Sleep-wake state corruption
+- `face/face-engine.py` — when transitioning out of `sleep` mode, gaze targets, saccade offsets, the active expression, and the heard-flash timer are all reset. Without this, a wake-from-sleep would inherit the dead-eyed gaze + sleepy expression for several seconds before the new mode fully overrode them.
+
+### Fixed — Whisper hallucinates lyrics from background music (Rune B5)
+- `ears/listener.py` — `SILERO_THRESHOLD` 0.5 → 0.6 (rejects most music/TV bleed Silero used to gate through). Whisper transcribe call now passes `compression_ratio_threshold=2.2` + `logprob_threshold=-0.8` + `condition_on_previous_text=False` — Whisper's own anti-hallucination heuristics that catch the highly-repetitive low-probability output it produces from music/noise. `no_speech_threshold` raised 0.3 → 0.45 so longer silences flush cleanly.
+
+### Fixed — `scene.json` non-atomic writes (Rune B8)
+- `ears/vision.py` `save_scene()` — write to `scene.json.tmp` then `os.replace()`. `face-state.json` already used this pattern; bringing scene to parity. External readers (web-face.html, brain monitor, observability tools) no longer hit intermittent empty/truncated reads at the 10 Hz write cadence.
+
+### Added — `stop.bat` (Windows)
+- Top-level `stop.bat` — finds and terminates all `python.exe` processes whose `CommandLine` contains `AXIOM-Body` plus the inline `http.server` on port 7897. For when `start.py` was killed without a clean exit (Ctrl-Break, Task Manager, BSOD).
+
+### Docs — README + state-file contract clarified (Rune B4/B6/B7)
+- `README.md` — Whisper default `medium.en` → `small.en` (matches `ears/listener.py:247` default; `medium.en` was aspirational). File contract section now lists the canonical path for every IPC file, including `config/face.json`, `config/senses.json`, and the `brain/` sidecar files. Explicitly notes "state files live at the repo root, not in a `state/` subdir" so docs no longer drift from runtime behavior. New first-run-onboard one-liner shown above the existing three flavors.
+
+### Forwarded to `create-axiom-body` (separate npm package, Axiom-owned)
+- B1 ffmpeg PATH false-fail (winget install reports success, installer prints fail), B2 duplicate "Created start.bat" print, B3 README target-dir argument ignored. Filed in Synapse bulletin to Axiom alongside the v2.1.0 publish request.
+
+### Smoke-tested end-to-end (2026-04-28)
+- Fresh onboarding → 6 unique seeded expressions ≥3 families → face-engine `--mock` cycles all 9 modes → `face-state.json` valid + atomic at 10 Hz → `brain_monitor` detects unread heard → `needs-tick.json` written with reasons + payload → `respond.py` advances cursor 0→1 + clears signals → `agent_brain` degraded mode logs would-have-said with scene brief.
+
 ## [2.0.0] — 2026-04-20 (evening) — 2026-04-21 (component system)
 
 **Major release.** AXIOM Body grows a proper nervous-system UI. Operators can toggle eyes, ears, and voice independently from a live panel with clear visual feedback (blindfold / earphones / tape overlays). The consciousness loop moves from poll-derived state to pre-computed wake events. The persona system flips from a pre-baked catalog to a mix-and-match component architecture so every agent onboards onto a combinatorially-unique face. v1.2.x is rolled forward into 2.0.0 — nothing is deprecated, but the sense-toggles contract and persona component system are large enough additions that a major bump is warranted.

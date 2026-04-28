@@ -59,6 +59,20 @@ DEFAULT_SENSES = {"eyes": True, "ears": True, "voice": True, "voice_elevenlabs":
 TICK_SEC = 0.05                   # 20 Hz
 SCHEMA_VERSION = 2
 
+# Bank mouth_shape strings → engine mouth integer 0-3.
+# Speaking mode is exempt: voice-meta drives mouth during TTS.
+MOUTH_SHAPE_TO_INT = {
+    "flat": 0,
+    "soft_small": 1,
+    "small_o": 1,
+    "down_curve": 1,
+    "smile": 2,
+    "asymmetric_smile": 2,
+    "zigzag": 2,
+    "wide_smile": 3,
+    "big_o": 3,
+}
+
 
 # --- Config ---
 DEFAULT_CONFIG_INLINE = {
@@ -216,6 +230,17 @@ class FaceEngine:
 
         self.heard_at_ms = 0.0  # set when heard.flag is consumed; drives the "heard" ack flash
 
+        # Persona expressions wiring (v2.1.0). Each agent's persona.expressions[]
+        # is a 5-7 atom subset from the bank. Group by base_mode so the engine
+        # can layer the agent's chosen atom over the default mode targets.
+        self.expressions_by_mode = {}
+        for e in self.cfg.get("expressions", []) or []:
+            base = e.get("base_mode")
+            if base:
+                self.expressions_by_mode.setdefault(base, []).append(e)
+        self.current_expression = None  # the sticky pick for the current mode
+        self.last_pick_mode = None
+
     # Small helpers -------------------------------------------------
     def _personality(self, key, default=0.5):
         return float(self.cfg.get("personality", {}).get(key, default))
@@ -231,6 +256,10 @@ class FaceEngine:
             self.prev_mode = self.mode
             self.mode = mode
             self.mode_entered_ms = now_ms
+            # Re-roll the persona expression on every mode change so the face
+            # cycles through the agent's chosen atoms instead of locking on one.
+            self.current_expression = None
+            self.last_pick_mode = None
 
     # Blink / saccade / gaze ---------------------------------------
     def _tick_blink(self, dt_ms):
@@ -314,6 +343,50 @@ class FaceEngine:
         elapsed = now_ms - self.heard_at_ms
         return self.HEARD_FLASH_MS <= elapsed < self.THINKING_TAIL_MS
 
+    STALE_SPEAK_GRACE_MS = 5000.0   # if voice-meta says we should be done, give 5s grace before cleanup
+    STALE_FLAG_FALLBACK_MS = 60000.0  # if mute.flag has no est_end_ms, force-clean after 60s
+
+    def _cleanup_stale_voice(self, now_ms):
+        """Speak.py crashes can orphan mute.flag + voice-meta.json. Detect stale
+        files at the top of each tick and remove them so face-engine doesn't get
+        stuck rendering a phantom 'speaking' state with an elapsed time past every
+        word's timing window — which is what made the mouth freeze closed after
+        a long silence + the next utterance."""
+        mute_present = MUTE_FLAG.exists()
+        meta_present = VOICE_META.exists()
+        if not mute_present and not meta_present:
+            return
+        if meta_present and not mute_present:
+            # Orphan meta — speak finished but cleanup raced. Just remove meta.
+            try:
+                VOICE_META.unlink()
+            except OSError:
+                pass
+            return
+        meta = read_json(VOICE_META) if meta_present else None
+        end = (meta or {}).get("est_end_ms")
+        stale = False
+        if end:
+            if now_ms > float(end) + self.STALE_SPEAK_GRACE_MS:
+                stale = True
+        else:
+            # No est_end_ms in meta — fall back to mute.flag mtime.
+            try:
+                age = (time.time() - os.path.getmtime(MUTE_FLAG)) * 1000.0
+                if age > self.STALE_FLAG_FALLBACK_MS:
+                    stale = True
+            except OSError:
+                pass
+        if stale:
+            for p in (MUTE_FLAG, VOICE_META):
+                try:
+                    p.unlink()
+                except OSError:
+                    pass
+            self.voice_meta = None
+            self.speak_started_ms = None
+            self.active_word_end_ms = None
+
     def _read_voice_meta(self):
         if not self._is_speaking():
             self.voice_meta = None
@@ -322,9 +395,16 @@ class FaceEngine:
             return
         meta = read_json(VOICE_META)
         if meta and meta.get("words"):
+            # If meta's started_at_ms drifted (e.g. cached from a previous speak
+            # that crashed without _clear_meta), trust the freshest timestamp.
             self.voice_meta = meta
-            if self.speak_started_ms is None:
-                self.speak_started_ms = meta.get("started_at_ms") or self._now_ms()
+            new_started = meta.get("started_at_ms")
+            if new_started is not None:
+                # Always re-anchor to the file's started_at_ms — no caching of
+                # the prior value across speak boundaries.
+                self.speak_started_ms = new_started
+            elif self.speak_started_ms is None:
+                self.speak_started_ms = self._now_ms()
 
     # Mode selection ------------------------------------------------
     def _select_mode(self, now_ms, people, gx, gy, novelty):
@@ -457,6 +537,44 @@ class FaceEngine:
         # idle (default)
         return "open", 0, "smile", glow_base, self.gaze_target_x, self.gaze_target_y, extras
 
+    def _pick_expression_for_mode(self, mode):
+        """Sticky pick — return the agent's chosen expression preset for this
+        base_mode, or None if the persona has no atom in this mode. Picks
+        weighted-randomly within the mode's pool then stays put until the
+        mode changes (so the face doesn't strobe between atoms)."""
+        if mode == self.last_pick_mode and self.current_expression is not None:
+            return self.current_expression
+        self.last_pick_mode = mode
+        pool = self.expressions_by_mode.get(mode, [])
+        if not pool:
+            self.current_expression = None
+            return None
+        self.current_expression = random.choice(pool)
+        return self.current_expression
+
+    def _apply_expression(self, eye_state, mouth, expression_label, glow, extras, mode):
+        """Overlay a persona expression atom onto the default mode targets.
+        Mouth_shape override is suppressed during 'speaking' so voice-meta
+        word timings still drive lipsync."""
+        expr = self._pick_expression_for_mode(mode)
+        if expr is None:
+            extras["expression_id"] = expression_label
+            extras["expression_family"] = None
+            extras["expression_label"] = None
+            return eye_state, mouth, expression_label, glow, extras
+        if expr.get("eye_state"):
+            eye_state = expr["eye_state"]
+        if expr.get("mouth_shape") and mode != "speaking":
+            mouth = MOUTH_SHAPE_TO_INT.get(expr["mouth_shape"], mouth)
+        if expr.get("glow") is not None:
+            glow = float(expr["glow"])
+        if expr.get("accent"):
+            extras["accent"] = expr["accent"]
+        extras["expression_id"] = expr.get("id", expression_label)
+        extras["expression_family"] = expr.get("family")
+        extras["expression_label"] = expr.get("label")
+        return eye_state, mouth, expr.get("id", expression_label), glow, extras
+
     def _mouth_from_voice_meta(self, now_ms):
         """Map current tick to a mouth-shape 0-3 using voice-meta word timings."""
         meta = self.voice_meta
@@ -488,14 +606,32 @@ class FaceEngine:
     # Main tick -----------------------------------------------------
     def tick(self, dt_ms):
         now_ms = self._now_ms()
+        self._cleanup_stale_voice(now_ms)
         people, gx, gy, novelty = self._read_scene()
         if people > 0:
             self.last_person_seen_ms = now_ms
 
         self._read_voice_meta()
         self._consume_heard_flag(now_ms)
+        prev_mode_for_wake = self.mode
         new_mode = self._select_mode(now_ms, people, gx, gy, novelty)
         self._set_mode(new_mode, now_ms)
+
+        # T3.2: explicit wake-from-sleep reset — when leaving sleep, force a
+        # clean re-roll of every transient state (gaze, expression pick,
+        # voice-meta cache) so the body comes back fully alive instead of
+        # carrying ghost state from before the nap.
+        if prev_mode_for_wake == "sleep" and new_mode != "sleep":
+            self.gaze_target_x = 0
+            self.gaze_target_y = 0
+            self.gaze_timer_ms = 0.0
+            self.next_gaze_ms = random.uniform(2000.0, 4000.0)
+            self.saccade_x = 0
+            self.saccade_y = 0
+            self.saccade_timer_ms = 0.0
+            self.current_expression = None
+            self.last_pick_mode = None
+            self.heard_at_ms = 0.0
 
         # Mode-entry side effects
         if new_mode == "eye_tag" and self.mode_entered_ms == now_ms:
@@ -512,6 +648,8 @@ class FaceEngine:
 
         eye_state, mouth, expression, glow, target_x, target_y, extras = \
             self._mode_targets(new_mode, now_ms, gx, gy)
+        eye_state, mouth, expression, glow, extras = \
+            self._apply_expression(eye_state, mouth, expression, glow, extras, new_mode)
 
         # Smoothly approach target (1 step per tick so it tweens)
         self.look_x += 1 if target_x > self.look_x else -1 if target_x < self.look_x else 0
@@ -556,6 +694,9 @@ class FaceEngine:
             "look_y": int(max(-2, min(2, self.look_y + self.saccade_y))),
             "eye_state": eye_state_effective,
             "expression": expression,
+            "expression_family": extras.get("expression_family"),
+            "expression_label": extras.get("expression_label"),
+            "accent": extras.get("accent"),
             "glow": round(min(1.0, glow * breath), 3),
             "blink_phase": self.blink_phase,
             "listening_intensity": round(extras.get("listening_intensity", 0.0), 3),
@@ -564,6 +705,7 @@ class FaceEngine:
             "people_count": people,
             "scene_gaze": {"x": gx, "y": gy},
             "palette": self.cfg.get("palette", {}),
+            "expressions_available": [e.get("id") for e in (self.cfg.get("expressions") or [])],
             "tick_ms": int(now_ms - self.start_ms),
             "senses": read_senses(),
         }

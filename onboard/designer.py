@@ -30,6 +30,7 @@ import argparse
 import hashlib
 import json
 import os
+import random
 import sys
 from pathlib import Path
 
@@ -176,6 +177,119 @@ def validate_expressions(requested, bank):
     return kept, rejected
 
 
+def seed_expressions_from_personality(slug, personality, bank):
+    """Pick a personality-driven, slug-deterministic set of 5-7 expressions.
+
+    Per expressions-bank.json picking_rules: 5-8 picks, >=3 distinct families,
+    'thinking' family strongly recommended. Family weights derive from
+    personality traits — a shy agent leans toward presence/quiet entries,
+    a playful agent toward joy/tongue/flirt, a curious agent toward
+    curiosity/insight, etc. The slug hash provides per-agent variation so
+    two agents with identical personality vectors still draw different
+    specific atoms.
+
+    No two slugs share an output short of SHA-256 collision.
+    """
+    h = hashlib.sha256(("expressions:" + slug).encode("utf-8")).digest()
+    rng = random.Random(int.from_bytes(h[:8], "big"))
+
+    play = float(personality.get("playfulness", 0.5))
+    cur = float(personality.get("curiosity", 0.5))
+    shy = float(personality.get("shyness", 0.5))
+    surp = float(personality.get("surprise_reactivity", 0.5))
+    drift = float(personality.get("attention_drift", 0.5))
+    sleep_thr = float(personality.get("sleep_threshold_sec", 60.0))
+
+    fam_w = {
+        "joy":          0.5 + play * 1.0,
+        "tongue":       0.1 + play * 0.8,
+        "flirt":        0.1 + play * 0.6,
+        "curiosity":    0.4 + cur * 1.0,
+        "insight":      0.3 + cur * 0.8,
+        "thinking":     0.5 + cur * 0.4 + (1.0 - drift) * 0.3,
+        "focus":        0.4 + (1.0 - drift) * 0.7,
+        "verification": 0.2 + (1.0 - drift) * 0.4,
+        "persistence":  0.2 + (1.0 - drift) * 0.4,
+        "surprise":     0.2 + surp * 1.0,
+        "alert":        0.2 + surp * 0.7,
+        "fear":         0.1 + surp * 0.3 + shy * 0.3,
+        "presence":     0.3 + shy * 0.7,
+        "neutral":      0.3 + shy * 0.4,
+        "sleep":        0.1 + max(0.0, (60.0 - sleep_thr) / 60.0) * 0.5,
+        "sadness":      0.1 + (1.0 - play) * 0.3,
+        "anger":        0.1 + (1.0 - shy) * 0.3,
+        "disgust":      0.1 + (1.0 - shy) * 0.2,
+        "error":        0.15,
+    }
+
+    by_family = {}
+    for e in bank["expressions"]:
+        by_family.setdefault(e.get("family", "neutral"), []).append(e)
+
+    picked = []
+    picked_ids = set()
+
+    # 1. Force-include one thinking-family entry (picking_rules recommendation).
+    if by_family.get("thinking"):
+        chosen = rng.choice(by_family["thinking"])
+        picked.append(chosen)
+        picked_ids.add(chosen["id"])
+
+    # 2. Weighted-pick the rest until we hit a slug-determined target of 5-7.
+    target = rng.randint(5, 7)
+    pool = []
+    for e in bank["expressions"]:
+        if e["id"] in picked_ids:
+            continue
+        w = fam_w.get(e.get("family"), 0.2) + rng.random() * 0.15
+        pool.append((w, e))
+
+    while pool and len(picked) < target:
+        total = sum(w for w, _ in pool)
+        if total <= 0:
+            break
+        r = rng.random() * total
+        acc = 0.0
+        for i, (w, _) in enumerate(pool):
+            acc += w
+            if acc >= r:
+                _, e = pool.pop(i)
+                picked.append(e)
+                picked_ids.add(e["id"])
+                break
+
+    # 3. Enforce >=3 distinct families. If short, swap an over-represented
+    #    pick (never the protected thinking entry) for an entry from an
+    #    unused family.
+    families_used = {p.get("family", "neutral") for p in picked}
+    if len(families_used) < 3:
+        unused = [f for f in by_family if f not in families_used and by_family[f]]
+        rng.shuffle(unused)
+        for f in unused:
+            if len(families_used) >= 3:
+                break
+            counts = {}
+            for p in picked:
+                counts[p.get("family")] = counts.get(p.get("family"), 0) + 1
+            evict_idx = None
+            for i, p in enumerate(picked):
+                if p.get("family") == "thinking":
+                    continue
+                if counts.get(p.get("family"), 0) > 1:
+                    evict_idx = i
+                    break
+            if evict_idx is None:
+                break
+            picked_ids.discard(picked[evict_idx]["id"])
+            del picked[evict_idx]
+            chosen = rng.choice(by_family[f])
+            picked.append(chosen)
+            picked_ids.add(chosen["id"])
+            families_used = {p.get("family", "neutral") for p in picked}
+
+    return [p["id"] for p in picked]
+
+
 def build_persona(args, bank):
     slug = args.slug.lower().strip()
     if not slug:
@@ -211,13 +325,14 @@ def build_persona(args, bank):
     if args.voice_pitch is not None:
         voice["pitch"] = float(args.voice_pitch)
 
-    # Expression picks
-    requested = []
-    if args.expressions:
+    # Expression picks — personality-driven, slug-deterministic.
+    # Explicit --expressions wins; --random forces the seed picker even when
+    # an explicit list is given. Otherwise seed from slug + personality so
+    # no two agents share the operator's hand-picked starter set.
+    if args.expressions and not args.random:
         requested = [e.strip() for e in args.expressions.split(",") if e.strip()]
     else:
-        # Bank default: a varied starter set
-        requested = ["shy_smile", "giggle", "focused", "determined", "wide_curious"]
+        requested = seed_expressions_from_personality(slug, personality, bank)
 
     kept, rejected = validate_expressions(requested, bank)
     if rejected:

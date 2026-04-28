@@ -2,7 +2,7 @@
 // Requires puppeteer — falls back to pulling from hive-test/node_modules.
 const path = require('path');
 const fs = require('fs');
-const puppeteer = require(path.resolve('C:/Users/ctt03/Desktop/hive-test/node_modules/puppeteer'));
+const puppeteer = require(path.resolve('C:/Users/ctt03/Desktop/Ysmara/projects/hive-test/node_modules/puppeteer'));
 
 const PALETTE_AXIOM = {
   bg: [10, 10, 15],

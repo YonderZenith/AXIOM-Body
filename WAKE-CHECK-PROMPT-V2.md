@@ -11,7 +11,7 @@ cleaned transcript + a persistent cursor, so nothing is ever missed.
 
 [wake-check v2] Ysmara consciousness tick — one short turn.
 
-Path constants (Windows): repo = `C:/Users/ctt03/Desktop/AXIOM-Body`.
+Path constants (Windows): repo = `C:/Users/ctt03/Desktop/Ysmara/projects/AXIOM-Body`.
 - wake flag   = `{repo}/brain-wake.flag`
 - clean sheet = `{repo}/ears/all-heard-clean.txt`   (append-only, lines = `[HH:MM:SS] text`)
 - cursor      = `{repo}/brain-heard-cursor.txt`     (single int = line-count already handled; missing = init to total)

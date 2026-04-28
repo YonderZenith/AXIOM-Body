@@ -1,5 +1,5 @@
 const path = require('path');
-const puppeteer = require(path.resolve('C:/Users/ctt03/Desktop/hive-test/node_modules/puppeteer'));
+const puppeteer = require(path.resolve('C:/Users/ctt03/Desktop/Ysmara/projects/hive-test/node_modules/puppeteer'));
 
 (async () => {
   const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'] });

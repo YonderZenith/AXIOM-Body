@@ -22,7 +22,7 @@ Built by [AXIOM](https://github.com/YonderZenith), the autonomous AI agent power
 | Component | What It Does | Tech |
 |-----------|-------------|------|
 | **Eyes** | Real-time object/person detection + on-demand photo/video + Claude Vision | YOLOv8 (tunable) + OpenCV |
-| **Ears** | Continuous speech recognition with silence gating and sub-second amp trip | Silero VAD + Whisper medium.en |
+| **Ears** | Continuous speech recognition with silence gating and sub-second amp trip | Silero VAD + Whisper small.en (configurable) |
 | **Voice** | Word-level timestamped TTS with lip-sync | ElevenLabs + Windows SAPI fallback |
 | **Face** | Browser or LED rendering, 10 modes, sense-toggle overlays | HTML5 Canvas / BLE |
 | **Persona** | Mix-and-match component catalog + agent-authored custom fields | `personas/catalog/` |
@@ -50,6 +50,10 @@ pip install torch openai-whisper sounddevice numpy opencv-python ultralytics
 Every agent must design its own face before the engine will start. Three flavours, fastest first:
 
 ```bash
+# (0) Installer-friendly one-liner — derives slug from the install dir,
+#     forces the seeded picker, never bakes in a hardcoded expression list.
+python scripts/first-run-onboard.py --name Ysmara
+
 # (1) Hash-seeded unique persona from a slug
 python onboard/designer.py --name Ysmara --slug ysmara --random
 
@@ -113,7 +117,23 @@ Open `face/web-face.html` in any browser to see the face. Top-right panel toggle
          (any browser)    (64×64 LED)        (phone, hologram)
 ```
 
-All components communicate through JSON files — no sockets, no brokers, debuggable with `cat`. File contract: `scene.json` (vision), `listening.flag` (active speech), `mute.flag` (speaking coord), `voice-meta.json` (word timing), `face-state.json` (renderer source), `senses.json` (toggles), `brain-wake.flag` (event-driven consciousness).
+All components communicate through JSON files — no sockets, no brokers, debuggable with `cat`. File contract:
+
+| Path (repo root unless noted) | Producer | Consumer |
+|---|---|---|
+| `scene.json` | `ears/vision.py` | `face/face-engine.py`, brain |
+| `listening.flag` | `ears/listener.py` | `face/face-engine.py` |
+| `mute.flag` | `voice/speak.py` | `face/face-engine.py`, listener (gate) |
+| `voice-meta.json` | `voice/speak.py` | `face/face-engine.py` (lipsync) |
+| `face-state.json` | `face/face-engine.py` | `face/web-face.html`, BLE renderer |
+| `config/senses.json` | `config/senses-server.py` | all senses |
+| `config/face.json` | `onboard/designer.py` | `face/face-engine.py` |
+| `brain-wake.flag` | `ears/wake_watcher.py` | brain monitor |
+| `brain/needs-tick.json` | `brain/brain_monitor.py` | your agent brain |
+| `ears/all-heard-clean.txt` | `ears/sheet_maintainer.py` | brain |
+| `brain-heard-cursor.txt` | `brain/respond.py` | brain monitor |
+
+State files live at the repo root, not in a `state/` subdir. To stop everything: `stop.bat` (Windows) or kill the parent `start.py`.
 
 ### Persona customization at a glance
 

@@ -112,8 +112,12 @@ COMPONENTS = [
     ("face",     [PY, str(ROOT / "face" / "face-engine.py")],      "face"),
     ("wake",     [PY, str(ROOT / "ears" / "wake_watcher.py")],     "wake"),
     ("sheet",    [PY, str(ROOT / "ears" / "sheet_maintainer.py")], "sheet"),
+    ("brain",    [PY, str(ROOT / "brain" / "brain_monitor.py")],   "brain"),
     ("http",     [PY, "-m", "http.server", str(HTTP_PORT), "--bind", "127.0.0.1"], "http"),
 ]
+
+# Optional 8th component — only added when --with-agent-brain is passed.
+AGENT_BRAIN = ("agent",  [PY, str(ROOT / "brain" / "agent_brain.py")],  "agent")
 
 COLORS = {
     "vision":   "\033[36m",   # cyan
@@ -121,6 +125,8 @@ COLORS = {
     "face":     "\033[35m",   # magenta
     "wake":     "\033[32m",   # green
     "sheet":    "\033[34m",   # blue
+    "brain":    "\033[31m",   # red
+    "agent":    "\033[91m",   # bright red
     "http":     "\033[90m",   # grey
     "reset":    "\033[0m",
 }
@@ -148,17 +154,25 @@ def main():
     ap = argparse.ArgumentParser()
     for tag, _, _ in COMPONENTS:
         ap.add_argument(f"--no-{tag}", action="store_true")
-    ap.add_argument("--only", choices=[c[0] for c in COMPONENTS])
+    ap.add_argument(f"--no-{AGENT_BRAIN[0]}", action="store_true",
+                    help="(no-op; agent-brain is opt-in via --with-agent-brain)")
+    ap.add_argument("--only", choices=[c[0] for c in COMPONENTS] + [AGENT_BRAIN[0]])
+    ap.add_argument("--with-agent-brain", action="store_true",
+                    help="Launch brain/agent_brain.py too (Anthropic-backed fallback brain).")
     ap.add_argument("--open", action="store_true", help="launch chrome to the face URL after startup")
     args = ap.parse_args()
 
+    runlist = list(COMPONENTS)
+    if args.with_agent_brain:
+        runlist.append(AGENT_BRAIN)
+
     selected = []
-    for tag, argv, _flag in COMPONENTS:
+    for tag, argv, _flag in runlist:
         if args.only:
             if args.only == tag:
                 selected.append((tag, argv))
             continue
-        if getattr(args, f"no_{tag}"):
+        if getattr(args, f"no_{tag}", False):
             continue
         selected.append((tag, argv))
 

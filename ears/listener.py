@@ -82,7 +82,8 @@ def _touch_heard(text):
         pass
 
 # VAD / recording settings
-SILERO_THRESHOLD = 0.5  # Silero VAD confidence threshold (0-1, higher = stricter)
+SILERO_THRESHOLD = 0.6  # Silero VAD confidence threshold (0-1, higher = stricter)
+                        # 0.5 lets background music pass; 0.6 holds against most music/TV bleed.
 SPEECH_FRAMES_START = 4  # Fewer needed since Silero is more accurate
 SILENCE_FRAMES_STOP = 15  # 15 chunks * 100ms = 1.5s of silence before stop
 MIN_SPEECH_SECONDS = 0.8
@@ -180,12 +181,21 @@ def save_all_heard(text, relevant, confidence, reason):
 
 
 def transcribe(model, audio_float32):
-    """Transcribe float32 audio array with Whisper — passes the numpy array
-    directly to avoid the WAV round-trip (which pulls in ffmpeg)."""
+    """Transcribe float32 audio array with Whisper -- passes the numpy array
+    directly to avoid the WAV round-trip (which pulls in ffmpeg).
+
+    The compression_ratio_threshold + logprob_threshold pair are Whisper's
+    own anti-hallucination heuristics: when Whisper invents text from music
+    or noise, it tends to produce highly repetitive (high compression ratio)
+    or low-probability output. Stricter thresholds = fewer phantom lyrics.
+    """
     try:
         audio = np.asarray(audio_float32, dtype=np.float32)
         result = model.transcribe(audio, language="en", fp16=False,
-                                   no_speech_threshold=0.3)
+                                   no_speech_threshold=0.45,
+                                   compression_ratio_threshold=2.2,
+                                   logprob_threshold=-0.8,
+                                   condition_on_previous_text=False)
         return result["text"].strip()
     except Exception as e:
         log(f"Transcribe error: {e}")
